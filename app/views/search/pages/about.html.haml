@@ -99,6 +99,25 @@
         %i.fas.fa-external-link-alt
 %br
 
+- if producthunt_launched?
+  %h3.ui.dividing.header
+    %i.fas.fa-globe
+    英語版「Bungo Search」
+  %amp-img.mobile.only(src="/assets/images/ogp_gutenberg.png" width="480" height="240" layout="responsive")
+  %amp-img.computer.only(src="/assets/images/ogp_gutenberg.png" width="480" height="240")
+  .ui.basic.segment
+    %p
+      英語版青空文庫「Project Gutenberg」収録の英語文学作品3.5万点以上を、読了目安時間で検索できるサービスです。
+      %br
+      英語の難易度目安表示や、出現単語のCSVダウンロード機能もあるので、英語の勉強にぜひご活用ください。
+    %p
+      = link_to " https://note.com/notsobad_jp/n/nc3d01f5d6a6b", target: :_blank, class: 'ui basic responsive button' do
+        Bungo Search 紹介記事
+        &nbsp;
+        %small
+          %i.fas.fa-external-link-alt
+  %br
+
 
 %h3.ui.dividing.header
   %i.far.fa-envelope

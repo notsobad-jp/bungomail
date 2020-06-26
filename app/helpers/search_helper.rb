@@ -63,4 +63,8 @@ module SearchHelper
   def lang_locale
     I18n.locale.slice(0,2).to_sym
   end
+
+  def producthunt_launched?
+    Time.zone.parse('2020/06/28 16:00:00') <= Time.zone.now
+  end
 end

@@ -1,5 +1,10 @@
 %br
 %br
+- if producthunt_launched?
+  %a(href="https://www.producthunt.com/posts/bungo-search?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-bungo-search" target="_blank")
+    %amp-img(src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=209599&theme=light" alt="Bungo Search - Search free e-books by Time-to-Read from Project Gutenberg | Product Hunt Embed" width="250px" height="54px" layout='responsive')
+  %br
+
 %h4.ui.header
   %i.far.fa-clock
   = t '.minutes_to_read'

@@ -45,11 +45,12 @@
       .ui.attached.mobile.only.segment= t '.tagline_sp'
 
     - if I18n.locale == :ja # juvenileのときは表示しないので、lang_localeを使わない
-      .ui.attached.info.message
-        = link_to "/juvenile" do
-          【お知らせ】児童文学のみを検索できる「ブンゴウサーチ for Kids」をリリースしました。お子さまへの読み聞かせなどにぜひご活用ください。
-          %small
-            %i.fas.fa-external-link-alt
+      - if producthunt_launched?
+        .ui.attached.success.message
+          = link_to " https://note.com/notsobad_jp/n/nc3d01f5d6a6b", target: :_blank do
+            🎉無料の英語作品を読了時間で検索できる英語版「Bungo Search」をリリースしました！英語の勉強にぜひご活用ください。
+            %small
+              %i.fas.fa-external-link-alt
 
 
     .ui.container
