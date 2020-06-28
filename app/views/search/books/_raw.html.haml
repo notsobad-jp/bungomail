@@ -41,9 +41,13 @@
     = link_to author_category_books_path(author_id: book.author_id, category_id: category[:id]) do
       = book.author_name
   %td
-    = link_to author_category_books_path(author_id: book.author_id, category_id: book.category_id) do
-      = category_label(book.category)
-    %small.right.floated= access_count_stars(book.access_rating(:stars))
+    .clear
+      = link_to author_category_books_path(author_id: book.author_id, category_id: book.category_id) do
+        = category_label(book.category)
+      %small.right.floated= access_count_stars(book.access_rating(:stars))
+    - if lang_locale == :en && %w(flash shortshort).include?(@category[:id])
+      %div
+        %small NGSL: #{book.try(:ngsl_ratio) || '--'}%
 %tr.mobile.only.sub.ellipsis
   %td(colspan="3")
     %small= book.beginning
