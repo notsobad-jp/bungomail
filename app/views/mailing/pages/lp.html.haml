@@ -243,6 +243,8 @@
               %a.ui.basic.blue.button{:href => "https://forms.gle/d2gZZBtbeAEdXySW9", :target => "_blank"}
                 一時停止フォーム
                 %i.icon.small.external
+              %br
+              %small ※ベータ版のため動作が不安定な場合があります。ご了承ください。
       .item
         .content
           .header
@@ -316,6 +318,15 @@
           .description
             進士素丸さん著『文豪どうかしてる逸話集』(KADOKAWA)とコラボし、書籍収録の逸話をブンゴウメールで配信いたしました。
 
+      = link_to 'https://prtimes.jp/main/html/rd/p/000000017.000043723.html', target: :_blank, class: 'item' do
+        .image
+          = image_tag('lp/news/booqs.png', alt: 'BooQs')
+        .content
+          .header 英単語学習サービス「BooQs」とコラボしました
+          .meta 2020年6月28日
+          .description
+            英語版「Bungo Search」をリリースし、200万回答突破の人気英単語学習サービス「BooQs」との特設コラボページを開設しました。
+
       = link_to 'https://www.j-wave.co.jp/original/colorswonder/entry/200517.html', target: :_blank, class: 'item' do
         .image
           = image_tag('lp/news/j-wave.jpg', alt: 'J-WAVE')
@@ -369,6 +380,27 @@
           .meta 2019年6月~9月
           .description
             5万部突破の大人気書籍『ビジネスモデル2.0図鑑』全文を公式配信する企画を実施しました。
+
+  .ui.mini.divider
+
+  %section.ui.container
+    %h2.ui.huge.center.aligned.header
+      スポンサー/コラボパートナー募集
+    %br
+    .ui.basic.segment.center.aligned
+      %p
+        ブンゴウメールに共感し、活動を支援してくださる企業様を募集しています。
+        %br
+        配信メールへの広告掲載やキャンペーン企画の実施など、ご相談の上で柔軟に設計可能です。
+        ご興味あればぜひお気軽にお声がけください。
+      %p
+        またコラボパートナーも随時募集しております。
+        %br
+        こちらも柔軟なコラボ方法が可能ですので、過去のコラボ実績などをご覧の上、ぜひお気軽にお問い合わせください。
+      %br
+      %p
+        = link_to 'https://goo.gl/forms/jE387feQLYysiv5m2', target: :_blank, class: 'ui blue large responsive button' do
+          お問い合わせ
 
   %section.ui.centered.stackable.grid.secondary.attached.segment
     .ui.row
