@@ -278,6 +278,8 @@
       メディア掲載
     %br
     .ui.horizontal.list
+      = link_to "https://www.nhk.jp/p/shibu5/ts/X5J7MZMGGY/episode/te/729252Z8XK/", target: :_blank, class: 'item' do
+        = image_tag('lp/media/nhk.png', alt: 'NHK', class: 'ui small image')
       = link_to "https://www.j-wave.co.jp/original/colorswonder/entry/200517.html", target: :_blank, class: 'item' do
         = image_tag('lp/media/j-wave.png', alt: 'J-WAVE', class: 'ui small image')
       = link_to "https://gigazine.net/news/20180531-bungomail/", target: :_blank, class: 'item' do
@@ -296,10 +298,6 @@
         = image_tag('lp/media/jcast.png', alt: 'jcast', class: 'ui small image')
       = link_to "https://lamire.jp/148287", target: :_blank, class: 'item' do
         = image_tag('lp/media/lamire.png', alt: 'lamire', class: 'ui tiny image')
-      = link_to "https://irorio.jp/nagasawamaki/20180912/492864/", target: :_blank, class: 'item' do
-        = image_tag('lp/media/irorio.jpg', alt: 'IRORIO', class: 'ui small image')
-      = link_to "https://isuta.jp/category/iphone/2019/04/599166", target: :_blank, class: 'item' do
-        = image_tag('lp/media/isuta.png', alt: 'isuta', class: 'ui small image')
 
 
   .ui.mini.divider
@@ -309,6 +307,15 @@
       お知らせ
     %br
     .ui.divided.link.items
+      = link_to 'https://www.nhk.jp/p/shibu5/ts/X5J7MZMGGY/episode/te/729252Z8XK/', target: :_blank, class: 'item' do
+        .image
+          = image_tag('lp/news/nhk.jpg', alt: 'NHK ニュース シブ5時')
+        .content
+          .header NHK「ニュース シブ5時」で紹介いただきました
+          .meta 2020年10月29日
+          .description
+            10/29放送のNHK「ニュース シブ5時」でブンゴウメールを紹介いただきました。
+
       = link_to 'https://www.amazon.co.jp/dp/4046044519', target: :_blank, class: 'item' do
         .image
           = image_tag('lp/news/episodes.jpg', alt: '文豪どうかしてる逸話集')
