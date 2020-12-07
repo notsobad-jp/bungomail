@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.0'
+ruby '2.6.6'
 
 gem 'rails', '~> 6.0'
 gem 'pg', '>= 0.18', '< 2.0'
@@ -47,7 +47,7 @@ group :development do
 
   # 新しいバージョンは複数workerをkillできないバグがあるので古いので固定
   ## https://github.com/collectiveidea/delayed_job/issues/798
-  gem 'daemons', '1.1.9'  
+  gem 'daemons', '1.1.9'
 end
 
 group :test do
