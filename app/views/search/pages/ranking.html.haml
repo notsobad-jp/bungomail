@@ -1,0 +1,46 @@
+%h1.ui.large.header
+  【2020年】年間アクセスランキング Top100
+
+%p
+  2020年の1年間に、ブンゴウサーチでアクセスが多かった作品のランキングです。
+  %br
+  今年もたくさんのご利用ありがとうございました！
+
+.clear-float
+  .right.floated
+    - canonical_url = @meta_canonical_url || url_for(only_path: false)
+    - text = "#{@meta_title}"
+    = link_to "https://twitter.com/intent/tweet?hashtags=#{t(:bungo_search, scope: [:search, :defaults]).downcase.delete(' ')}&url=#{canonical_url}&text=#{text}", target: :_blank, class: 'ui mini twitter button' do
+      %i.fab.fa-twitter
+      Tweet
+%br
+
+%table.ui.fixed.unstackable.table
+  %thead
+    %tr.computer.only
+      %th.five.wide= t :title, scope: [:search, :defaults]
+      %th.four.wide= t :author, scope: [:search, :defaults]
+      %th.four.wide= t :minutes_to_read, scope: [:search, :defaults]
+      - if lang_locale == :en && %w(flash shortshort).include?(@category[:id])
+        %th.two.wide NGSL
+      %th.two.wide= t :popularity, scope: [:search, :defaults]
+      %th.five.wide.computer.only= t :beginning, scope: [:search, :defaults]
+
+    %tr.mobile.only
+      %th.six.wide
+        %small= t :title, scope: [:search, :defaults]
+      %th.six.wide
+        %small= t :author, scope: [:search, :defaults]
+      %th.nine.wide
+        %small= t :minutes_to_read, scope: [:search, :defaults]
+        %small.right.floated= t :popularity, scope: [:search, :defaults]
+  %tbody
+    - if @books.blank?
+      %tr
+        %td(colspan="3")= t '.no_results'
+    = render partial: 'search/books/raw', collection: @books, as: :book, locals: { category: @category }
+
+%small
+  = t :html, scope: [:search, :books, :index, :copyright_reserved]
+%br
+%br

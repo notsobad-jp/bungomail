@@ -126,6 +126,7 @@ Rails.application.routes.draw do
             end
           end
           get '/about' => "pages#about", as: :about_page
+          get '/ranking/:year' => "pages#ranking", as: :ranking
           get '/:locale' => 'books#index'
           get '/:juvenile' => 'books#index'
           get '/:locale/:juvenile' => 'books#index'
