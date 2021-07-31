@@ -29,9 +29,14 @@ class MembershipsController < ApplicationController
 
     session = Stripe::Checkout::Session.retrieve({id: params[:session_id], expand: ['customer']})
     user = User.find_or_initialize_by(email: session.customer.email)
-    raise "Customer #{user.stripe_customer_id} already exists." if user.stripe_customer_id.present?  # 重複登録 or 退会→再登録 の場合はとりあえず例外で手動対応
-    user.update!(stripe_customer_id: session.customer.id)
 
+    # 重複登録 or 退会→再登録 の場合はとりあえず例外で手動対応
+    if user.stripe_customer_id.present?
+      flash[:error] = 'このアカウントにはすでにお支払い情報が登録されているため、決済処理を中止しました。これにより課金が二重が発生することはありません。登録情報を確認・更新したい場合は「利用者メニュー」をご利用ください'
+      redirect_to(memberships_new_path) and return
+    end
+
+    user.update!(stripe_customer_id: session.customer.id)
     beginning_of_next_next_month = Time.current.next_month.next_month.beginning_of_month
     Stripe::Subscription.create({
       customer: session.customer.id,

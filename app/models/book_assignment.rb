@@ -1,7 +1,7 @@
 class BookAssignment < ApplicationRecord
   belongs_to :channel
   belongs_to :book, polymorphic: true
-  has_many :feeds, -> { order("delivery_date") }, dependent: :destroy
+  has_many :feeds, dependent: :destroy
   has_many :delayed_jobs, through: :feeds
 
   validates :start_date, presence: true
