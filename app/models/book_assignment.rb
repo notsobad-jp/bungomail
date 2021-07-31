@@ -1,17 +1,13 @@
 class BookAssignment < ApplicationRecord
   belongs_to :channel
   belongs_to :book, polymorphic: true
-  has_many :feeds, dependent: :destroy
+  has_many :feeds, -> { order("delivery_date") }, dependent: :destroy
   has_many :delayed_jobs, through: :feeds
 
   validates :start_date, presence: true
   validates :end_date, presence: true
   validate :end_date_comes_after_start_date
   validate :delivery_period_should_not_overlap # 同一チャネルで期間が重複するレコードが存在すればinvalid
-
-  before_create do
-    # self.twitter_share_url = self.twitter_short_url
-  end
 
 
   def count
