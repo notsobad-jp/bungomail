@@ -14,34 +14,17 @@
       .h5.text-sm.font-bold.px-4.py-1.border-b.bg-gray-100
         新規ユーザー登録
       .p-4.flex-1
-        - if Time.current < Time.zone.parse("2021-08-01")
-          .mb-2.text-red-700.font-bold
-            %span.mr-1 🎉
-            2021年7月31日までのご登録限定キャンペーン実施中
-            %span.ml-1 🎉
-          .mb-4.text-xs
-            キャンペーン中に登録すると、今後もずっとこの料金が適用されます。
-
-          .text-3xl.font-bold.text-red-600
-            ￥350
-            .text-xs.inline /月 (税込385円)
-          .mb-2.text-2xl.font-bold.line-through
-            ￥500
-            .text-xs.inline /月 (税込550円)
-          .text-sm
-            毎月1冊、おまかせ読書
-        - else
-          .mb-2.text-red-700.font-bold
-            %span.mr-1 🎉
-            1ヶ月間の無料トライアル
-            %span.ml-1 🎉
-          .mb-4.text-xs
-            トライアル期間中に解約すれば、料金は一切発生しません
-          .text-3xl.font-bold.mb-2
-            ￥500
-            .text-xs.inline /月 (税込550円)
-          .text-sm
-            毎月1冊、おまかせ読書
+        .mb-2.text-red-700.font-bold
+          %span.mr-1 🎉
+          1ヶ月間の無料トライアル
+          %span.ml-1 🎉
+        .mb-4.text-xs
+          トライアル期間中に解約すれば、料金は一切発生しません
+        .text-3xl.font-bold.mb-2
+          ￥500
+          .text-xs.inline /月 (税込550円)
+        .text-sm
+          毎月1冊、おまかせ読書
       .px-4.pt-2.pb-4
         = link_to memberships_create_path, class: 'block w-full rounded py-4 bg-red-600 text-white text-sm hover:opacity-75' do
           カード情報を登録する

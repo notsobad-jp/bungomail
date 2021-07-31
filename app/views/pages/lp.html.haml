@@ -34,17 +34,10 @@
             = link_to 'こちらのページ', memberships_edit_path, class: 'text-link'
             から登録情報の確認ができます
 
-  - if Time.current < Time.zone.parse("2021-08-01")
-    .px-4.py-2.bg-blue-50.border-t.border-b.border-blue-500.text-blue-800.-mt-24.mb-12.full-bleed.text-sm
-      .container.mx-auto.max-w-screen-lg.px-2(class="sm:px-0")
-        = link_to memberships_new_path, class: 'text-link' do
-          【2021年7月31日まで限定】
-          7月中に登録すると、ずっとおトクな特別料金で利用できるキャンペーン実施中です🎉
-  - else
-    .px-4.py-2.bg-blue-50.border-t.border-b.border-blue-500.text-blue-800.-mt-24.mb-12.full-bleed.text-sm
-      .container.mx-auto.max-w-screen-lg.px-2(class="sm:px-0")
-        【メディア掲載】
-        NHK「ニュースシブ5時」でブンゴウメールを紹介いただきました 🎉
+  .px-4.py-2.bg-blue-50.border-t.border-b.border-blue-500.text-blue-800.-mt-24.mb-12.full-bleed.text-sm
+    .container.mx-auto.max-w-screen-lg.px-2(class="sm:px-0")
+      【メディア掲載】
+      NHK「ニュースシブ5時」でブンゴウメールを紹介いただきました 🎉
 
   .grid.grid-cols-1.gap-8.mb-24(class="sm:grid-cols-3 sm:gap-12")
     %div
@@ -210,32 +203,17 @@
       .bg-gray-100.p-2.border-b
         %h5.font-bold 月額プラン
       .p-4.flex-1
-        - if Time.current < Time.zone.parse("2021-08-01")
-          .mb-2.text-red-700.font-bold
-            %span.mr-1 🎉
-            2021年7月31日までのご登録限定キャンペーン実施中
-            %span.ml-1 🎉
-          .mb-4.text-xs
-            キャンペーン中に登録すると、今後もずっとこの料金が適用されます。
-
-          .text-3xl.font-bold.text-red-600
-            ￥350
-            .text-xs.inline /月 (税込385円)
-          .mb-2.text-2xl.font-bold.line-through
-            ￥500
-            .text-xs.inline /月 (税込550円)
-        - else
-          .mb-2.text-red-700.font-bold
-            %span.mr-1 🎉
-            1ヶ月間の無料トライアル
-            %span.ml-1 🎉
-          .mb-4.text-xs
-            トライアル期間中に解約すれば、料金は一切発生しません
-          .text-3xl.font-bold.mb-2
-            ￥500
-            .text-xs.inline /月 (税込550円)
-          .text-sm
-            毎月1冊、おまかせ読書
+        .mb-2.text-red-700.font-bold
+          %span.mr-1 🎉
+          1ヶ月間の無料トライアル
+          %span.ml-1 🎉
+        .mb-4.text-xs
+          トライアル期間中に解約すれば、料金は一切発生しません
+        .text-3xl.font-bold.mb-2
+          ￥500
+          .text-xs.inline /月 (税込550円)
+        .text-sm
+          毎月1冊、おまかせ読書
 
 
       .px-4.pt-2.pb-4

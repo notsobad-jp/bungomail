@@ -256,4 +256,11 @@ namespace :tmp do
       puts "[Updated] #{book.title}"
     end
   end
+
+  task create_subscription_for_paid_users: :environment do |_task, _args|
+    channel = Channel.find_by(code: 'bungomail-official')
+    User.where.not(stripe_customer_id: nil).each do |user|
+      user.subscriptions.create(channel_id: channel.id)
+    end
+  end
 end
