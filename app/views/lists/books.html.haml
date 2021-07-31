@@ -9,23 +9,23 @@
 
 - colors = %w(red orange yellow olive green teal blue violet purple pink brown black)
 .mb-4.space-y-4
-  - @campaign_groups.each do |cg|
-    - month = cg.start_at.month
-    - end_month = (cg.count - 1).days.since(cg.start_at).month
+  - @book_assignments.each do |ba|
+    - month = ba.start_date.month
+    - end_month = (ba.count - 1).days.since(ba.start_date).month
     .item
       .content
-        = link_to "https://bungo-search.com/authors/#{cg.book.author_id}/categories/#{cg.book.category_id}/books/#{cg.book_id}", class: 'header', target: :blank do
+        = link_to "https://bungo-search.com/authors/#{ba.book.author_id}/categories/#{ba.book.category_id}/books/#{ba.book_id}", class: 'header', target: :blank do
           %span.text-sm{class: colors[month - 1]} #{month}月
           - if month != end_month # ２ヶ月配信対応
             %span.text-sm{class: colors[end_month - 1]} #{end_month}月
           &nbsp;
-          .inline.font-bold 『#{cg.book.title}』
-          = cg.book.author_name
+          .inline.font-bold 『#{ba.book.title}』
+          = ba.book.author_name
           &nbsp;
           %small
             %i.icon.external.small
         .extra
           %small
-            = cg.start_at.strftime("%Y年%-m月%-d日")
+            = ba.start_date.strftime("%Y年%-m月%-d日")
             〜
-            = (cg.count - 1).days.since(cg.start_at).strftime("%Y年%-m月%-d日")
+            = (ba.count - 1).days.since(ba.start_date).strftime("%Y年%-m月%-d日")
