@@ -27,7 +27,7 @@ class PagesController < ApplicationController
       terms: '利用規約',
       privacy: 'プライバシーポリシー',
       tokushoho: '特定商取引法に基づく表記',
-      unsubscribe: '配信停止',
+      unsubscribe: '退会',
     }
   end
 end

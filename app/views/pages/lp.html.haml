@@ -498,11 +498,3 @@
           .flex.flex-col
             お支払い情報の管理
             .text-sm （利用者メニュー）
-
-      - if Time.current < Time.zone.parse("2021-08-01")
-        .px-4.py-2.bg-blue-50.rounded.border.border-blue-500.text-blue-800
-          %svg(class="mr-1 w-6 h-6 fill-current inline-block" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
-            %path(d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z")
-          2021年7月まで配信していた無料版の配信解約をご希望の場合は、
-          = link_to 'こちらのページ', page_path(:unsubscribe), class: 'text-link'
-          からご解約お願いします。

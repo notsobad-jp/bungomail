@@ -1,21 +1,15 @@
 .mb-4
   %h1.text-lg.font-bold
-    旧無料版の配信停止
+    退会
 
 .mb-8
-  2021年7月まで配信していた旧無料版配信の登録を解除します。
+  アカウント情報を削除し、すべての配信を停止します。
+  %br
+  有料プランをご契約されている場合、今後のお支払いも自動的に停止します。
 
 .mb-8
-  = form_with(url: channel_subscriptions_path, method: :delete, local: true, class: '') do |f|
+  = form_with(url: user_path("unsubscribe"), method: :delete, local: true, class: '') do |f|  # この時点ではuser特定できないのでurlはダミー
     = f.email_field :email, class: "block w-full p-2 rounded border mb-2", placeholder: 'メールアドレス', required: true
     .flex{class: "sm:flex-row flex-col space-x-0 sm:space-x-2 space-y-2 sm:space-y-0"}
-      = button_tag type: 'submit', name: 'action_type', value: 'unsubscribed', class: 'flex-1 bg-red-600 border border-red-600 rounded text-white px-4 py-2 hover:opacity-75' do
-        無料版の登録を解除する
-
-.mb-8
-  .px-4.py-2.bg-blue-50.rounded.border.border-blue-500.text-blue-800
-    %svg(class="mr-1 w-6 h-6 fill-current inline-block" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
-      %path(d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z")
-    新しい有料配信にご登録いただいた方は、
-    = link_to '「お支払い情報の管理」', page_path(:unsubscribe), class: 'text-link'
-    から登録情報の確認・更新・解約処理が可能です。
+      = button_tag type: 'submit', name: 'action_type', value: 'unsubscribed', data: { confirm: "ブンゴウメールを退会します。本当によろしいですか？"}, class: 'flex-1 bg-red-600 border border-red-600 rounded text-white px-4 py-2 hover:opacity-75' do
+        退会する
