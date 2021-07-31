@@ -1,4 +1,15 @@
 class BungoMailer < ApplicationMailer
+  def customer_portal_email
+    @user = params[:user]
+    @url = params[:url]
+
+    xsmtp_api_params = { category: 'customer_portal' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+
+    mail(to: @user.email, subject: "【ブンゴウメール】ご登録情報の確認用URL")
+    logger.info "[CUSTOMER_PORTAL] email sent to #{@user.id}"
+  end
+
   def feed_email
     @feed = params[:feed]
     @book = @feed.book_assignment.book
@@ -15,38 +26,15 @@ class BungoMailer < ApplicationMailer
     logger.info "[FEED] channel: #{@channel.code || @channel.id}, title: #{@feed.title}"
   end
 
-  def magic_login_email
-    @user = params[:user]
-    @url  = URI.join(root_url, "/auth?token=#{@user.magic_login_token}")
-
-    xsmtp_api_params = { category: 'login' }
+  def marketing_email
+    mail_to = "bungomail-text@notsobad.jp"
+    xsmtp_api_params = { category: 'marketing' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
 
-    mail(to: @user.email, subject: '【ブンゴウメール】ログイン用URL')
-    logger.info "[LOGIN] Login mail sent to #{@user.id}"
+    mail(to: mail_to, subject: "【ブンゴウメール】無料配信終了のお知らせ & 優待キャンペーンは本日までです")
+    logger.info "[Marketing] email sent to #{mail_to}"
   end
 
-  def activation_email
-    @user = params[:user]
-    @url  = URI.join(root_url, "/users/#{@user.activation_token}/activate")
-
-    xsmtp_api_params = { category: 'activation' }
-    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-
-    mail(to: @user.email, subject: "【ブンゴウメール】アカウント確認")
-    logger.info "[ACTIVATION] Activation mail sent to #{@user.id}"
-  end
-
-  def customer_portal_email
-    @user = params[:user]
-    @url = params[:url]
-
-    xsmtp_api_params = { category: 'customer_portal' }
-    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-
-    mail(to: @user.email, subject: "【ブンゴウメール】ご登録情報の確認用URL")
-    logger.info "[CUSTOMER_PORTAL] Customer Portal mail sent to #{@user.id}"
-  end
 
   private
 
