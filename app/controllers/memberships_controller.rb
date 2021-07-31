@@ -32,6 +32,7 @@ class MembershipsController < ApplicationController
 
     # 重複登録 or 退会→再登録 の場合はとりあえず例外で手動対応
     if user.stripe_customer_id.present?
+      # TODO: 重複時はこのタイミングでstripeのcustomerを削除したい
       flash[:error] = 'このアカウントにはすでにお支払い情報が登録されているため、決済処理を中止しました。これにより課金が二重が発生することはありません。登録情報を確認・更新したい場合は「利用者メニュー」をご利用ください'
       redirect_to(memberships_new_path) and return
     end
