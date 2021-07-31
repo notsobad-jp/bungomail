@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_12_041348) do
+ActiveRecord::Schema.define(version: 2021_07_31_070437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 2021_07_12_041348) do
     t.date "delivery_date", null: false
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.text "comment"
     t.index ["book_assignment_id"], name: "index_feeds_on_book_assignment_id"
     t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
   end

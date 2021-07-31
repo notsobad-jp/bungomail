@@ -2,6 +2,11 @@
 
 <%= simple_format @feed.content.gsub(/(\r\n|\r|\n)/, "<br />") %>
 
+<% if @feed.comment %>
+  <br />=========================<br />
+  <%= simple_format @feed.comment.gsub(/(\r\n|\r|\n)/, "<br />") %>
+<% end %>
+
 <br />=========================<br />
 ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　<br />
 <%= link_to(nil, @feed.book_assignment.twitter_share_url || "https://bit.ly/3wh90Ee") %><br />

@@ -17,7 +17,8 @@ class BungoMailer < ApplicationMailer
     @word_count = @feed.content.gsub(" ", "").length
 
     sender_name = envelope_display_name("#{@book.author_name}（ブンゴウメール）")
-    send_to = @channel.active_subscribers.map(&:email)
+    send_to = params[:send_to] || @channel.active_subscribers.map(&:email)
+    p send_to
 
     xsmtp_api_params = { to: send_to, category: 'feed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)

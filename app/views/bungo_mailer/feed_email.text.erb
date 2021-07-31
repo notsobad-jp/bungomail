@@ -2,6 +2,11 @@
 
 <%= @feed.content %>
 
+<% if @feed.comment %>
+  =========================
+  <%= @feed.comment %>
+<% end %>
+
 =========================
 ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　
 <%= @feed.book_assignment.twitter_share_url || "https://bit.ly/3wh90Ee" %>
