@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   end
 
   resources :subscriptions
+  resources :books, only: [:show]
   resources :book_assignments
   resources :users
   resources :channels do

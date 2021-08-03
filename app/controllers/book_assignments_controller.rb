@@ -1,26 +1,28 @@
 class BookAssignmentsController < ApplicationController
   def create
-    @channel = Channel.find(book_assignment_params[:channel_id])
+    @user = User.find_by(email: params[:email])
+    raise 'ユーザー登録が確認できませんでした。カスタム配信を利用する際は、事前にブンゴウメールの有料アカウント登録が必要です' if !@user
+    raise '有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前にブンゴウメールの有料プランへの登録が必要です' if !@user.stripe_customer_id
+
+    @channel = Channel.find_or_create_by(user_id: @user.id)
     @book_assignment = @channel.book_assignments.new(
-      book_id: book_assignment_params[:book_id],
-      book_type: book_assignment_params[:book_type],
-      start_date: book_assignment_params[:start_date],
-      end_date: book_assignment_params[:end_date],
+      book_id: ba_params[:book_id],
+      book_type: ba_params[:book_type],
+      start_date: ba_params[:start_date],
+      end_date: ba_params[:end_date],
     )
     authorize @book_assignment
-
-    if @book_assignment.save
-      @book_assignment.delay.create_and_schedule_feeds
-      flash[:success] = '配信予約が完了しました！'
-    else
-      flash[:error] = @book_assignment.errors.values.join("。") || '処理に失敗しました。。何回か試してもうまくいかない場合、お手数ですが運営までお問い合わせください。'
-    end
-    redirect_to aozora_book_path(book_assignment_params[:book_id])
+    @book_assignment.delay.create_and_schedule_feeds
+    flash[:success] = '配信予約が完了しました！'
+  rescue => e
+    logger.error e
+    flash[:error] = e
+    redirect_to book_path(id: ba_params[:book_id], book_type: 'AozoraBook', start_date: ba_params[:start_date], end_date: ba_params[:end_date])
   end
 
   private
 
-  def book_assignment_params
+  def ba_params
     params.require(:book_assignment).permit(:book_id, :book_type, :channel_id, :start_date, :end_date)
   end
 end

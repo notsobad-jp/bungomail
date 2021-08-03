@@ -1,0 +1,9 @@
+= @book.title
+
+= form_with model: @book_assignment, local: true do |f|
+  = f.hidden_field :book_id, value: @book.id
+  = f.hidden_field :book_type, value: 'AozoraBook'
+  = f.email_field :email, required: true
+  = f.date_field :start_date, min: Date.current.tomorrow, required: true
+  = f.date_field :end_date, min: Date.current.tomorrow, required: true
+  = f.submit
