@@ -1,6 +1,6 @@
 class BookAssignmentsController < ApplicationController
   def create
-    @user = User.find_by(email: params[:email])
+    @user = User.find_by(email: ba_params[:email])
     raise 'ユーザー登録が確認できませんでした。カスタム配信を利用する際は、事前にブンゴウメールの有料アカウント登録が必要です' if !@user
     raise '有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前にブンゴウメールの有料プランへの登録が必要です' if !@user.stripe_customer_id
 
@@ -17,12 +17,12 @@ class BookAssignmentsController < ApplicationController
   rescue => e
     logger.error e
     flash[:error] = e
-    redirect_to book_path(id: ba_params[:book_id], book_type: 'AozoraBook', start_date: ba_params[:start_date], end_date: ba_params[:end_date])
+    redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date])
   end
 
   private
 
   def ba_params
-    params.require(:book_assignment).permit(:book_id, :book_type, :channel_id, :start_date, :end_date)
+    params.require(:book_assignment).permit(:book_id, :book_type, :channel_id, :start_date, :end_date, :email)
   end
 end
