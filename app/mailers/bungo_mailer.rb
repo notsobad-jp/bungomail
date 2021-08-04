@@ -18,13 +18,21 @@ class BungoMailer < ApplicationMailer
 
     sender_name = envelope_display_name("#{@book.author_name}（ブンゴウメール）")
     send_to = params[:send_to] || @channel.active_subscribers.map(&:email)
-    p send_to
 
     xsmtp_api_params = { to: send_to, category: 'feed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
 
     mail(from: "#{sender_name} <bungomail@notsobad.jp>", subject: @feed.title)
     logger.info "[FEED] channel: #{@channel.code || @channel.id}, title: #{@feed.title}"
+  end
+
+  def schedule_completed_email
+    @user = params[:user]
+    @ba = params[:book_assignment]
+    xsmtp_api_params = { category: 'schedule_completed' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+
+    mail(to: @user.email, subject: "【ブンゴウメール】配信予約が完了しました")
   end
 
   def marketing_email

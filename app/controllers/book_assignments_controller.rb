@@ -1,8 +1,7 @@
 class BookAssignmentsController < ApplicationController
   def create
     @user = User.find_by(email: ba_params[:email])
-    raise 'ユーザー登録が確認できませんでした。カスタム配信を利用する際は、事前にブンゴウメールの有料アカウント登録が必要です' if !@user
-    raise '有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前にブンゴウメールの有料プランへの登録が必要です' if !@user.stripe_customer_id
+    raise '有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前にブンゴウメール有料プランへの登録が必要です' if !@user || !@user.stripe_customer_id
 
     @channel = Channel.find_or_create_by(user_id: @user.id)
     @book_assignment = @channel.book_assignments.new(
@@ -11,9 +10,16 @@ class BookAssignmentsController < ApplicationController
       start_date: ba_params[:start_date],
       end_date: ba_params[:end_date],
     )
-    authorize @book_assignment
-    @book_assignment.delay.create_and_schedule_feeds
-    flash[:success] = '配信予約が完了しました！'
+    if @book_assignment.save
+      @book_assignment.delay.create_and_schedule_feeds
+      flash[:success] = '配信予約が完了しました！'
+      # TODO: 予約完了メール送信
+    else
+      # TODO: validationエラーの処理
+      flash[:error] = '登録失敗しました'
+      logger.error 'エラー'
+      render 'books/show'
+    end
   rescue => e
     logger.error e
     flash[:error] = e
