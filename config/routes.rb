@@ -9,8 +9,10 @@ Rails.application.routes.draw do
 
   resources :subscriptions
   resources :books, only: [:show]
-  resources :book_assignments
   resources :users
+  resources :book_assignments do
+    get :cancel, on: :member
+  end
   resources :channels do
     get :feed, on: :member, defaults: { format: :rss }
   end

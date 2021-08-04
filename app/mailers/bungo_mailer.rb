@@ -26,12 +26,19 @@ class BungoMailer < ApplicationMailer
     logger.info "[FEED] channel: #{@channel.code || @channel.id}, title: #{@feed.title}"
   end
 
+  def schedule_canceled_email
+    @user = params[:user]
+    @ba = params[:book_assignment]
+    xsmtp_api_params = { category: 'schedule_canceled' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+    mail(to: @user.email, subject: "【ブンゴウメール】配信予約をキャンセルしました")
+  end
+
   def schedule_completed_email
     @user = params[:user]
     @ba = params[:book_assignment]
     xsmtp_api_params = { category: 'schedule_completed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-
     mail(to: @user.email, subject: "【ブンゴウメール】配信予約が完了しました")
   end
 

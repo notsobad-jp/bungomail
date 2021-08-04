@@ -26,6 +26,19 @@ class BookAssignmentsController < ApplicationController
     redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date])
   end
 
+  def cancel
+    @ba = BookAssignment.find_by(id: params[:id])
+    raise '【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。' if !@ba
+    @ba.destroy
+    BungoMailer.with(user: @ba.channel.user, book_assignment: @ba).schedule_canceled_email.deliver_now
+    flash[:success] = '配信をキャンセルしました！'
+    redirect_to page_path(:book_assignment_canceled)
+  rescue => e
+    logger.error e
+    flash[:error] = e
+    redirect_to root_path
+  end
+
   private
 
   def ba_params
