@@ -28,7 +28,8 @@ class BungoMailer < ApplicationMailer
 
   def schedule_canceled_email
     @user = params[:user]
-    @ba = params[:book_assignment]
+    @author_title = params[:author_title]
+    @delivery_period = params[:delivery_period]
     xsmtp_api_params = { category: 'schedule_canceled' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
     mail(to: @user.email, subject: "【ブンゴウメール】配信予約をキャンセルしました")

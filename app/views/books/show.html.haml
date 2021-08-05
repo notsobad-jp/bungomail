@@ -17,4 +17,4 @@
       = f.date_field :start_date, min: Date.current.tomorrow, required: true, class: 'border rounded p-2 flex-1'
       .text-center 〜
       = f.date_field :end_date, min: Date.current.tomorrow, required: true, class: 'border rounded p-2 flex-1'
-  = f.submit '配信を予約する', class: 'rounded bg-red-600 text-white py-4 w-full'
+  = f.submit '配信を予約する', class: 'rounded bg-red-600 text-white py-4 w-full cursor-pointer hover:bg-red-500'
