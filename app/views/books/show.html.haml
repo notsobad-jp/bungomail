@@ -1,8 +1,16 @@
-.mb-8
+.mb-4
   %h1(class="mb-2 text-xl sm:text-2xl font-bold")
     = @book.title
   .text-gray-500.text-large
     = @book.author
+.mb-8
+  .border.rounded.bg-gray-50.p-2
+    = @book.words_count.to_s(:delimited)
+    %small.text-xs 文字
+    .inline
+      .inline.text-sm （推奨配信期間:
+      .inline.text-red-600= @recommended_duration
+      .inline.text-sm ）
 
 = form_with model: @book_assignment, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
