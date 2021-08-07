@@ -8,8 +8,11 @@ Rails.application.routes.draw do
   end
 
   resources :subscriptions
-  resources :book_assignments
+  resources :books, only: [:show]
   resources :users
+  resources :book_assignments do
+    get :cancel, on: :member
+  end
   resources :channels do
     get :feed, on: :member, defaults: { format: :rss }
   end

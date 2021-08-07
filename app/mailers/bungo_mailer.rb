@@ -18,7 +18,6 @@ class BungoMailer < ApplicationMailer
 
     sender_name = envelope_display_name("#{@book.author_name}（ブンゴウメール）")
     send_to = params[:send_to] || @channel.active_subscribers.map(&:email)
-    p send_to
 
     xsmtp_api_params = { to: send_to, category: 'feed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
@@ -34,6 +33,30 @@ class BungoMailer < ApplicationMailer
 
     mail(to: mail_to, subject: "【ブンゴウメール】無料配信終了のお知らせ & 優待キャンペーンは本日までです")
     logger.info "[Marketing] email sent to #{mail_to}"
+  end
+
+  def schedule_canceled_email
+    @user = params[:user]
+    @author_title = params[:author_title]
+    @delivery_period = params[:delivery_period]
+    xsmtp_api_params = { category: 'schedule_canceled' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+    mail(to: @user.email, subject: "【ブンゴウメール】配信予約をキャンセルしました")
+  end
+
+  def schedule_completed_email
+    @user = params[:user]
+    @ba = params[:book_assignment]
+    xsmtp_api_params = { category: 'schedule_completed' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+    mail(to: @user.email, subject: "【ブンゴウメール】配信予約が完了しました")
+  end
+
+  def stripe_registered_email
+    @user = params[:user]
+    xsmtp_api_params = { category: 'stripe_registered' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+    mail(to: @user.email, subject: "【ブンゴウメール】お支払い情報の登録が完了しました")
   end
 
 

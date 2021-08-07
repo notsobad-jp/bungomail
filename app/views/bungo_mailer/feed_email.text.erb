@@ -7,14 +7,24 @@
   <%= @feed.comment %>
 <% end %>
 
-=========================
-ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　
-<%= @feed.book_assignment.twitter_share_url || "https://bit.ly/3wh90Ee" %>
+<% if @channel.code == 'bungomail-official' %>
+  =========================
+  ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　
+  <%= @feed.book_assignment.twitter_share_url || "https://bit.ly/3wh90Ee" %>
 
-■Twitterでみんなの感想を見る：https://goo.gl/rgfoDv
-■ブンゴウメール公式サイト：https://bungomail.com
-■青空文庫でこの作品を読む：<%= @book.aozora_file_url %>
-■配信停止（有料プラン解約）：https://bungomail.com/memberships/edit
+  ■Twitterでみんなの感想を見る：https://goo.gl/rgfoDv
+  ■ブンゴウメール公式サイト：https://bungomail.com
+  ■青空文庫でこの作品を読む：<%= @book.aozora_file_url %>
+  ■配信停止（有料プラン解約）：https://bungomail.com/memberships/edit
+<% else %>
+  -------
+  このメールはブンゴウメールのカスタム配信を予約した方にお送りしています。
+  配信停止をご希望の場合は、以下のURLからいつでもこの配信をキャンセルすることができます。
+  <%= cancel_book_assignment_url(@feed.book_assignment) %>
+
+  ※このメールは、送信専用メールアドレスから配信されています。ご返信いただいてもお答えできませんので、ご了承ください。
+  ※このメールに心当たりがない方、またはご不明な点がある方は運営までお問い合わせください。
+<% end %>
 
 -------
 配信元: ブンゴウメール編集部

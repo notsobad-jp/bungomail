@@ -1,26 +1,41 @@
 class BookAssignmentsController < ApplicationController
   def create
-    @channel = Channel.find(book_assignment_params[:channel_id])
-    @book_assignment = @channel.book_assignments.new(
-      book_id: book_assignment_params[:book_id],
-      book_type: book_assignment_params[:book_type],
-      start_date: book_assignment_params[:start_date],
-      end_date: book_assignment_params[:end_date],
-    )
-    authorize @book_assignment
+    @user = User.find_by(email: ba_params[:email])
+    raise "有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', memberships_new_path, class: 'text-link'}が必要です。" if !@user || !@user.stripe_customer_id
 
-    if @book_assignment.save
-      @book_assignment.delay.create_and_schedule_feeds
-      flash[:success] = '配信予約が完了しました！'
-    else
-      flash[:error] = @book_assignment.errors.values.join("。") || '処理に失敗しました。。何回か試してもうまくいかない場合、お手数ですが運営までお問い合わせください。'
-    end
-    redirect_to aozora_book_path(book_assignment_params[:book_id])
+    @channel = Channel.where(id: @user.id, user_id: @user.id).first_or_create
+    @ba = @channel.book_assignments.create!(
+      book_id: ba_params[:book_id],
+      book_type: ba_params[:book_type],
+      start_date: ba_params[:start_date],
+      end_date: ba_params[:end_date],
+    )
+    @ba.delay.create_and_schedule_feeds
+    BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
+    flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
+    redirect_to book_path(ba_params[:book_id])
+  rescue => e
+    logger.error e
+    flash[:error] = e
+    redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date])
+  end
+
+  def cancel
+    @ba = BookAssignment.find_by(id: params[:id])
+    raise '【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。' if !@ba || @ba.channel.code == 'bungomail-official'
+    @ba.destroy!
+    BungoMailer.with(user: @ba.channel.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
+    flash[:success] = '配信をキャンセルしました！'
+    redirect_to page_path(:book_assignment_canceled)
+  rescue => e
+    logger.error e
+    flash[:error] = e
+    redirect_to root_path
   end
 
   private
 
-  def book_assignment_params
-    params.require(:book_assignment).permit(:book_id, :book_type, :channel_id, :start_date, :end_date)
+  def ba_params
+    params.require(:book_assignment).permit(:book_id, :book_type, :channel_id, :start_date, :end_date, :email)
   end
 end

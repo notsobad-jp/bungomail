@@ -1,0 +1,29 @@
+ブンゴウメールへのご登録ありがとうございます。
+以下の通りお支払い情報の登録が完了しました。
+
+▼登録メールアドレス:
+<%= @user.email %>
+
+▼無料トライアル期間:
+<%= Time.current.next_month.beginning_of_month.strftime("%Y-%m-%d") %> 〜 <%= Time.current.next_month.end_of_month.strftime("%Y-%m-%d") %>
+
+※無料トライアルは翌月初に開始します。配信開始までしばらくお待ちください。
+
+▼初回お支払い日:
+<%= Time.current.next_month.next_month.beginning_of_month.strftime("%Y-%m-%d") %>
+
+▼有料プランの解約:
+有料プランは、以下のリンクからいつでも解約いただけます。
+<%= memberships_edit_url %>
+
+
+-------
+
+※このメールは、送信専用メールアドレスから配信されています。ご返信いただいてもお答えできませんので、ご了承ください。
+※このメールに心当たりがない方、またはご不明な点がある方は運営までお問い合わせください。
+
+-------
+配信元: ブンゴウメール編集部
+NOT SO BAD, LLC.
+Web： https://bungomail.com
+E-mail: info@notsobad.jp

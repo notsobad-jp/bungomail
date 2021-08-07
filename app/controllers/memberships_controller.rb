@@ -48,7 +48,8 @@ class MembershipsController < ApplicationController
       ],
     })
 
-    redirect_to(root_path, flash: { success: '決済処理が完了しました！翌月初から1ヶ月間の無料トライアルを開始します。配信開始までしばらくお待ちください。' })
+    BungoMailer.with(user: user).stripe_registered_email.deliver_later
+    redirect_to(root_path, flash: { success: '決済処理が完了しました！ご登録内容の確認メールをお送りしています。もし10分以上経ってもメールが届かない場合は運営までお問い合わせください。' })
   rescue => e
     logger.error "[Error]Stripe subscription failed. #{e}"
     redirect_to(memberships_new_path, flash: { error: '決済処理に失敗しました。。課金処理を中止したため、これにより支払いが発生することはありません。解決しない場合は運営までお問い合わせください。' })
