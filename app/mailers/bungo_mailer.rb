@@ -26,6 +26,15 @@ class BungoMailer < ApplicationMailer
     logger.info "[FEED] channel: #{@channel.code || @channel.id}, title: #{@feed.title}"
   end
 
+  def marketing_email
+    mail_to = "bungomail-text@notsobad.jp"
+    xsmtp_api_params = { category: 'marketing' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+
+    mail(to: mail_to, subject: "【ブンゴウメール】無料配信終了のお知らせ & 優待キャンペーンは本日までです")
+    logger.info "[Marketing] email sent to #{mail_to}"
+  end
+
   def schedule_canceled_email
     @user = params[:user]
     @author_title = params[:author_title]
@@ -43,13 +52,11 @@ class BungoMailer < ApplicationMailer
     mail(to: @user.email, subject: "【ブンゴウメール】配信予約が完了しました")
   end
 
-  def marketing_email
-    mail_to = "bungomail-text@notsobad.jp"
-    xsmtp_api_params = { category: 'marketing' }
+  def stripe_registered_email
+    @user = params[:user]
+    xsmtp_api_params = { category: 'stripe_registered' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-
-    mail(to: mail_to, subject: "【ブンゴウメール】無料配信終了のお知らせ & 優待キャンペーンは本日までです")
-    logger.info "[Marketing] email sent to #{mail_to}"
+    mail(to: @user.email, subject: "【ブンゴウメール】お支払い情報の登録が完了しました")
   end
 
 
