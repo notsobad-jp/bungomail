@@ -22,7 +22,7 @@ class BookAssignmentsController < ApplicationController
 
   def cancel
     @ba = BookAssignment.find_by(id: params[:id])
-    raise '【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。' if !@ba
+    raise '【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。' if !@ba || @ba.channel.code == 'bungomail-official'
     @ba.destroy!
     BungoMailer.with(user: @ba.channel.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信をキャンセルしました！'
