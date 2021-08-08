@@ -1,9 +1,10 @@
 class BookAssignmentsController < ApplicationController
   def create
-    @user = User.find_by(email: ba_params[:email])
-    raise "有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', memberships_new_path, class: 'text-link'}が必要です。" if !@user || !@user.stripe_customer_id
+    @user = User.where.not(stripe_customer_id: nil).find_by(email: ba_params[:email])
+    raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', memberships_new_path, class: 'text-link'}が必要です。") if !@user
 
     @channel = Channel.where(id: @user.id, user_id: @user.id).first_or_create
+    @user.subscriptions.where(channel_id: @channel.id).first_or_create
     @ba = @channel.book_assignments.create!(
       book_id: ba_params[:book_id],
       book_type: ba_params[:book_type],
@@ -15,7 +16,7 @@ class BookAssignmentsController < ApplicationController
     flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
     redirect_to book_path(ba_params[:book_id])
   rescue => e
-    logger.error e
+    logger.error e if ![ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid].include?(e.class)
     flash[:error] = e
     redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date])
   end
