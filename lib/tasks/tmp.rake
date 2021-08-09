@@ -263,4 +263,11 @@ namespace :tmp do
       user.subscriptions.create(channel_id: channel.id)
     end
   end
+
+  # 過去配信の配信時間をbook_assignmentsに設定
+  task update_book_assignments_delivery_time: :environment do |_task, _args|
+    Channel.find_by(code: 'alterego').book_assignments.update_all(delivery_time: '21:00')
+    Channel.find_by(code: 'business-model').book_assignments.update_all(delivery_time: '08:00')
+    Channel.find_by(code: 'dogramagra').book_assignments.update_all(delivery_time: '22:00')
+  end
 end

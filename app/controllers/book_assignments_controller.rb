@@ -4,14 +4,13 @@ class BookAssignmentsController < ApplicationController
     raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', memberships_new_path, class: 'text-link'}が必要です。") if !@user
 
     @channel = Channel.where(id: @user.id, user_id: @user.id).first_or_create
-    @channel.update(delivery_time: ba_params[:delivery_time]) if @channel.delivery_time.strftime("%H:%M") != ba_params[:delivery_time]
-
     @user.subscriptions.where(channel_id: @channel.id).first_or_create
     @ba = @channel.book_assignments.create!(
       book_id: ba_params[:book_id],
       book_type: ba_params[:book_type],
       start_date: ba_params[:start_date],
       end_date: ba_params[:end_date],
+      delivery_time: ba_params[:delivery_time],
     )
     @ba.delay.create_and_schedule_feeds
     BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
@@ -20,7 +19,7 @@ class BookAssignmentsController < ApplicationController
   rescue => e
     logger.error e if ![ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid].include?(e.class)
     flash[:error] = e
-    redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date])
+    redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date], delivery_time: ba_params[:delivery_time])
   end
 
   def cancel
