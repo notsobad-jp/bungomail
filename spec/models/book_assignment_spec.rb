@@ -42,7 +42,7 @@ RSpec.describe BookAssignment, type: :model do
         it "should not be valid" do
           ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today, end_date: Time.zone.today.next_month)
           expect(ba.valid?).to be_falsy
-          expect(ba.errors[:start_date]).to include("配信期間が重複しています")
+          expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
       end
 
@@ -51,7 +51,7 @@ RSpec.describe BookAssignment, type: :model do
         it "should not be valid" do
           ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today.next_month, end_date: Time.zone.today.next_month + 29)
           expect(ba.valid?).to be_falsy
-          expect(ba.errors[:start_date]).to include("配信期間が重複しています")
+          expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
       end
 
@@ -60,7 +60,7 @@ RSpec.describe BookAssignment, type: :model do
         it "should not be valid" do
           ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today, end_date: Time.zone.today + 50)
           expect(ba.valid?).to be_falsy
-          expect(ba.errors[:start_date]).to include("配信期間が重複しています")
+          expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
       end
 
@@ -69,7 +69,7 @@ RSpec.describe BookAssignment, type: :model do
         it "should not be valid" do
           ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today.next_month.beginning_of_month + 2, end_date: Time.zone.today.next_month.beginning_of_month + 12)
           expect(ba.valid?).to be_falsy
-          expect(ba.errors[:start_date]).to include("配信期間が重複しています")
+          expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
       end
     end
@@ -78,6 +78,46 @@ RSpec.describe BookAssignment, type: :model do
     context "when other channel has overlapping record" do
       it "should be valid" do
         ba = build(:book_assignment, book: book_assignment.book, start_date: Time.zone.today)
+        expect(ba.valid?).to be_truthy
+      end
+    end
+  end
+
+  # 配信期間がユーザーの無料トライアル開始日より前だと予約できない制約
+  ## createしないと:with_bookできないけど、エラーになるときはbuildでエラーメッセージを拾う
+  describe "delivery_should_start_after_trial" do
+    context "when start_date = trial_start_date" do
+      it "should be valid" do
+        channel = build(:channel)
+        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
+        ba = create(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-09-01"))
+        expect(ba.valid?).to be_truthy
+      end
+    end
+
+    context "when start_date < trial_start_date" do
+      it "should not be valid" do
+        channel = build(:channel)
+        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
+        ba = build(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-08-01"))
+        expect(ba.valid?).to be_falsy
+        expect(ba.errors[:base]).to include("配信開始日は無料トライアルの開始日以降に設定してください")
+      end
+    end
+
+    context "when start_date > trial_start_date" do
+      it "should be valid" do
+        channel = build(:channel)
+        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
+        ba = create(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-10-01"))
+        expect(ba.valid?).to be_truthy
+      end
+    end
+
+    context "when trial_start_date is blank" do
+      it "should be valid" do
+        channel = build(:channel)
+        ba = create(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-08-01"))
         expect(ba.valid?).to be_truthy
       end
     end
