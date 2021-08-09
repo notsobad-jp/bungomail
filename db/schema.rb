@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(version: 2021_08_09_055430) do
   create_table "email_digests", primary_key: "digest", id: :string, force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "trial_ended_at"
+    t.boolean "trial_ended", default: false, null: false
   end
 
   create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
