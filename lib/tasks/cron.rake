@@ -35,7 +35,7 @@ namespace :cron do
     ## TODO: 有料でも公式チャネルの購読on/offしたい
     records = []
     users.pluck(:id).each do |user_id|
-      records << { user_id: user_id, channel_id: Channel::OFFICIAL_CHANNEL_ID }
+      records << { user_id: user_id, channel_id: Channel.find_by(code: 'bungomail-official').id }
     end
     Subscription.upsert_all(records, unique_by: %i[user_id channel_id])
     p "Total sub: #{Subscription.all.count}"

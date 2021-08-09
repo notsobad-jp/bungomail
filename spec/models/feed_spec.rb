@@ -28,7 +28,7 @@ RSpec.describe Feed, type: :model do
       let(:feed) { create(:feed, delivery_date: Time.zone.tomorrow) }
 
       before do
-        feed.book_assignment.channel.update(delivery_time: '10:00:00')
+        feed.book_assignment.update(delivery_time: '10:00:00')
       end
 
       it "should enqueue the job" do
@@ -44,8 +44,8 @@ RSpec.describe Feed, type: :model do
   end
 
   describe "scope: :delivered" do
-    let(:ba1) { create(:book_assignment, :with_book, channel: create(:channel, delivery_time: Time.current.ago(1.minute).strftime("%T"))) }
-    let(:ba2) { create(:book_assignment, book_id: ba1.book_id, channel: create(:channel, delivery_time: Time.current.since(1.minute).strftime("%T"))) }
+    let(:ba1) { create(:book_assignment, :with_book, delivery_time: Time.current.ago(1.minute).strftime("%T"), channel: create(:channel)) }
+    let(:ba2) { create(:book_assignment, book_id: ba1.book_id, delivery_time: Time.current.since(1.minute).strftime("%T"), channel: create(:channel)) }
 
     it "should include right records" do
       feed1 = create(:feed, book_assignment_id: ba1.id, delivery_date: Time.zone.yesterday)  # 日付が昨日: 対象
