@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 2021_08_09_055430) do
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "trial_ended", default: false, null: false
+    t.datetime "canceled_at"
+    t.index ["canceled_at"], name: "index_email_digests_on_canceled_at"
   end
 
   create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

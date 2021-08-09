@@ -8,7 +8,7 @@ class UsersController < ApplicationController
       end
 
       # 有料ユーザーのときは処理をスキップして手動削除
-      if @user.paid_member?
+      if @user.stripe_customer_id # paid_memberで判定すると、トライアル前の人も削除してstripeだけに残っちゃうので広く拾う
         logger.error "[Error] Paid account cancelled: #{@user.stripe_customer_id}"
       else
         @user.destroy

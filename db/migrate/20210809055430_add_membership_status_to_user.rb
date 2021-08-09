@@ -6,5 +6,7 @@ class AddMembershipStatusToUser < ActiveRecord::Migration[6.0]
 
     remove_column :email_digests, :trial_ended_at, :datetime
     add_column :email_digests, :trial_ended, :boolean, null: false, default: false
+    add_column :email_digests, :canceled_at, :datetime
+    add_index :email_digests, :canceled_at
   end
 end
