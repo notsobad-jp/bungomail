@@ -62,14 +62,14 @@ class BookAssignment < ApplicationRecord
   end
 
   def end_date_should_come_after_start_date
-    errors.add(:base, "配信終了日は開始日より後に設定してください") if end_date && end_date < start_date
+    errors.add(:base, "配信終了日は開始日より後に設定してください") if end_date < start_date
   end
 
   def end_date_should_not_be_too_far
-    errors.add(:base, "配信終了日は現在から6ヶ月以内に設定してください") if end_date && end_date > Date.current.since(6.months)
+    errors.add(:base, "配信終了日は現在から6ヶ月以内に設定してください") if end_date > Date.current.since(6.months)
   end
 
   def delivery_should_start_after_trial
-    errors.add(:base, "配信開始日は無料トライアルの開始日以降に設定してください") if start_date && channel.user.trial_start_date && start_date < channel.user.trial_start_date
+    errors.add(:base, "配信開始日は無料トライアルの開始日以降に設定してください") if channel.user.trial_start_date && start_date < channel.user.trial_start_date
   end
 end

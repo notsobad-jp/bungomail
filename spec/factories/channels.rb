@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :channel do
-    association :user, :with_basic_membership
+    association :user
   end
 
   trait :with_book_assignment do
