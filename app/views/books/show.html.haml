@@ -8,7 +8,7 @@
     = @book.words_count.to_s(:delimited)
     %small.text-xs 文字
     .inline
-      .inline.text-sm （推奨配信期間:
+      .inline.text-sm （配信期間の目安:
       .inline.text-red-600= @recommended_duration
       .inline.text-sm ）
 
@@ -19,11 +19,15 @@
     %h5.mb-2.font-bold 配信先
     = f.email_field :email, required: true, class: 'border rounded w-full p-2', placeholder: 'メールアドレス'
     %small.text-xs ※有料プランに登録済みのメールアドレスを入力してください
-  .mb-8
+  .mb-4
     %h5.mb-2.font-bold 配信期間
     %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")
       = f.date_field :start_date, min: Date.current.tomorrow, required: true, class: 'border rounded p-2 flex-1'
       .text-center 〜
       = f.date_field :end_date, min: Date.current.tomorrow, max: Date.tomorrow.since(6.months), required: true, class: 'border rounded p-2 flex-1'
     %small.text-xs ※同じ期間に複数の配信を予約することはできません。また配信予約は最長で6ヶ月先までです。
+  .mb-8
+    %h5.mb-2.font-bold 配信時間
+    = f.time_field :delivery_time, class: 'border rounded w-full p-2', placeholder: '07:00', value: '07:00', min: '05:00', max: '23:00'
+    %small.text-xs ※配信時間は5:00~23:00の間で指定可能です（実際の配信には数分程度の誤差があります）
   = f.submit '配信を予約する', class: 'rounded bg-red-600 text-white py-4 w-full cursor-pointer hover:bg-red-500'
