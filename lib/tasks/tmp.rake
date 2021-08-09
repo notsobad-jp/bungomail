@@ -37,7 +37,7 @@ namespace :tmp do
         uuid = SecureRandom.uuid
         user_attributes << {id: uuid, email: email, created_at: default_timestamp, updated_at: default_timestamp}
         membership_attributes << {id: uuid, plan: 'free', status: Membership.statuses[:active], created_at: default_timestamp, updated_at: default_timestamp}
-        subscription_attributes << {user_id: uuid, channel_id: Channel::OFFICIAL_CHANNEL_ID, created_at: default_timestamp, updated_at: default_timestamp}
+        subscription_attributes << {user_id: uuid, channel_id: Channel.find_by(code: 'bungomail-official').id, created_at: default_timestamp, updated_at: default_timestamp}
       end
     end
 
@@ -221,7 +221,7 @@ namespace :tmp do
     assignments = []
     CampaignGroup.where("start_at > ?", Time.zone.parse("2021-04-01")).each do |cg|
       assignments << {
-        channel_id: Channel::OFFICIAL_CHANNEL_ID,
+        channel_id: Channel.find_by(code: 'bungomail-official').id,
         book_id: cg.book_id,
         book_type: 'AozoraBook',
         start_date: cg.start_at.to_date,

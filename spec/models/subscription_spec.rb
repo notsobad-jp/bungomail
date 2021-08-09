@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Subscription, type: :model do
   describe "check_channel_required_plan" do
-    subject { user.subscriptions.create(channel_id: Channel::OFFICIAL_CHANNEL_ID) }
+    subject { user.subscriptions.create(channel_id: Channel.find_by(code: 'bungomail-official').id) }
 
     context "when user is free plan" do
       let!(:user) { create(:user, :with_free_membership) }
 
       it "should succeed to subscribe juvenile-channel" do
-        expect{user.subscriptions.create(channel_id: Channel::JUVENILE_CHANNEL_ID)}.to change{Subscription.count}.by(1)
+        expect{user.subscriptions.create(channel_id: Channel.find_by(code: 'juvenile').id)}.to change{Subscription.count}.by(1)
       end
 
       it "should fail to subscribe official-channel" do

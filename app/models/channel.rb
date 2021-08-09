@@ -10,8 +10,6 @@ class Channel < ApplicationRecord
 
   delegate :title, :description, :google_group_key, to: :channel_profile, allow_nil: true
 
-  OFFICIAL_CHANNEL_ID = '1418479c-d5a7-4d29-a174-c5133ca484b6'
-  NOVEL_CHANNEL_ID = '470a73fb-d1ae-4ffb-9c6b-5b9dc292f4ef'
   PUBLIC_CHANNEL_CODES = %w(bungomail-official long-novel dogramagra alterego business-model) # channels#indexではこの並び順で表示
 
 
