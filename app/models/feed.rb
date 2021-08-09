@@ -3,7 +3,7 @@ class Feed < ApplicationRecord
   belongs_to :delayed_job, required: false
 
   # 配信日が昨日以前のもの or 配信日が今日ですでに配信時刻を過ぎているもの
-  scope :delivered, -> { joins(book_assignment: :channel).where("delivery_date < ?", Time.zone.today).or(Feed.joins(book_assignment: :channel).where(delivery_date: Time.zone.today).where("channels.delivery_time < ?", Time.current.strftime("%T"))) }
+  scope :delivered, -> { joins(:book_assignment).where("delivery_date < ?", Time.zone.today).or(Feed.joins(:book_assignment).where(delivery_date: Time.zone.today).where("book_assignments.delivery_time < ?", Time.current.strftime("%T"))) }
 
   after_destroy do
     self.delayed_job&.delete
@@ -17,6 +17,6 @@ class Feed < ApplicationRecord
   end
 
   def send_at
-    Time.zone.parse("#{delivery_date.to_s} #{book_assignment.channel.delivery_time}")
+    Time.zone.parse("#{delivery_date.to_s} #{book_assignment.delivery_time}")
   end
 end

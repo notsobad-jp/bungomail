@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_31_070437) do
+ActiveRecord::Schema.define(version: 2021_08_09_050529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_070437) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "twitter_share_url"
     t.date "end_date", null: false
+    t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
     t.index "channel_id, daterange(start_date, end_date)", name: "gist_index_book_assignments_on_delivery_period", using: :gist
     t.index ["book_id", "book_type"], name: "index_book_assignments_on_book_id_and_book_type"
     t.index ["channel_id"], name: "index_book_assignments_on_channel_id"
@@ -107,7 +108,6 @@ ActiveRecord::Schema.define(version: 2021_07_31_070437) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "code"
-    t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
     t.index ["code"], name: "index_channels_on_code", unique: true
     t.index ["user_id"], name: "index_channels_on_user_id"
   end
@@ -227,7 +227,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_070437) do
     t.index ["remember_me_token"], name: "index_users_on_remember_me_token"
   end
 
-  add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
+  add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id", name: "aozora_books_canonical_book_id_fkey"
   add_foreign_key "book_assignments", "channels", on_delete: :cascade
   add_foreign_key "campaign_groups", "aozora_books", column: "book_id"
   add_foreign_key "campaigns", "campaign_groups"
