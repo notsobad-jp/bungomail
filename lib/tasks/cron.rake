@@ -5,6 +5,7 @@ namespace :cron do
     has_more = true
     last_id = nil
 
+    # Stripe支払い中のuser一覧取得
     while has_more do
       list = Stripe::Subscription.list({limit: 100, starting_after: last_id, expand: ['data.customer']})
       last_id = list.data.last&.id
@@ -12,17 +13,28 @@ namespace :cron do
       emails += list.data.map{|m| m.customer.email}
     end
 
-    subscribed_users = User.where(email: emails)
-    user_ids = subscribed_users.map(&:id)
+    # 解約した人のstatus更新
+    unsubs = User.where.not(email: emails).where(paid_member: true)
+    unsubs.update_all(paid_member: false)
+    p "UnSubscribed users: #{unsubs.length}"
 
-    p "Subscribed users: #{user_ids.length}"
+    # 支払い中の人のstatus更新
+    users = User.where(email: emails)
+    users.update_all(paid_member: true)
+    p "Subscribing users: #{user.length}"
 
-    canceled_subs = Subscription.where.not(user_id: user_ids)
-    p "Canceled subs: #{canceled_subs.length}"
-    canceled_subs.delete_all
+    # 月初時点で有料の人はトライアル体験済みにする
+    digests = users.map{|u| Digest::SHA256.hexdigest(u.email) }
+    EmailDigest.where(digest: digests).update_all(trial_ended: true)
 
+    # 有料じゃないユーザーのsubscriptionは全部削除
+    free_channel_ids = [Channel.find_by(code: 'long-novel')]
+    Subscription.where.not(user_id: users.pluck(:id)).where.not(channel_id: free_channel_ids).delete_all
+
+    # 有料ユーザーは全員公式チャネルを購読
+    ## TODO: 有料でも公式チャネルの購読on/offしたい
     records = []
-    user_ids.each do |user_id|
+    users.pluck(:id).each do |user_id|
       records << { user_id: user_id, channel_id: Channel::OFFICIAL_CHANNEL_ID }
     end
     Subscription.upsert_all(records, unique_by: %i[user_id channel_id])
