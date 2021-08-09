@@ -13,6 +13,14 @@ class User < ApplicationRecord
 
   # 新規作成時（未activation）: EmailDigest作成
   after_create do
-    EmailDigest.find_or_create_by!(digest: Digest::SHA256.hexdigest(email)) # 退会済みユーザーの場合はEmailDigestが存在する
+    EmailDigest.find_or_create_by!(digest: digest) # 退会済みユーザーの場合はEmailDigestが存在する
+  end
+
+  after_destroy do
+    EmailDigest.find_by(digest: digest).update(canceled_at: Time.current)
+  end
+
+  def digest
+    Digest::SHA256.hexdigest(email)
   end
 end

@@ -37,7 +37,11 @@ class MembershipsController < ApplicationController
       redirect_to(memberships_new_path) and return
     end
 
-    user.update!(stripe_customer_id: session.customer.id)
+    user.update!(
+      stripe_customer_id: session.customer.id,
+      trial_start_date: Date.current.next_month.beginning_of_month,
+      trial_end_date: Date.current.next_month.end_of_month,
+    )
     beginning_of_next_next_month = Time.current.next_month.next_month.beginning_of_month
     Stripe::Subscription.create({
       customer: session.customer.id,

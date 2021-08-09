@@ -6,6 +6,7 @@ class BookAssignment < ApplicationRecord
 
   validates :start_date, presence: true
   validates :end_date, presence: true
+  validate :delivery_should_start_after_trial # トライアル開始前の配信予約は不可
   validate :end_date_should_come_after_start_date
   validate :delivery_period_should_not_overlap # 同一チャネルで期間が重複するレコードが存在すればinvalid
   validate :end_date_should_not_be_too_far # ６ヶ月以上先の予約は禁止
@@ -66,5 +67,9 @@ class BookAssignment < ApplicationRecord
 
   def end_date_should_not_be_too_far
     errors.add(:base, "配信終了日は現在から6ヶ月以内に設定してください") if end_date && end_date > Date.current.since(6.months)
+  end
+
+  def delivery_should_start_after_trial
+    errors.add(:base, "配信開始日は無料トライアルの開始日以降に設定してください") if start_date && channel.user.trial_start_date && start_date < channel.user.trial_start_date
   end
 end

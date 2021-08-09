@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_050529) do
+ActiveRecord::Schema.define(version: 2021_08_09_055430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
@@ -130,7 +130,9 @@ ActiveRecord::Schema.define(version: 2021_08_09_050529) do
   create_table "email_digests", primary_key: "digest", id: :string, force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "trial_ended_at"
+    t.boolean "trial_ended", default: false, null: false
+    t.datetime "canceled_at"
+    t.index ["canceled_at"], name: "index_email_digests_on_canceled_at"
   end
 
   create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -212,19 +214,11 @@ ActiveRecord::Schema.define(version: 2021_08_09_050529) do
     t.string "salt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "magic_login_token"
-    t.datetime "magic_login_token_expires_at"
-    t.datetime "magic_login_email_sent_at"
-    t.string "remember_me_token"
-    t.datetime "remember_me_token_expires_at"
-    t.string "activation_state"
-    t.string "activation_token"
-    t.datetime "activation_token_expires_at"
     t.string "stripe_customer_id"
-    t.index ["activation_token"], name: "index_users_on_activation_token"
+    t.boolean "paid_member", default: false, null: false
+    t.date "trial_start_date"
+    t.date "trial_end_date"
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["magic_login_token"], name: "index_users_on_magic_login_token"
-    t.index ["remember_me_token"], name: "index_users_on_remember_me_token"
   end
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id", name: "aozora_books_canonical_book_id_fkey"
