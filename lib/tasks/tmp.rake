@@ -270,4 +270,13 @@ namespace :tmp do
     Channel.find_by(code: 'business-model').book_assignments.update_all(delivery_time: '08:00')
     Channel.find_by(code: 'dogramagra').book_assignments.update_all(delivery_time: '22:00')
   end
+
+  # 有料会員のステータス更新
+  task update_paid_members: :environment do |_task, _args|
+    User.where.not(stripe_customer_id: nil).update_all(
+      paid_member: true,
+      trial_start_date: "2021-08-01",
+      trial_end_date: "2021-08-31",
+    )
+  end
 end

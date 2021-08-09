@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_054643) do
+ActiveRecord::Schema.define(version: 2021_08_09_055430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
@@ -213,6 +213,9 @@ ActiveRecord::Schema.define(version: 2021_08_09_054643) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "stripe_customer_id"
+    t.boolean "paid_member", default: false, null: false
+    t.date "trial_start_date"
+    t.date "trial_end_date"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
