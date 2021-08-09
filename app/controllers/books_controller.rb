@@ -6,6 +6,7 @@ class BooksController < ApplicationController
       book_type: 'AozoraBook',
       start_date: params[:start_date],
       end_date: params[:end_date],
+      delivery_time: params[:delivery_time] || '07:00',
     )
 
     # 推奨配信期間
