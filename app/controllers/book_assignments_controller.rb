@@ -4,7 +4,7 @@ class BookAssignmentsController < ApplicationController
     raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', memberships_new_path, class: 'text-link'}が必要です。") if !@user
 
     @channel = Channel.where(id: @user.id, user_id: @user.id).first_or_create
-    @channel.update(delivery_time: ba_params[:delivery_time]) if @channel.delivery_time != ba_params[:delivery_time]
+    @channel.update(delivery_time: ba_params[:delivery_time]) if @channel.delivery_time.strftime("%H:%M") != ba_params[:delivery_time]
 
     @user.subscriptions.where(channel_id: @channel.id).first_or_create
     @ba = @channel.book_assignments.create!(
