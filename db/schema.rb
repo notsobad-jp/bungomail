@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_055430) do
+ActiveRecord::Schema.define(version: 2021_08_10_081256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
@@ -180,6 +180,14 @@ ActiveRecord::Schema.define(version: 2021_08_09_055430) do
     t.index ["guten_book_id", "subject_id"], name: "index_guten_books_subjects_on_guten_book_id_and_subject_id", unique: true
     t.index ["guten_book_id"], name: "index_guten_books_subjects_on_guten_book_id"
     t.index ["subject_id"], name: "index_guten_books_subjects_on_subject_id"
+  end
+
+  create_table "marketing_emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "title", null: false
+    t.text "content"
+    t.datetime "send_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   create_table "senders", id: :serial, force: :cascade do |t|

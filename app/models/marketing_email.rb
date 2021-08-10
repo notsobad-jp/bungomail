@@ -1,0 +1,2 @@
+class MarketingEmail < ApplicationRecord
+end
