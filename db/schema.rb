@@ -221,7 +221,7 @@ ActiveRecord::Schema.define(version: 2021_08_09_055430) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id", name: "aozora_books_canonical_book_id_fkey"
+  add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
   add_foreign_key "book_assignments", "channels", on_delete: :cascade
   add_foreign_key "campaign_groups", "aozora_books", column: "book_id"
   add_foreign_key "campaigns", "campaign_groups"
