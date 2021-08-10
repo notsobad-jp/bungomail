@@ -27,12 +27,12 @@ class BungoMailer < ApplicationMailer
   end
 
   def marketing_email
-    mail_to = "bungomail-text@notsobad.jp"
+    @marketing_email = params[:marketing_email]
+    send_to = params[:send_to] || User.where(paid_member: true).pluck(:email)
     xsmtp_api_params = { category: 'marketing' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
 
-    mail(to: mail_to, subject: "【ブンゴウメール】無料配信終了のお知らせ & 優待キャンペーンは本日までです")
-    logger.info "[Marketing] email sent to #{mail_to}"
+    mail(to: send_to, subject: "【ブンゴウメール】#{@marketing_email.title}")
   end
 
   def schedule_canceled_email
