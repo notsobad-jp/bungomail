@@ -40,4 +40,27 @@ namespace :cron do
     Subscription.upsert_all(records, unique_by: %i[user_id channel_id])
     p "Total sub: #{Subscription.all.count}"
   end
+
+  # [Daily?] 決済画面遷移時に作成されるcustomerのうち、決済情報を登録せずに離脱したemailなしcustomerを定期的に削除する
+  task clean_stripe_blank_accounts: :environment do |_task, _args|
+    has_more = true
+    last_id = nil
+    emails = []
+
+    # customersの一覧取得
+    while has_more do
+      list = Stripe::Customer.list({limit: 100, starting_after: last_id})
+      last_id = list.data.last&.id
+      has_more = list.has_more
+      list.data.each do |customer|
+        emails << customer.email
+        next if customer.email.present?
+        Stripe::Customer.delete(customer.id)
+        p "Deleted: #{customer.id}, email: #{customer.email}"
+      end
+    end
+
+    # 重複したemailを表示
+    p emails.group_by(&:itself).map{ |k,v| [k, v.count] }.to_h.filter{|k,v| v > 1}.keys
+  end
 end
