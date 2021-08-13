@@ -30,9 +30,9 @@ class MembershipsController < ApplicationController
     session = Stripe::Checkout::Session.retrieve({id: params[:session_id], expand: ['customer']})
     user = User.find_or_initialize_by(email: session.customer.email)
 
-    # 重複登録 or 退会→再登録 の場合はとりあえず例外で手動対応
+    # customerが過去にstripe登録済み（重複登録 or 退会→再登録）の場合はとりあえず手動対応
     if user.stripe_customer_id.present?
-      # TODO: 重複時はこのタイミングでstripeのcustomerを削除したい
+      Stripe::Customer.delete(session.customer.id) # stripe側に重複して作成されたcustomerを削除
       flash[:error] = 'このアカウントにはすでにお支払い情報が登録されているため、決済処理を中止しました。これにより課金が二重が発生することはありません。登録情報を確認・更新したい場合は「利用者メニュー」をご利用ください'
       redirect_to(memberships_new_path) and return
     end
