@@ -1,4 +1,10 @@
 # README
+## Setup
+> bundle install
+> bundle exec rails db:create
+> bundle exec rails db:migrate
+> yarn install
+> yarn dev-build
 
 ## PostCSS
 やってること
