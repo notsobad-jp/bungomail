@@ -1,0 +1,48 @@
+.mb-8
+  %h1(class="mb-2 text-xl sm:text-2xl font-bold")
+    カスタム配信機能
+  .text-gray-500.text-large
+    青空文庫の好きな作品を、好きなタイミングで自由にメールで分割配信することができます。
+
+.mb-12
+  .text-xs
+    ※利用には
+    = link_to 'ブンゴウメール有料プランへの登録', memberships_new_path, class: 'text-link'
+    が必要です。
+  .text-xs ※青空文庫に登録されていても、著作権が存続している作品は配信対象外です。
+
+
+.mb-12
+  %h3.font-bold.text-lg.mb-4
+    ▼ 使い方
+
+  .mb-12
+    %h5.font-bold.bg-gray-100.rounded.px-4.py-2.mb-4
+      (1) 好きな作品を検索する
+    .mb-4
+      青空文庫の作品を読了時間で検索できる姉妹サービス「
+      = link_to 'ブンゴウサーチ', 'https://bungo-search.com', class: 'text-link', target: :_blank
+      」で、読みたい作品を検索してください。
+    .mb-4
+      読みたい作品が決まったら、作品詳細画面で「メールで分割して読む」ボタンをクリックします。
+    .mb-4
+      = image_tag('/assets/images/custom_deliveries/search_detail.png', width: 1128, height: 600, class: 'border rounded')
+    .mb-4
+      = link_to 'https://bungo-search.com', class: 'text-link', target: :_blank do
+        ブンゴウサーチで作品を検索する
+
+  .mb-12
+    %h5.font-bold.bg-gray-100.rounded.px-4.py-2.mb-4
+      (2) 配信設定を登録する
+    .mb-4
+      配信設定画面が表示されるので、メールアドレスや配信期間などを登録してください。
+    .mb-4
+      = image_tag('/assets/images/custom_deliveries/delivery_settings.png', width: 1128, height: 750, class: 'border rounded')
+
+  .mb-12
+    %h5.font-bold.bg-gray-100.rounded.px-4.py-2.mb-4
+      (3) 配信開始！
+    .mb-4
+      「配信を予約する」ボタンをクリックすると、配信予約完了です！数分以内に配信内容を記載した確認メールが届きます。
+    .mb-4
+      配信が不要になった場合は、確認メールに記載のリンクからいつでも配信を解除できます。
