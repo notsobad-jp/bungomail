@@ -18,7 +18,10 @@
   .mb-4
     %h5.mb-2.font-bold 配信先
     = f.email_field :email, required: true, class: 'border rounded w-full p-2', placeholder: 'メールアドレス'
-    %small.text-xs ※有料プランに登録済みのメールアドレスを入力してください
+    %small.text-xs
+      ※
+      = link_to 'ブンゴウメール有料プラン', memberships_new_path, class: 'text-link'
+      に登録済みのメールアドレスを入力してください
   .mb-4
     %h5.mb-2.font-bold 配信期間
     %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")

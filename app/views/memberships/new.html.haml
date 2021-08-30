@@ -23,8 +23,11 @@
         .text-3xl.font-bold.mb-2
           ￥500
           .text-xs.inline /月 (税込550円)
-        .text-sm
+        .text-sm.mb-1
           毎月1冊、おまかせ読書
+        .text-sm.mb-1
+          = link_to '好きな作品の配信', page_path(:custom_delivery), class: 'text-link'
+          も可能
       .px-4.pt-2.pb-4
         = link_to memberships_create_path, class: 'block w-full rounded py-4 bg-red-600 text-white text-sm hover:opacity-75' do
           カード情報を登録する
