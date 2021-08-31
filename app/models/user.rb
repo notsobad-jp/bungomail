@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   scope :activated_in_stripe, -> (active_emails) { where(paid_member: false).where(email: active_emails) }  # stripeで購読したけどまだDBの支払いステータスに反映されていないuser
   scope :canceled_in_stripe, -> (active_emails) { where(paid_member: true).where.not(email: active_emails) }  # stripeで解約したけどまだDBの支払いステータスに反映されていないuser
-  scope :paid_without_official_subscription, -> { where(paid_member: true).left_outer_joins(:subscriptions).where(subscriptions: {id: nil}) } # 有料プランなのに公式チャネル購読してないuser
+  scope :paid_without_official_subscription, -> { where(paid_member: true).where.not(id: Subscription.where(channel_id: Channel.find_by(code: 'bungomail-official').id).pluck(:user_id)) } # 有料プランなのに公式チャネル購読してないuser
 
   validates :email, presence: true, uniqueness: true
 
