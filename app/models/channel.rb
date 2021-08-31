@@ -7,6 +7,7 @@ class Channel < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :active_subscriptions, -> { where paused: false }, class_name: 'Subscription'
   has_many :active_subscribers, through: :active_subscriptions, source: :user
+  scope :by_unpaid_users, -> { joins(:user).where(users: { paid_member: false }) }
 
   delegate :title, :description, :google_group_key, to: :channel_profile, allow_nil: true
 
