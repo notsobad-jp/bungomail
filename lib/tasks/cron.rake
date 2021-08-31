@@ -1,36 +1,38 @@
 namespace :cron do
   # [月初] Stripe登録状況とSubscriptionを一致させる
   task sync_stripe_subscription: :environment do |_task, _args|
-    # stripeで支払い中のメールアドレス一覧
-    emails = User.active_emails_in_stripe
+    ActiveRecord::Base.transaction(joinable: false, requires_new: true) do
+      # stripeで支払い中のメールアドレス一覧
+      emails = User.active_emails_in_stripe
 
-    # 解約した人のstatus更新
-    unsubs = User.canceled_in_stripe(emails)
-    unsubs.update_all(paid_member: false, updated_at: Time.current)
-    p "UnSubscribed users: #{unsubs.map(&:email)}"
+      # 解約した人のstatus更新
+      unsubs = User.canceled_in_stripe(emails)
+      unsubs.update_all(paid_member: false, updated_at: Time.current)
+      p "UnSubscribed users: #{unsubs.map(&:email)}"
 
-    # 契約中の人のstatus更新(新規＋既存両方とも)
-    users = User.where(email: emails)
-    users.update_all(paid_member: true, updated_at: Time.current)
-    p "Subscribing users: #{users.map(&:email)}"
+      # 契約中の人のstatus更新(新規＋既存両方とも)
+      users = User.where(email: emails)
+      users.update_all(paid_member: true, updated_at: Time.current)
+      p "Subscribing users: #{users.map(&:email)}"
 
-    # 月初時点で有料の人はトライアル体験済みにする
-    digests = emails.map{|email| Digest::SHA256.hexdigest(email) }
-    EmailDigest.where(digest: digests).update_all(trial_ended: true, updated_at: Time.current)
+      # 月初時点で有料の人はトライアル体験済みにする
+      digests = emails.map{|email| Digest::SHA256.hexdigest(email) }
+      EmailDigest.where(digest: digests).update_all(trial_ended: true, updated_at: Time.current)
 
-    # 有料じゃないユーザーのchannel/subscriptionは全部削除
-    Channel.by_unpaid_users.where(code: nil).destroy_all
-    free_channel_ids = [Channel.find_by(code: 'long-novel')&.id]
-    Subscription.by_unpaid_users.where.not(channel_id: free_channel_ids).delete_all
+      # 有料じゃないユーザーのchannel/subscriptionは全部削除
+      Channel.by_unpaid_users.where(code: nil).destroy_all
+      free_channel_ids = [Channel.find_by(code: 'long-novel')&.id]
+      Subscription.by_unpaid_users.where.not(channel_id: free_channel_ids).delete_all
 
-    # 有料ユーザーは全員公式チャネルを購読
-    ## TODO: 有料でも公式チャネルの購読on/offしたい
-    official_channel_id = Channel.find_by(code: 'bungomail-official').id
-    users.each do |user|
-      sub = user.subscriptions.find_or_initialize_by(channel_id: official_channel_id)
-      next if sub.persisted?
-      sub.save!
-      p "New subscription: #{user.email}"
+      # 有料ユーザーは全員公式チャネルを購読
+      ## TODO: 有料でも公式チャネルの購読on/offしたい
+      official_channel_id = Channel.find_by(code: 'bungomail-official').id
+      users.each do |user|
+        sub = user.subscriptions.find_or_initialize_by(channel_id: official_channel_id)
+        next if sub.persisted?
+        sub.save!
+        p "New subscription: #{user.email}"
+      end
     end
   end
 
