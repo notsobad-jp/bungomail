@@ -1,8 +1,4 @@
-namespace :tmp do
-  task test: :environment do |_task, _args|
-    p 'test!'
-  end
-
+namespace :temp do
   # Stripeのcustomerにデフォルト支払い方法を設定
   task set_default_payment_method: :environment do |_task, _args|
     emails = User.active_emails_in_stripe
