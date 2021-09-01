@@ -18,8 +18,7 @@ class MembershipsController < ApplicationController
       success_url: "#{memberships_completed_url}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: memberships_new_url,
     )
-    render layout: false
-    @no_index = true
+    render layout: false  # 共通metatagも読まないのでnoindexはviewで直接定義
   end
 
 
