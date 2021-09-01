@@ -42,6 +42,10 @@ class MembershipsController < ApplicationController
       trial_start_date: Date.current.next_month.beginning_of_month,
       trial_end_date: Date.current.next_month.end_of_month,
     )
+    # Stripeでデフォルトの支払い方法を設定
+    sti = Stripe::SetupIntent.retrieve(session.setup_intent)
+    Stripe::Customer.update(session.customer.id, {invoice_settings: {default_payment_method: sti.payment_method}})
+
     beginning_of_next_next_month = Time.current.next_month.next_month.beginning_of_month
     Stripe::Subscription.create({
       customer: session.customer.id,
