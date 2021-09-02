@@ -23,7 +23,7 @@
   %body.text-gray-700.font-sans
     -# Google Tag Manager
     - if Rails.env.production?
-      %noscript
+      %noscripts
         %iframe(src="https://www.googletagmanager.com/ns.html?id=#{ENV['GOOGLE_TAG_MANAGER_ID']}" height="0" width="0" style="display:none; visibility:hidden;")
 
     - if current_page?(root_url) || current_page?('/lp_new')
