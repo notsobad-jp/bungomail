@@ -18,6 +18,6 @@ class BooksController < ApplicationController
     end
 
     @meta_title = @book.title
-    @breadcrumbs = [ {text: 'カスタム配信'}, {text: @meta_title} ]
+    @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
   end
 end
