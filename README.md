@@ -1,5 +1,13 @@
 # README
-## Setup
+## Docker Setup
+> docker-compose build
+> docker-compose run web rails db:create
+> docker-compose run web rails db:migrate
+> heroku pg:backups:download -a bungomail # 本番DBをlatest.dumpにダウンロード
+> docker-compose exec web bash # webコンテナに入る
+>> pg_restore --verbose --clean --no-acl --no-owner -h db -U postgres -d bungomail_development latest.dump # dbコンテナにリストア
+
+## Mac Setup(Deprecated)
 > bundle install
 > bundle exec rails db:create
 > bundle exec rails db:migrate

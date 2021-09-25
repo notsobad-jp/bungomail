@@ -18,7 +18,7 @@ RSpec.describe Channel, type: :model do
       let(:channel) { create(:channel, :with_book_assignment) }
 
       it "should return the day after last_date" do
-        expect(channel.nearest_assignable_date).to eq(Time.zone.today.next_month.end_of_month.next_day)
+        expect(channel.nearest_assignable_date).to eq(channel.book_assignments.first.end_date + 1)
       end
     end
   end
