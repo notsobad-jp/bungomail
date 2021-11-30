@@ -13,7 +13,7 @@ namespace :cron do
       # 新規契約した人のstatus更新
       new_subs = User.activated_in_stripe(emails)
       new_subs.update_all(paid_member: true, updated_at: Time.current)
-      p "Subscribing users: #{users.map(&:email)}"
+      p "Subscribing users: #{new_subs.map(&:email)}"
 
       # 月初時点で有料の人はトライアル体験済みにする
       digests = new_subs.map{|user| Digest::SHA256.hexdigest(user.email) }
