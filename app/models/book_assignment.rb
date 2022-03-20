@@ -66,7 +66,7 @@ class BookAssignment < ApplicationRecord
   end
 
   def end_date_should_not_be_too_far
-    errors.add(:base, "配信終了日は現在から6ヶ月以内に設定してください") if end_date > Date.current.since(6.months)
+    errors.add(:base, "配信終了日は現在から12ヶ月以内に設定してください") if end_date > Date.current.since(12.months)
   end
 
   def delivery_should_start_after_trial
