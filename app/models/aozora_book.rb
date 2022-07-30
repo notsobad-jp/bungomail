@@ -101,7 +101,7 @@ class AozoraBook < ApplicationRecord
 
   # scrape and parse Aozora File
   def aozora_file_text(html=nil)
-    html = html || Rails.env.production? ? open(aozora_raw_file_url)&.read : File.open(aozora_file_path, &:read)
+    html = html || Rails.env.production? ? URI.open(aozora_raw_file_url)&.read : File.open(aozora_file_path, &:read)
 
     charset = 'CP932'
     doc = Nokogiri::HTML.parse(html, nil, charset)
