@@ -18,6 +18,8 @@ services:
       - "bundle:/usr/local/bundle"
     ports:
       - "3000:3000"
+    depends_on:
+      - db
     networks:
       - bungo_network
 networks:
