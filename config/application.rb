@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module BungoMail
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     # 表示時のタイムゾーンをJSTに設定
     config.time_zone = 'Tokyo'
