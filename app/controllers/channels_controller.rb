@@ -24,7 +24,7 @@ class ChannelsController < ApplicationController
   def feed
      # 公開チャネルはcodeでチャネル検索
     @channel = Channel::PUBLIC_CHANNEL_CODES.include?(params[:id]) ? Channel.find_by(code: params[:id]) : Channel.find(params[:id])
-    @feeds = @channel.feeds.delivered.order('feeds.delivery_date DESC').limit(30)
+    @feeds = Feed.delivered.where(book_assignment_id: @channel.book_assignments.pluck(:id)).order('feeds.delivery_date DESC').limit(30)
   end
 
   private
