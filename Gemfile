@@ -23,6 +23,10 @@ gem 'pragmatic_segmenter'
 gem 'lemmatizer'
 gem 'google-api-client'
 gem 'trigram' # 文字列の類似度チェック
+gem "tailwindcss-rails"
+gem 'propshaft'
+gem 'importmap-rails'
+gem 'turbo-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
