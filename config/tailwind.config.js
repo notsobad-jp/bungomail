@@ -5,13 +5,19 @@ module.exports = {
     './public/*.html',
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
-    './app/views/**/*.{erb,haml,html,slim}'
+    './app/views/**/*.{erb,haml,html,slim}',
+    'config/locales/**/*.yml'
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['Noto Sans JP', 'ui-sans-serif', 'system-ui', 'Inter var', ...defaultTheme.fontFamily.sans],
       },
+    },
+  },
+  variants: {
+    extend: {
+      textColor: ['visited'],
     },
   },
   plugins: [
