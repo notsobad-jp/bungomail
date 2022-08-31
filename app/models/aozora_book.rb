@@ -236,7 +236,7 @@ class AozoraBook < ApplicationRecord
     def author_name(author)
       name = author.split(',').first # 複数著者の場合もあるので、最初の一人を取得
       if name.match(/^[\p{katakana}\s・ー＝]+$/)  # 外国人著者の場合（カタカナ＋記号のみ）
-        name.split(" ", 2).reverse.join("・")
+        name.split(" ", 2).reject(&:blank?).reverse.join("・")
       else
         name.delete(' ')
       end
