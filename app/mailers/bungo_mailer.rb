@@ -59,6 +59,13 @@ class BungoMailer < ApplicationMailer
     mail(to: @user.email, subject: "【ブンゴウメール】お支払い情報の登録が完了しました")
   end
 
+  def user_registered_email
+    @user = params[:user]
+    xsmtp_api_params = { category: 'user_registered' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+    mail(to: @user.email, subject: "【ブンゴウメール】ユーザー登録が完了しました")
+  end
+
 
   private
 
