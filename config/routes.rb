@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     get 'books', on: :member
   end
 
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   get ':page' => "pages#show", as: :page
   root to: 'pages#lp'
 end
