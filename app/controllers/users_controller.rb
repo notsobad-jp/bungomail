@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.find_or_initialize_by(email: params[:email])
+    user = User.find_or_initialize_by(email: user_params[:email])
 
     # customerが過去にstripe登録済み（重複登録 or 退会→再登録）の場合はとりあえず手動対応
     if user.stripe_customer_id.present?
@@ -64,4 +64,10 @@ class UsersController < ApplicationController
       redirect_to page_path(:unsubscribe)
     end
   end
+
+  private
+
+    def user_params
+      params.require(:user).permit(:email)
+    end
 end
