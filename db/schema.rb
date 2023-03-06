@@ -2,16 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[6.1].define(version: 2021_08_10_081256) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_03_06_142034) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -23,8 +22,8 @@ ActiveRecord::Schema[6.1].define(version: 2021_08_10_081256) do
     t.bigint "author_id"
     t.bigint "file_id"
     t.text "footnote"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "words_count", default: 0
     t.string "beginning"
     t.integer "access_count", default: 0
@@ -46,13 +45,13 @@ ActiveRecord::Schema[6.1].define(version: 2021_08_10_081256) do
     t.index ["words_count"], name: "index_aozora_books_on_words_count"
   end
 
-  create_table "book_assignments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "book_assignments", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "channel_id", null: false
     t.integer "book_id", null: false
     t.string "book_type", null: false
     t.date "start_date", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "twitter_share_url"
     t.date "end_date", null: false
     t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
@@ -63,86 +62,86 @@ ActiveRecord::Schema[6.1].define(version: 2021_08_10_081256) do
     t.index ["start_date"], name: "index_book_assignments_on_start_date"
   end
 
-  create_table "campaign_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "campaign_groups", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "book_id", null: false
     t.integer "count", null: false
-    t.datetime "start_at", null: false
+    t.datetime "start_at", precision: nil, null: false
     t.integer "list_id", null: false
     t.integer "sender_id", null: false
-    t.datetime "created_at", default: -> { "now()" }, null: false
-    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "now()" }, null: false
     t.string "twitter_share_url"
     t.index ["book_id"], name: "index_campaign_groups_on_book_id"
   end
 
-  create_table "campaigns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "campaigns", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.integer "sendgrid_id"
     t.string "title", null: false
     t.text "content", null: false
-    t.datetime "send_at", null: false
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "send_at", precision: nil, null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.uuid "campaign_group_id", null: false
     t.index ["campaign_group_id"], name: "index_campaigns_on_campaign_group_id"
     t.index ["sendgrid_id"], name: "index_campaigns_on_sendgrid_id", unique: true
   end
 
-  create_table "channel_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "channel_profiles", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "google_group_key"
     t.string "title", null: false
     t.text "description"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "channel_subscription_logs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "channel_subscription_logs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.integer "action", default: 1, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["action"], name: "index_channel_subscription_logs_on_action"
   end
 
-  create_table "channels", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "channels", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "code"
     t.index ["code"], name: "index_channels_on_code", unique: true
     t.index ["user_id"], name: "index_channels_on_user_id"
   end
 
-  create_table "delayed_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "delayed_jobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "email_digests", primary_key: "digest", id: :string, force: :cascade do |t|
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "trial_ended", default: false, null: false
-    t.datetime "canceled_at"
+    t.datetime "canceled_at", precision: nil
     t.index ["canceled_at"], name: "index_email_digests_on_canceled_at"
   end
 
-  create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "book_assignment_id", null: false
     t.uuid "delayed_job_id"
     t.string "title", null: false
     t.text "content", null: false
     t.date "delivery_date", null: false
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.text "comment"
     t.index ["book_assignment_id"], name: "index_feeds_on_book_assignment_id"
     t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
@@ -156,8 +155,8 @@ ActiveRecord::Schema[6.1].define(version: 2021_08_10_081256) do
     t.bigint "downloads", default: 0
     t.integer "words_count", default: 0, null: false
     t.integer "chars_count", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "author_id"
     t.string "category_id"
     t.string "beginning"
@@ -182,51 +181,53 @@ ActiveRecord::Schema[6.1].define(version: 2021_08_10_081256) do
     t.index ["subject_id"], name: "index_guten_books_subjects_on_subject_id"
   end
 
-  create_table "marketing_emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "marketing_emails", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
     t.text "content"
-    t.datetime "send_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "send_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   create_table "senders", id: :serial, force: :cascade do |t|
     t.string "nickname", null: false
     t.string "name", null: false
     t.date "locked_until"
-    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
-    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
     t.index ["locked_until"], name: "index_senders_on_locked_until"
   end
 
   create_table "subjects", id: :string, force: :cascade do |t|
     t.integer "books_count", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "subscriptions", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "channel_id", null: false
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "paused", default: false, null: false
     t.index ["channel_id"], name: "index_subscriptions_on_channel_id"
     t.index ["user_id", "channel_id"], name: "index_subscriptions_on_user_id_and_channel_id", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
-  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "crypted_password"
     t.string "salt"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "stripe_customer_id"
     t.boolean "paid_member", default: false, null: false
     t.date "trial_start_date"
     t.date "trial_end_date"
+    t.integer "status", limit: 2, default: 1, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["status"], name: "index_users_on_status"
   end
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"

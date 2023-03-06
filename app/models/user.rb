@@ -6,6 +6,8 @@ class User < ApplicationRecord
   scope :canceled_in_stripe, -> (active_emails) { where(paid_member: true).where.not(email: active_emails) }  # stripeで解約したけどまだDBの支払いステータスに反映されていないuser
   scope :paid_without_official_subscription, -> { where(paid_member: true).where.not(id: Subscription.where(channel_id: Channel.find_by(code: 'bungomail-official').id).pluck(:user_id)) } # 有料プランなのに公式チャネル購読してないuser
 
+  enum status: { trial_scheduled: 1, trialing: 2, free: 3, basic: 4 }
+
   validates :email, presence: true, uniqueness: true
 
   # activation実行に必要なのでダミーのパスワードを設定

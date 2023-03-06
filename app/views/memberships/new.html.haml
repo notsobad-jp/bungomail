@@ -10,26 +10,10 @@
     トライアル終了後も継続される場合は、トライアル終了前にクレジットカード情報を登録してください。
 
   .mb-4
-    .rounded.border.flex.flex-col.text-center
-      .h5.text-sm.font-bold.px-4.py-1.border-b.bg-gray-100
-        新規ユーザー登録
-      .py-4
-        .flex-1
-          .text-3xl.font-bold.mb-2
-            .text-sm.inline ¥
-            500
-            .text-xs.inline /月 (税込550円)
-        %ul
-          %li.text-sm.mb-1
-            ✅ 毎月1冊、おまかせ読書
-          %li.text-sm.mb-1
-            ✅
-            = link_to '好きな作品の配信', page_path(:custom_delivery), class: 'text-link'
-            も可能
-      = form_with model: User.new, url: users_path, class: "flex flex-col sm:flex-row space-y-4 sm:space-y-0 px-4 pt-2 pb-4" do |f|
-        =f.text_field :email, type: :email, required: true, class: "flex-1 rounded py-3 sm:rounded-r-none sm:border-r-0 border-gray-300", placeholder: "メールアドレス"
-        %button(type="submit" class="block rounded-r py-4 px-4 bg-red-600 text-white text-sm hover:opacity-75")
-          無料トライアルを開始する
+    = form_with model: User.new, url: users_path, local: true, class: "flex flex-col sm:flex-row space-y-4 sm:space-y-0" do |f|
+      =f.text_field :email, type: :email, required: true, class: "flex-1 rounded py-3 sm:rounded-r-none sm:border-r-0 border-gray-300", placeholder: "メールアドレス"
+      %button(type="submit" class="block rounded-l sm:rounded-l-none rounded-r py-4 px-4 bg-red-600 text-white text-sm hover:opacity-75")
+        無料トライアルを開始する
 
 .mb-20
   %h5.font-bold.text-lg.mb-4
