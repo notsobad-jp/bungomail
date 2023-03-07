@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_06_142034) do
+ActiveRecord::Schema[7.0].define(version: 2021_08_10_081256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -225,9 +225,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_142034) do
     t.boolean "paid_member", default: false, null: false
     t.date "trial_start_date"
     t.date "trial_end_date"
-    t.integer "status", limit: 2, default: 1, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["status"], name: "index_users_on_status"
   end
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
