@@ -8,7 +8,7 @@
   有料プランをご契約されている場合、今後のお支払いも自動的に停止します。
 
 .mb-8
-  = form_with(url: user_path("unsubscribe"), method: :delete, local: true, class: '') do |f|  # この時点ではuser特定できないのでurlはダミー
+  = form_with(url: user_path, method: :delete, local: true, class: '') do |f|
     = f.email_field :email, class: "block w-full p-2 rounded border mb-2", placeholder: 'メールアドレス', required: true
     .flex{class: "sm:flex-row flex-col space-x-0 sm:space-x-2 space-y-2 sm:space-y-0"}
       = button_tag type: 'submit', name: 'action_type', value: 'unsubscribed', data: { confirm: "ブンゴウメールを退会します。本当によろしいですか？"}, class: 'flex-1 bg-red-600 border border-red-600 rounded text-white px-4 py-2 hover:opacity-75' do

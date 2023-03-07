@@ -1,21 +1,13 @@
 Rails.application.routes.draw do
-  namespace :memberships do
-    get 'new'
-    get 'create'
-    get 'completed'
-    get 'edit'
-    post 'update'
-  end
-
-  resources :subscriptions
   resources :books, only: [:show]
-  resources :users
   resources :book_assignments do
     get :cancel, on: :member
   end
   resources :channels do
     get :feed, on: :member, defaults: { format: :rss }
   end
+  resources :subscriptions
+  resource :user
 
   get '/campaigns/dogramagra' => "pages#dogramagra"
 

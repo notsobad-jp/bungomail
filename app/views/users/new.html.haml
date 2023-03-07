@@ -10,7 +10,7 @@
     トライアル終了後も継続される場合は、トライアル終了前にクレジットカード情報を登録してください。
 
   .mb-4
-    = form_with model: User.new, url: users_path, local: true, class: "flex flex-col sm:flex-row space-y-4 sm:space-y-0" do |f|
+    = form_with model: User.new, url: user_path, local: true, class: "flex flex-col sm:flex-row space-y-4 sm:space-y-0" do |f|
       =f.text_field :email, type: :email, required: true, class: "flex-1 rounded py-3 sm:rounded-r-none sm:border-r-0 border-gray-300", placeholder: "メールアドレス"
       %button(type="submit" class="block rounded-l sm:rounded-l-none rounded-r py-4 px-4 bg-red-600 text-white text-sm hover:opacity-75")
         無料トライアルを開始する

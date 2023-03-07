@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :set_stripe_key
+
   def new
     @meta_title = '新規ユーザー登録'
     @no_index = true
@@ -39,7 +41,29 @@ class UsersController < ApplicationController
     redirect_to(root_path, flash: { success: 'ユーザー登録が完了しました！ご登録内容の確認メールをお送りしています。もし10分以上経ってもメールが届かない場合は運営までお問い合わせください。' })
   rescue => e
     logger.error "[Error]Stripe subscription failed. #{e}"
-    redirect_to(memberships_new_path, flash: { error: '決済処理に失敗しました。。課金処理を中止したため、これにより支払いが発生することはありません。解決しない場合は運営までお問い合わせください。' })
+    redirect_to(new_user_path, flash: { error: '決済処理に失敗しました。。課金処理を中止したため、これにより支払いが発生することはありません。解決しない場合は運営までお問い合わせください。' })
+  end
+
+  # Customer Portalの表示申請ページ
+  def edit
+    @meta_title = 'お支払い情報の管理'
+    @no_index = true
+  end
+
+  # メアドを受け取ってCustomer PortalのURLをメール送信
+  def update
+    user = User.find_by(email: params[:email])
+    if !user || !user.stripe_customer_id
+      return redirect_to(edit_user_path, flash: { error: '入力されたメールアドレスで決済登録情報が確認できませんでした。解決しない場合は運営までお問い合わせください。' })
+    end
+
+    portal_session = Stripe::BillingPortal::Session.create(
+      customer: user.stripe_customer_id,
+      return_url: edit_user_url,
+    )
+    BungoMailer.with(user: user, url: portal_session.url).customer_portal_email.deliver_now
+
+    redirect_to(edit_user_path, flash: { success: 'URLを送信しました。10分以上経過してもメールが届かない場合は運営までお問い合わせください' })
   end
 
   def destroy
@@ -66,6 +90,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+    def set_stripe_key
+      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+    end
 
     def user_params
       params.require(:user).permit(:email)
