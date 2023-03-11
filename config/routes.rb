@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get 'books', on: :member
   end
 
+  get 'lp_new' => "pages#lp_new"
   get ':page' => "pages#show", as: :page
   root to: 'pages#lp'
 end
