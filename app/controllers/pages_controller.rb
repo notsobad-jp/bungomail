@@ -4,9 +4,6 @@ class PagesController < ApplicationController
     @meta_description = '青空文庫の作品を小分けにして、毎朝メールで配信。気づいたら毎月1冊本が読めてしまう、忙しいあなたのための読書サポートサービスです。'
   end
 
-  def lp_new
-  end
-
   def show
     @meta_title = page_titles[params[:page].to_sym]
     raise ActionController::RoutingError, request.url unless @meta_title
