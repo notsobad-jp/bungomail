@@ -1,0 +1,800 @@
+<!-- Header -->
+<header class="bg-transparent absolute w-full z-10">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+    <div class="flex items-center gap-x-12">
+      <h1 class="flex items-center space-x-4">
+        <img class="inline-block h-6 w-6 sm:h-8 sm:w-8 rounded-full shadow" src="/favicon.ico" alt="">
+        <img class="h-6 w-auto sm:h-8" src="/assets/images/logo_text.png" alt="ブンゴウメール">
+      </h1>
+    </div>
+    <div class="hidden lg:flex flex-1 items-center justify-end gap-x-6">
+      <%= link_to 'マイページ', memberships_edit_path, class: 'hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-gray-900' %>
+      <%= link_to memberships_new_path, class: "rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" do %>
+        アカウント登録
+      <% end %>
+    </div>
+  </nav>
+</header>
+
+<!-- Hero Secrions -->
+<div class="relative overflow-hidden bg-gray-50 pt-24" style="background-image: url('/assets/images/seigaiha.png')">
+  <!-- Flash -->
+  <% if flash.present? %>
+    <div class="mx-auto max-w-7xl px-6">
+      <%= render partial: 'layouts/flash', locals: { style: '' } %>
+    </div>
+  <% end %>
+
+  <div class="relative pt-6">
+    <div class="mx-auto max-w-7xl px-6 space-y-8 sm:space-y-0 lg:flex lg:items-center lg:gap-x-10 lg:px-8">
+      <div class="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
+        <p class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl !leading-snug">
+          1日3分のメールで、
+          <br class="hidden lg:block" />
+          ムリせず毎月本が読める
+        </p>
+        <p class="mt-6 text-lg leading-8 text-gray-600">
+          青空文庫の作品を小分けにして、毎日メールで配信。
+          <br class="hidden lg:block" />
+          気づいたら毎月1冊本が読めてしまう、
+          <br class="hidden lg:block" />
+          忙しいあなたのための読書サポートサービスです。
+        </p>
+        <div class="mt-10 flex items-center gap-x-6">
+          <form class="w-full max-w-lg lg:col-span-5 lg:pt-2">
+            <div class="flex gap-x-4">
+              <!--
+              <label for="email-address" class="sr-only">メールアドレス</label>
+              <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="メールアドレス">
+              <button type="submit" class="flex-none rounded-md bg-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">アカウント登録（無料）</button>
+              -->
+              <%= link_to memberships_new_path, class: "w-full block rounded-md py-3.5 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
+                新規登録（1ヶ月無料）
+              <% end %>
+            </div>
+            <p class="mt-4 text-xs leading-6 text-gray-900">
+              登録済みの方は
+              <%= link_to "マイページ", memberships_edit_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+              から登録情報の確認ができます
+            </p>
+          </form>
+        </div>
+      </div>
+      <div class="overflow-hidden aspect-[12/13] max-w-[600px]">
+        <img src="/assets/images/lp/screenshot/mockup.png" class="w-full" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Banner -->
+<div class="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 py-2.5 px-6 sm:px-3.5 sm:before:flex-1">
+  <svg viewBox="0 0 577 310" aria-hidden="true" class="absolute top-1/2 left-[max(-7rem,calc(50%-52rem))] -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl">
+    <path id="558b8b01-4d09-4091-8be3-c5da192b7892" fill="url(#4b688345-001e-47fa-aa7a-d561812ecf15)" fill-opacity=".3" d="m142.787 168.697-75.331 62.132L.016 88.702l142.771 79.995 135.671-111.9c-16.495 64.083-23.088 173.257 82.496 97.291C492.935 59.13 494.936-54.366 549.339 30.385c43.523 67.8 24.892 159.548 10.136 196.946l-128.493-95.28-36.628 177.599-251.567-140.953Z" />
+    <defs>
+      <linearGradient id="4b688345-001e-47fa-aa7a-d561812ecf15" x1="614.778" x2="-42.453" y1="26.617" y2="96.115" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#9089FC" />
+        <stop offset="1" stop-color="#FF80B5" />
+      </linearGradient>
+    </defs>
+  </svg>
+  <svg viewBox="0 0 577 310" aria-hidden="true" class="absolute top-1/2 left-[max(45rem,calc(50%+8rem))] -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl">
+    <use href="#558b8b01-4d09-4091-8be3-c5da192b7892" />
+  </svg>
+  <p class="w-full text-center text-sm leading-6 text-gray-900">
+    <span class="rounded px-2 py-0.5 bg-orange-700 text-white mr-2 text-xs">NEWS</span>
+    NHK「ニュースシブ5時」でブンゴウメールが紹介されました 🎉
+  </p>
+</div>
+
+<!-- Features -->
+<div class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:max-w-none">
+      <dl class="grid max-w-xl grid-cols-1 gap-x-12 gap-y-16 lg:max-w-none lg:grid-cols-3">
+        <div class="flex flex-col">
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 mb-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+            </svg>
+            最近、仕事以外の本読みですか？ました？
+          </dt>
+          <dd class="mt-1 flex flex-auto flex-col text-base leading-7 text-gray-600">
+            <p class="flex-auto">
+              忙しいと、すぐに役立つ知識ばかり仕入れがち。なかなか仕事以外の本を読む時間が取れなかったりしませんか。
+            </p>
+          </dd>
+        </div>
+
+        <div class="flex flex-col">
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 mb-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+            </svg>
+            でも毎日メールは読んでますよね
+          </dt>
+          <dd class="mt-1 flex flex-auto flex-col text-base leading-7 text-gray-600">
+            <p class="flex-auto">
+              じゃあそのメールで本が読めたらどうでしょう。1〜3分程度のメールが1通増えるだけなので大丈夫。あなたならきっと読めます。
+            </p>
+          </dd>
+        </div>
+
+        <div class="flex flex-col">
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 mb-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+            せっかくなら教養になる名作を
+          </dt>
+          <dd class="mt-1 flex flex-auto flex-col text-base leading-7 text-gray-600">
+            <p class="flex-auto">
+              名前は知ってるけど読んでなかった名作、青空文庫にはいっぱいあります。普段自分では選ばない本を読めるのもいいものです。
+            </p>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- Examples -->
+<div class="bg-gray-50 py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto text-center">
+      <p class="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+        Example
+      </p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:leading-tight text-gray-900 sm:text-4xl">
+        たとえば、1年でこれだけの本が読めます
+      </h2>
+      <p class="mt-6 leading-8 text-gray-600">
+        1日3分のメールを読みですか？続けるだけで、1年ではこれだけの作品を読むことができます。
+        <div class="text-xs text-center mt-2">
+          （あくまで一例なので、実際に配信する内容とは異なります）
+        </div>
+      </p>
+    </div>
+
+    <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">芥川龍之介</p>
+          <p class="truncate text-sm text-gray-500">藪の中</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">萩原朔太郎</p>
+          <p class="truncate text-sm text-gray-500">月に吠える</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">新美南吉</p>
+          <p class="truncate text-sm text-gray-500">ごん狐</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">坂口安吾</p>
+          <p class="truncate text-sm text-gray-500">堕落論</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">太宰治</p>
+          <p class="truncate text-sm text-gray-500">ヴィヨンの妻</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">宮沢賢治</p>
+          <p class="truncate text-sm text-gray-500">銀河鉄道の夜</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">カフカ</p>
+          <p class="truncate text-sm text-gray-500">断食芸人</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">森鴎外</p>
+          <p class="truncate text-sm text-gray-500">高瀬舟</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">夏目漱石</p>
+          <p class="truncate text-sm text-gray-500">夢十夜</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">中島敦</p>
+          <p class="truncate text-sm text-gray-500">山月記</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">泉鏡花</p>
+          <p class="truncate text-sm text-gray-500">外科室</p>
+        </div>
+      </div>
+      <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm">
+        <div>
+          <p class="font-bold text-gray-900 mb-1">林芙美子</p>
+          <p class="truncate text-sm text-gray-500">風琴と魚の町</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-8">
+      <%= link_to "これまでの配信作品はこちら", "/lists/9399756/books?year=2018", class: "text-link" %>
+    </div>
+  </div>
+</div>
+
+<!-- Testimonials -->
+<div class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto text-center">
+      <p class="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+        User's Voice
+      </p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:leading-tight text-gray-900 sm:text-4xl">
+        これまで2万人以上の方が
+        <br class="hidden sm:block" />
+        ブンゴウメールで読書を続けています
+      </h2>
+    </div>
+    <div class="mx-auto mt-16 flow-root max-w-2xl sm:mt-20 lg:mx-0 lg:max-w-none">
+      <div class="-mt-8 sm:-mx-4 sm:text-[0] flex flex-col sm:flex-row">
+        <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
+          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <blockquote class="text-gray-900">
+              <p>
+                短くて読みやすい…！ささっと読めるちょうどいい長さだから毎日続けられそうだし、何よりこう、続きが気になってくる👏
+              </p>
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/helen.jpg" alt="">
+            </figcaption>
+          </figure>
+        </div>
+        <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
+          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <blockquote class="text-gray-900">
+              <p>
+                知ってはいるけど、なんとなく避けていた太宰。 こういう機会でもないと、一生読まなかっただろうなと思うと感慨深い。短いから無理なく読めるし。
+              </p>
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/elyse.png" alt="">
+            </figcaption>
+          </figure>
+        </div>
+        <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
+          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <blockquote class="text-gray-900">
+              <p>
+                毎日育児に追われててもどうにか読める長さが毎日届くの画期的だしありがたすぎる…🙏
+              </p>
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/stevie.jpg" alt="">
+            </figcaption>
+          </figure>
+        </div>
+        <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
+          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <blockquote class="text-gray-900">
+              <p>
+                ほんの1分で読める量だから、「今日は『反駁』の『駁』を調べてみよう」と辞書を開くきっかけにしたり、一言一句を気まぐれに噛み締めてみたりしている
+              </p>
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/elliot.jpg" alt="">
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Plan/Price -->
+<div class="bg-gray-50 py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto text-center">
+      <p class="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+        Pricing
+      </p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:leading-tight text-gray-900 sm:text-4xl">
+        料金プラン
+      </h2>
+      <p class="mt-6 leading-8 text-gray-600">
+        登録日に関わらず、翌月1日から1ヶ月間が無料トライアル期間となります。
+        <br class="hidden sm:block" />
+        トライアル終了前に解約した場合、料金は一切発生しません。
+      </p>
+    </div>
+
+    <div class="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-lg lg:grid-cols-1">
+      <div class="rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 relative bg-white shadow-2xl">
+        <h3 id="tier-personal" class="text-base font-semibold leading-7 text-indigo-600">Basic</h3>
+        <p class="mt-4 flex items-baseline gap-x-2">
+          <span class="text-5xl font-bold tracking-tight text-gray-900">¥500</span>
+          <span class="text-base text-gray-500">/月</span>
+          <span class="text-base text-gray-500 text-sm">（税込550円）</span>
+        </p>
+        <p class="mt-6 text-base leading-7 text-gray-600">毎月1冊おまかせ読書</p>
+        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10">
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            ブンゴウメール公式チャネルの配信
+          </li>
+
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            <span>
+              好きな作品を配信できる
+              <%= link_to "カスタム配信機能", page_path(:custom_delivery), class: "text-link" %>
+            </span>
+          </li>
+        </ul>
+        <%= link_to memberships_new_path, class: "mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
+          新規登録（1ヶ月無料）
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="bg-gray-900 py-16 sm:py-24 lg:py-32">
+  <div class="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-12 lg:gap-8 lg:px-8">
+    <div class="max-w-xl text-3xl font-bold tracking-tight text-white sm:text-4xl lg:col-span-7">
+      <p class="inline sm:block lg:inline xl:block sm:leading-snug">
+        まずは1ヶ月間の
+        <br class="hidden sm:block" />
+        無料トライアルをお試しください
+      </p>
+    </div>
+    <form class="w-full max-w-md lg:col-span-5 lg:pt-2">
+      <div class="flex gap-x-4">
+        <!--
+        <label for="email-address" class="sr-only">メールアドレス</label>
+        <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" placeholder="メールアドレス">
+        <button type="submit" class="flex-none rounded-md bg-indigo-500 py-2.5 px-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">アカウント登録（無料）</button>
+        -->
+        <%= link_to memberships_new_path, class: "w-full block rounded-md py-3 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
+          新規登録（1ヶ月無料）
+        <% end %>
+      </div>
+      <p class="mt-4 text-xs leading-6 text-gray-300">
+        アカウント登録によって
+        <%= link_to "利用規約", page_path(:terms), class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+        と
+        <%= link_to "プライバシーポリシー", page_path(:privacy), class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+        に同意したものとみなします。
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- Logo Clouds -->
+<div class="bg-white py-12 sm:py-8 border-b border-gray-50">
+  <div class="mx-auto max-w-7xl py-16 px-6 sm:py-24 lg:px-8">
+    <div class="mx-auto text-center">
+      <p class="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+        Publications
+      </p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:leading-tight text-gray-900 sm:text-4xl">
+        メディア掲載実績
+      </h2>
+    </div>
+
+    <div class="mt-20 mx-auto max-w-lg flex flex-wrap items-center justify-center space-x-0 sm:max-w-xl sm:space-x-8 lg:mx-0 lg:max-w-none">
+      <%= link_to "https://www.nhk.jp/p/shibu5/ts/X5J7MZMGGY/episode/te/729252Z8XK/", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/nhk.png" alt="Transistor" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://www.j-wave.co.jp/original/colorswonder/entry/200517.html", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/j-wave.png" alt="Transistor" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://gigazine.net/news/20180531-bungomail/", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/gigazine.png" alt="Transistor" width="158" height="48" />
+      <% end %>
+      <%= link_to "http://nlab.itmedia.co.jp/nl/articles/1804/27/news145.html", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/nlab.png" alt="Transistor" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://internet.watch.impress.co.jp/docs/yajiuma/1224590.html", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/internetwatch.png" alt="Transistor" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://rocketnews24.com/2019/12/11/1303143/", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/rocketnews.png" alt="Transistor" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://kai-you.net/article/69993", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/kai-you.png" alt="Transistor" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://news.mynavi.jp/article/20201206-1562101/", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/mynavi.png" alt="Statamic" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://amp.review/2019/04/08/search-bungomail/", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/amp.png" alt="Statamic" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://www.j-cast.com/trend/2019/04/08354695.html", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/jcast.png" alt="Statamic" width="158" height="48" />
+      <% end %>
+      <%= link_to "https://lamire.jp/148287", target: :_blank do %>
+        <img class="block max-h-8 sm:max-h-12 object-contain mb-4" src="/assets/images/lp/media/lamire.png" alt="Statamic" width="158" height="48" />
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="bg-gray-50">
+  <div class="mx-auto max-w-7xl py-16 px-6 sm:py-24 lg:px-8">
+    <div class="mx-auto text-center">
+      <p class="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+        FAQ
+      </p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:leading-tight text-gray-900 sm:text-4xl">
+        よくある質問
+      </h2>
+    </div>
+
+    <div class="mt-20">
+      <dl class="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:gap-x-10">
+        <div>
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            配信される作品は選べないのですか？
+          </dt>
+          <dd class="mt-2 text-base leading-7 text-gray-600">
+            <p>ブンゴウメールは毎月1冊おまかせで作品が選ばれ、全員が同じ作品を同時に読むことも特徴となっています。 そのためこのおまかせ配信に関しては作品を変更することはできません。</p>
+            <p>ただし有料プランユーザーは、月1冊のおまかせ配信とは別に自分で好きな作品を選んで配信する「カスタム配信機能」も利用することができます。 どうしても本編の作品が合わない場合や、他に読みたい作品がある場合などはぜひこちらもご活用ください。</p>
+            <div class="my-2">
+              <%= link_to "カスタム配信機能を利用する（有料プラン）", page_path(:custom_delivery), class: "text-link" %>
+            </div>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            登録したけどメールが届きません
+          </dt>
+          <dd class="mt-2 text-base leading-7 text-gray-600">
+            <p>
+              お使いのメールソフトによっては、自動で迷惑メールフォルダなどにはいってしまう場合があります。 特にGmailや携帯キャリアアドレスをお使いの場合にフィルタされるケースが多いようです。
+            </p>
+            <p>
+              公式ブログに対応方法をご案内しておりますので、メールが届かない場合はこちらを参考にご設定お願いいたします。
+            </p>
+            <div class="my-2">
+              <%= link_to "ブンゴウメールからメールを受信できないケースと対応方法について", "https://blog.bungomail.com/entry/2018/05/21/172542", class: "text-link", target: :_blank %>
+            </div>
+            <p>
+              またブンゴウメールでは毎月1日から新しい作品を配信するため、無料トライアルも登録日の 翌月1日から配信開始 するようになっています。 月中に登録された場合は翌月初まで配信されませんので、配信開始までしばらくお待ちください。
+            </p>
+            <p>
+              上記すべて確認してもメールが届かない場合は、お手数ですが運営までお問い合わせいただければ幸いです。
+            </p>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            有料プランを解約したいのですが
+          </dt>
+          <dd class="mt-2 text-base leading-7 text-gray-600">
+            <p>
+              解約を希望される場合は、「お支払い情報の管理」ページでご登録いただいているアドレスを入力してください。 お支払情報を管理するためのセキュアなURLをメールでお送りします。
+            </p>
+            <div class="my-2">
+              <%= link_to "お支払い情報の管理（利用者メニュー）", memberships_edit_path, class: "text-link" %>
+            </div>
+            <p>
+              解約をお申し込みいただくと、月末まで配信を続けたあと翌月の更新を行わず自動的に契約を終了します。 配信もすぐに停止したい場合はお手数ですが運営までお問い合わせください。 その場合も当月分の料金は返金されませんのでご了承ください。
+            </p>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            登録したメールアドレスを変更できますか？
+          </dt>
+          <dd class="mt-2 text-base leading-7 text-gray-600">
+            はい、可能です。メールアドレスの変更を希望される場合は、お手数ですが運営までお問い合わせください。
+          </dd>
+        </div>
+        <div>
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            配信されたメールの文面などをSNSでシェアしても大丈夫ですか？
+          </dt>
+          <dd class="mt-2 text-base leading-7 text-gray-600">
+            <p>
+              ブンゴウメールで配信しているのは著作権の切れたパブリックドメインの作品であるため、配信された文章をSNS等にシェアいただいても基本的には問題ありません。 また今月はどの作品が配信されている、などの情報もシェアして頂いて大丈夫です。
+            </p>
+            <p>
+              ただ毎月の選本およびメールの分割配信システムはブンゴウメール運営によるものですので、その点は尊重いただけると幸いです。 具体的には、「毎日すべての配信内容をシェアする」「メール配信を第三者に転送する」などの行為はお控えいただきますようお願いいたします。
+          </dd>
+        </div>
+        <div>
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            ブンゴウメールは無料で利用できますか？
+          </dt>
+          <dd class="mt-2 text-base leading-7 text-gray-600">
+            <p>
+              大変申し訳ありませんが、現在ブンゴウメールの利用は原則有料となっております。 メールでの配信内容はRSSフィードで無料公開もしていますので、無料での利用をご希望の場合はこちらもご活用ください。
+            </p>
+            <div class="my-2">
+              <%= link_to "RSSフィード", feed_channel_path("bungomail-official"), class: "text-link", target: :_blank %>
+            </div>
+            <p>
+              なおブンゴウメール本編とは別に、無料の企画配信なども不定期に行っています。 配信開始の際は公式Twitterなどでお知らせしますので、興味のある方はぜひチェックしてみてください。
+            </p>
+            <div class="my-2">
+              <%= link_to "ブンゴウメール公式Twitter", "https://twitter.com/bungomail", class: "text-link", target: :_blank %>
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- News -->
+<div class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:max-w-4xl">
+      <div class="mx-auto text-center">
+        <p class="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+          News
+        </p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:leading-tight text-gray-900 sm:text-4xl">
+          お知らせ
+        </h2>
+      </div>
+
+      <div class="mt-16 space-y-8 lg:mt-20 lg:space-y-8">
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/lp/news/nhk.jpg" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2020-10-29</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                メディア掲載
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://www.nhk.jp/p/shibu5/ts/X5J7MZMGGY/episode/te/729252Z8XK/", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  NHK「ニュース シブ5時」で紹介いただきました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                10/29放送のNHK「ニュース シブ5時」でブンゴウメールを紹介いただきました。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/lp/news/episodes.jpg" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2020-10-01</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                コラボ
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://www.amazon.co.jp/dp/4046044519", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  KADOKAWA『文豪どうかしてる逸話集』とコラボしました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                進士素丸さん著『文豪どうかしてる逸話集』(KADOKAWA)とコラボし、書籍収録の逸話をブンゴウメールで配信いたしました。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/lp/news/booqs.png" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2020-06-28</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                コラボ
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://prtimes.jp/main/html/rd/p/000000017.000043723.html", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  英単語学習サービス「BooQs」とコラボしました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                英語版「Bungo Search」をリリースし、200万回答突破の人気英単語学習サービス「BooQs」との特設コラボページを開設しました。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/lp/news/j-wave.jpg" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2020-05-17</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                メディア掲載
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://www.j-wave.co.jp/original/colorswonder/entry/200517.html", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  J-WAVE「COLORS OF WONDER」で紹介いただきました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                J-WAVE「COLORS OF WONDER」5/17放送回の「いまこそ読書」特集で、ブンゴウメールを紹介いただきました。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/ogp_search.png" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2020-04-01</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                機能追加
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://bungo-search.com", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  「ブンゴウサーチ」をリニューアルしました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                青空文庫の作品を読了時間で検索できる姉妹サービス「ブンゴウサーチ」をリニューアルしました。児童書のみ検索できる新機能も提供しています。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/channels/dogramagra.png" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2020-01-01</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                イベント
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <%= link_to campaigns_dogramagra_path, target: :_blank do %>
+                  <span class="absolute inset-0"></span>
+                  「ドグラ・マグラ365日配信チャレンジ」を開始しました
+                <% end %>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                日本三大奇書に数えられる一大長編、夢野久作の『ドグラ・マグラ』を1年かけて配信する企画を開始しました。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/lp/news/book_tech.jpg" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2019-10-18</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                イベント
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://logmi.jp/business/articles/322767", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  「本の"新しい"読み方〜BOOK TECH〜」イベントに登壇しました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                本の新しい読み方を提供するスタートアップ3社のトークイベントに、代表の大西が登壇いたしました。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/channels/business-model.png" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2019-06-01</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                コラボ
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://prtimes.jp/main/html/rd/p/000000005.000034248.html", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  『ビジネスモデル2.0図鑑』公式配信を実施しました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                5万部突破の大人気書籍『ビジネスモデル2.0図鑑』全文を公式配信する企画を実施しました。
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative isolate flex flex-col gap-4 sm:gap-8 lg:flex-row">
+          <div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-48 lg:shrink-0">
+            <img src="/assets/images/channels/alterego.png" alt="" class="absolute inset-0 h-full w-full rounded bg-gray-50 object-cover">
+            <div class="absolute inset-0 rounded"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-x-4 text-xs">
+              <time datetime="2020-10-29" class="text-gray-500">2019-04-01</time>
+              <span class="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600">
+                コラボ
+              </span>
+            </div>
+            <div class="group relative max-w-xl">
+              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <a href="https://prtimes.jp/main/html/rd/p/000000003.000034248.html", target="_blank">
+                  <span class="absolute inset-0"></span>
+                  「ALTER EGO」公式コラボを実施しました
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-gray-600">
+                累計50万ダウンロード突破の大人気自分探しタップゲーム「ALTER EGO」との公式コラボを実施しました。
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
