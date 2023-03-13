@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2021_08_10_081256) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_13_054950) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -62,44 +62,12 @@ ActiveRecord::Schema[7.0].define(version: 2021_08_10_081256) do
     t.index ["start_date"], name: "index_book_assignments_on_start_date"
   end
 
-  create_table "campaign_groups", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "book_id", null: false
-    t.integer "count", null: false
-    t.datetime "start_at", precision: nil, null: false
-    t.integer "list_id", null: false
-    t.integer "sender_id", null: false
-    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "now()" }, null: false
-    t.string "twitter_share_url"
-    t.index ["book_id"], name: "index_campaign_groups_on_book_id"
-  end
-
-  create_table "campaigns", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "sendgrid_id"
-    t.string "title", null: false
-    t.text "content", null: false
-    t.datetime "send_at", precision: nil, null: false
-    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.uuid "campaign_group_id", null: false
-    t.index ["campaign_group_id"], name: "index_campaigns_on_campaign_group_id"
-    t.index ["sendgrid_id"], name: "index_campaigns_on_sendgrid_id", unique: true
-  end
-
   create_table "channel_profiles", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "google_group_key"
     t.string "title", null: false
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "channel_subscription_logs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.string "email", null: false
-    t.integer "action", default: 1, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["action"], name: "index_channel_subscription_logs_on_action"
   end
 
   create_table "channels", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -181,23 +149,6 @@ ActiveRecord::Schema[7.0].define(version: 2021_08_10_081256) do
     t.index ["subject_id"], name: "index_guten_books_subjects_on_subject_id"
   end
 
-  create_table "marketing_emails", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title", null: false
-    t.text "content"
-    t.datetime "send_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-  end
-
-  create_table "senders", id: :serial, force: :cascade do |t|
-    t.string "nickname", null: false
-    t.string "name", null: false
-    t.date "locked_until"
-    t.datetime "created_at", default: -> { "now()" }, null: false
-    t.datetime "updated_at", default: -> { "now()" }, null: false
-    t.index ["locked_until"], name: "index_senders_on_locked_until"
-  end
-
   create_table "subjects", id: :string, force: :cascade do |t|
     t.integer "books_count", default: 0
     t.datetime "created_at", precision: nil, null: false
@@ -230,8 +181,6 @@ ActiveRecord::Schema[7.0].define(version: 2021_08_10_081256) do
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
   add_foreign_key "book_assignments", "channels", on_delete: :cascade
-  add_foreign_key "campaign_groups", "aozora_books", column: "book_id"
-  add_foreign_key "campaigns", "campaign_groups"
   add_foreign_key "channel_profiles", "channels", column: "id", on_delete: :cascade
   add_foreign_key "channels", "users"
   add_foreign_key "feeds", "book_assignments", on_delete: :cascade
