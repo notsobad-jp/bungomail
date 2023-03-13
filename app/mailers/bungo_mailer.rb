@@ -26,15 +26,6 @@ class BungoMailer < ApplicationMailer
     logger.info "[FEED] channel: #{@channel.code || @channel.id}, title: #{@feed.title}"
   end
 
-  def marketing_email
-    @marketing_email = params[:marketing_email]
-    send_to = params[:send_to] || User.where(paid_member: true).pluck(:email)
-    xsmtp_api_params = { category: 'marketing' }
-    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-
-    mail(to: send_to, subject: "【ブンゴウメール】#{@marketing_email.title}")
-  end
-
   def schedule_canceled_email
     @user = params[:user]
     @author_title = params[:author_title]

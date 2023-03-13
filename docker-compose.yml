@@ -22,6 +22,8 @@ services:
       - db
     networks:
       - bungo_network
+    environment:
+      - EDITOR=vim
 networks:
   bungo_network:
 volumes:

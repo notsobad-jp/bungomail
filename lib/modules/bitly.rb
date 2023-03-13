@@ -12,7 +12,7 @@ module Bitly
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
     req = Net::HTTP.const_get(method.to_s.capitalize).new(uri.path)
-    req["authorization"] = "Bearer #{ENV['BITLY_ACCESS_TOKEN']}"
+    req["authorization"] = "Bearer #{ Rails.application.credentials.dig(:bitly, :access_token) }"
     req["content-type"] = 'application/json'
     req.body = params.to_json if params
 

@@ -30,10 +30,10 @@ class UsersController < ApplicationController
     beginning_of_next_next_month = Time.current.next_month.next_month.beginning_of_month
     Stripe::Subscription.create({
       customer: customer.id,
-      default_tax_rates: [ENV['STRIPE_TAX_RATE']],
+      default_tax_rates: [ Rails.application.credentials.dig(:stripe, :tax_rate_id) ],
       trial_end: beginning_of_next_next_month.to_i,
       items: [
-        {price: ENV['STRIPE_PLAN_ID']}
+        {price: Rails.application.credentials.dig(:stripe, :plan_id) }
       ],
     })
 
@@ -92,7 +92,7 @@ class UsersController < ApplicationController
   private
 
     def set_stripe_key
-      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+      Stripe.api_key = Rails.application.credentials.dig(:stripe, :secret_key)
     end
 
     def user_params

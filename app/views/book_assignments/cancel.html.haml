@@ -17,4 +17,4 @@
       %td= @ba.delivery_time.strftime("%H:%M")
 
 .mb-8
-  = link_to '配信を停止する', book_assignment_path(@ba), data: { turbo_method: :delete }, class: "block text-center mb-2 rounded bg-red-600 text-white py-4 w-full hover:bg-red-500 cursor-pointer"
+  = button_to '配信を停止する', book_assignment_path(@ba), method: :delete, data: { turbo: false }, class: "block text-center mb-2 rounded bg-red-600 text-white py-4 w-full hover:bg-red-500 cursor-pointer"
