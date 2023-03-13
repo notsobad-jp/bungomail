@@ -4,7 +4,7 @@ class BookAssignmentsController < ApplicationController
     @user = User.where(email: ba_params[:email]).merge(
       User.where(paid_member: true).or(User.where("trial_start_date >= ?", Date.current))
     ).first
-    raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', memberships_new_path, class: 'text-link'}が必要です。") if !@user
+    raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', new_user_path, class: 'text-link'}が必要です。") if !@user
 
     @channel = Channel.where(id: @user.id, user_id: @user.id).first_or_create
     @user.subscriptions.where(channel_id: @channel.id).first_or_create
