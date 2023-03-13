@@ -35,6 +35,7 @@ group :development do
   gem 'web-console'
   gem 'listen'
   gem 'letter_opener'
+  gem 'letter_opener_web'
   gem "rack-dev-mark"
   gem 'sitemap_generator'
 end

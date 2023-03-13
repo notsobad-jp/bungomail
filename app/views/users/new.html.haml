@@ -6,36 +6,14 @@
 
 .mb-20
   .mb-4.text-sm
-    ブンゴウメールの利用にはクレジットカードの登録が必要です。
-    1ヶ月間の無料トライアル中に解約された場合、料金は一切発生しません。
+    メールアドレス登録のみで無料トライアルを開始できます。
+    トライアル終了後も継続される場合は、トライアル終了前にクレジットカード情報を登録してください。
 
   .mb-4
-    .rounded.border.flex.flex-col.text-center
-      .h5.text-sm.font-bold.px-4.py-1.border-b.bg-gray-100
-        新規ユーザー登録
-      .p-4.flex-1
-        .mb-2.text-red-700.font-bold
-          %span.mr-1 🎉
-          1ヶ月間の無料トライアル
-          %span.ml-1 🎉
-        .mb-4.text-xs
-          トライアル期間中に解約すれば、料金は一切発生しません
-        .text-3xl.font-bold.mb-2
-          ￥500
-          .text-xs.inline /月 (税込550円)
-        .text-sm.mb-1
-          毎月1冊、おまかせ読書
-        .text-sm.mb-1
-          = link_to '好きな作品の配信', page_path(:custom_delivery), class: 'text-link'
-          も可能
-      .px-4.pt-2.pb-4
-        = link_to memberships_create_path, class: 'block w-full rounded py-4 bg-red-600 text-white text-sm hover:opacity-75' do
-          カード情報を登録する
-          %small.text-xs（1ヶ月無料）
-  .mb-8.text-xs
-    ※本サービスの決済には、世界的に利用シェアの高い決済プラットフォームである
-    = link_to 'Stripe', 'https://stripe.com/jp', target: '_blank', class: 'text-link', rel: 'nofollow'
-    を利用しています。クレジットカード情報は当社では保持せず、Stripe社にて国際基準に準拠して安全に保管されます。
+    = form_with model: User.new, url: user_path, local: true, class: "flex flex-col sm:flex-row space-y-4 sm:space-y-0" do |f|
+      =f.text_field :email, type: :email, required: true, class: "flex-1 rounded py-3 sm:rounded-r-none sm:border-r-0 border-gray-300", placeholder: "メールアドレス"
+      %button(type="submit" class="block rounded-l sm:rounded-l-none rounded-r py-4 px-4 bg-red-600 text-white text-sm hover:opacity-75")
+        無料トライアルを開始する
 
 .mb-20
   %h5.font-bold.text-lg.mb-4
@@ -59,7 +37,7 @@
             %svg(class="inline w-6 h-6 fill-current text-yellow-600" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
               %path(d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z")
             %br
-            決済情報
+            ユーザー
             %br
             登録
           .flex-1.border-b-2.border-dashed.border-yellow-700
@@ -74,10 +52,12 @@
 
   %ul.list-disc.list-inside.mb-8
     %li
-      決済登録日に関わらず、
+      登録日に関わらず、
       .inline.font-bold.text-red-600
         翌月初から1ヶ月間が無料トライアル期間
       となります。配信開始までしばらくお待ちください。
+    %li
+      トライアル後も継続利用をご希望の場合は、トライアル終了前にクレジットカード情報を登録してください。
     %li
       無料トライアル終了前に解約いただいた場合、
       .inline.font-bold.text-red-600
