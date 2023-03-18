@@ -39,10 +39,4 @@ class Channel < ApplicationRecord
   def recent_author_ids(n=6)
     book_assignments.order(start_date: :desc).limit(n).preload(:book).map{|ba| ba.book.author_id}
   end
-
-  # 購読に必要な契約プラン
-  ## 公開チャネルはfree, 公式チャネルやカスタム配信はbasicプランから
-  def required_plan
-    (public? && code != 'bungomail-official') ? 'free' : 'basic'
-  end
 end
