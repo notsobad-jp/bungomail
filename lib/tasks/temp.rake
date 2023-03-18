@@ -41,4 +41,35 @@ namespace :temp do
       end
     end
   end
+
+  task sub_schedule: :environment do |_task, _args|
+    customer = Stripe::Customer.retrieve('cus_NVqYed9rSPgN36')
+    Stripe::SubscriptionSchedule.create({
+      customer: customer.id,
+      start_date: "now",
+      phases: [
+        {
+          # Freeプランをすぐに開始
+          items: [
+            { price: Rails.application.credentials.dig(:stripe, :plan_ids, :free) },
+          ],
+          end_date: Time.current.next_month.beginning_of_month.to_i,
+        },
+        {
+          # 翌月初からBasicプランのトライアルを開始
+          items: [
+            { price: Rails.application.credentials.dig(:stripe, :plan_ids, :basic) },
+          ],
+          trial: true,
+          end_date: Time.current.next_month.next_month.beginning_of_month.to_i,
+        },
+        {
+          # 翌々月初から何もなければFreeプランに戻る
+          items: [
+            { price: Rails.application.credentials.dig(:stripe, :plan_ids, :free) },
+          ],
+        },
+      ],
+    })
+  end
 end

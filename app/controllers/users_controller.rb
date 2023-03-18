@@ -15,27 +15,48 @@ class UsersController < ApplicationController
       redirect_to(new_user_path) and return
     end
 
-    # StripeにCustomer作成
+    # Stripe
+    ## Customer作成
     customer = Stripe::Customer.create(email: user.email)
 
-    # DBにユーザー登録（翌月初からトライアル開始）
-    user.update!(
-      stripe_customer_id: customer.id,
-      trial_start_date: Date.current.next_month.beginning_of_month,
-      trial_end_date: Date.current.next_month.end_of_month,
-    )
-
-    # StripeにSucscription作成
-    ## CustomerPortalを使えるようにするため、Stripe上はこの時点からトライアル扱い（実際の配信はまだしない）
-    beginning_of_next_next_month = Time.current.next_month.next_month.beginning_of_month
-    Stripe::Subscription.create({
+    ## SubscriptionSchedule作成
+    Stripe::SubscriptionSchedule.create({
       customer: customer.id,
-      default_tax_rates: [ Rails.application.credentials.dig(:stripe, :tax_rate_id) ],
-      trial_end: beginning_of_next_next_month.to_i,
-      items: [
-        {price: Rails.application.credentials.dig(:stripe, :plan_id) }
+      start_date: "now",
+      phases: [
+        {
+          # Freeプランをすぐに開始
+          items: [
+            { price: Rails.application.credentials.dig(:stripe, :plan_ids, :free) },
+          ],
+          end_date: Time.current.next_month.beginning_of_month.to_i,
+        },
+        {
+          # 翌月初からBasicプランのトライアルを開始
+          items: [
+            { price: Rails.application.credentials.dig(:stripe, :plan_ids, :basic) },
+          ],
+          trial: true,
+          end_date: Time.current.next_month.next_month.beginning_of_month.to_i,
+        },
+        {
+          # 翌々月初から何もなければFreeプランに戻る
+          items: [
+            { price: Rails.application.credentials.dig(:stripe, :plan_ids, :free) },
+          ],
+          end_date: Time.current.next_month.next_month.beginning_of_month.to_i,
+        },
       ],
     })
+
+    # DBにデータ保存
+    ActiveRecord::Base.transaction(joinable: false, requires_new: true) do
+      user.update!(stripe_customer_id: customer.id)
+      user.memberships.create!(plan: "free", trialing: false, apply_at: Date.current)
+      user.memberships.create!(plan: "basic", trialing: true, apply_at: Date.current.next_month.beginning_of_month)
+      user.memberships.create!(plan: "free", trialing: false, apply_at: Date.current.next_month.next_month.beginning_of_month)
+    end
+
 
     BungoMailer.with(user: user).user_registered_email.deliver_later
     redirect_to(root_path, flash: { success: 'ユーザー登録が完了しました！ご登録内容の確認メールをお送りしています。もし10分以上経ってもメールが届かない場合は運営までお問い合わせください。' })
