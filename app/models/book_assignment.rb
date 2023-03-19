@@ -4,6 +4,8 @@ class BookAssignment < ApplicationRecord
   has_many :feeds, dependent: :destroy
   has_many :delayed_jobs, through: :feeds
 
+  scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
+
   validates :start_date, presence: true
   validates :end_date, presence: true
   validate :delivery_should_start_after_trial # トライアル開始前の配信予約は不可
