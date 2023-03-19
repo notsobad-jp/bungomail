@@ -13,17 +13,21 @@ class BungoMailer < ApplicationMailer
   def feed_email
     @feed = params[:feed]
     @book = @feed.book_assignment.book
-    @channel = @feed.book_assignment.channel
+    @owner = @feed.book_assignment.user
     @word_count = @feed.content.gsub(" ", "").length
 
     sender_name = envelope_display_name("#{@book.author_name}（ブンゴウメール）")
-    send_to = params[:send_to] || @channel.active_subscribers.map(&:email)
+    if params[:send_to]
+      send_to = params[:send_to] # テスト配信用
+    else
+      send_to = @owner.email == 'info@notsobad.jp' ? User.basic.pluck(:email) : @owner.email
+    end
 
     xsmtp_api_params = { to: send_to, category: 'feed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
 
     mail(from: "#{sender_name} <bungomail@notsobad.jp>", subject: @feed.title)
-    logger.info "[FEED] channel: #{@channel.code || @channel.id}, title: #{@feed.title}"
+    logger.info "[FEED] owner: #{@owner.id}, title: #{@feed.title}"
   end
 
   def schedule_canceled_email
