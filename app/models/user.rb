@@ -3,7 +3,7 @@ class User < ApplicationRecord
   scope :activated_in_stripe, -> (active_emails) { where(plan: :free).where(email: active_emails) }  # stripeで購読したけどまだDBの支払いステータスに反映されていないuser
   scope :canceled_in_stripe, -> (active_emails) { where(plan: :basic).where.not(email: active_emails) }  # stripeで解約したけどまだDBの支払いステータスに反映されていないuser
 
-  enum plan: { free: "free", basic: "basic" }
+  enum plan: { free_plan: "free", basic_plan: "basic" }
 
   validates :email, presence: true, uniqueness: true
 

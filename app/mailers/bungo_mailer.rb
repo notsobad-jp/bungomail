@@ -20,7 +20,7 @@ class BungoMailer < ApplicationMailer
     if params[:send_to]
       send_to = params[:send_to] # テスト配信用
     else
-      send_to = @owner.email == 'info@notsobad.jp' ? User.basic.pluck(:email) : @owner.email
+      send_to = @owner.email == 'info@notsobad.jp' ? User.basic_plan.pluck(:email) : @owner.email
     end
 
     xsmtp_api_params = { to: send_to, category: 'feed' }

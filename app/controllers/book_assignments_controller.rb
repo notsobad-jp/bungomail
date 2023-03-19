@@ -2,7 +2,7 @@ class BookAssignmentsController < ApplicationController
   def create
     # 有料会員（トライアル含む）or トライアル開始前（予約済み）の人が配信予約可能
     @user = User.where(email: ba_params[:email]).merge(
-      User.basic.or(User.where("trial_start_date >= ?", Date.current))
+      User.basic_plan.or(User.where("trial_start_date >= ?", Date.current))
     ).first
     raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', new_user_path, class: 'text-link'}が必要です。") if !@user
 
