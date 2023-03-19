@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_19_175348) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_19_181713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -131,20 +131,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_175348) do
     t.index ["subject_id"], name: "index_guten_books_subjects_on_subject_id"
   end
 
-  create_table "memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.string "plan", default: "free", null: false
-    t.boolean "trialing", default: false, null: false
-    t.date "apply_at", default: -> { "CURRENT_DATE" }, null: false
-    t.boolean "canceled", default: false, null: false
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.index ["apply_at"], name: "index_memberships_on_apply_at"
-    t.index ["canceled"], name: "index_memberships_on_canceled"
-    t.index ["user_id", "apply_at", "canceled"], name: "index_memberships_on_user_id_and_apply_at_and_canceled", unique: true
-    t.index ["user_id"], name: "index_memberships_on_user_id"
-  end
-
   create_table "subjects", id: :string, force: :cascade do |t|
     t.integer "books_count", default: 0
     t.datetime "created_at", precision: nil, null: false
@@ -158,9 +144,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_175348) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_customer_id"
-    t.boolean "paid_member", default: false, null: false
     t.date "trial_start_date"
     t.date "trial_end_date"
+    t.string "plan", default: "free", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
@@ -171,5 +157,4 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_175348) do
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
-  add_foreign_key "memberships", "users"
 end
