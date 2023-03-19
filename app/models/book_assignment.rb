@@ -11,7 +11,7 @@ class BookAssignment < ApplicationRecord
   validate :delivery_should_start_after_trial # トライアル開始前の配信予約は不可
   validate :end_date_should_come_after_start_date
   validate :delivery_period_should_not_overlap # 同一チャネルで期間が重複するレコードが存在すればinvalid
-  validate :end_date_should_not_be_too_far # ６ヶ月以上先の予約は禁止
+  validate :end_date_should_not_be_too_far # 12ヶ月以上先の予約は禁止
 
 
   def count
@@ -59,7 +59,7 @@ class BookAssignment < ApplicationRecord
 
   # 同一チャネルで期間が重複するレコードが存在すればinvalid
   def delivery_period_should_not_overlap
-    overlapping = BookAssignment.where.not(id: id).where(channel_id: channel_id).where("end_date > ? and ? > start_date", start_date, end_date)
+    overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).where("end_date > ? and ? > start_date", start_date, end_date)
     errors.add(:base, "予約済みの配信と期間が重複しています") if overlapping.present?
   end
 
@@ -72,6 +72,6 @@ class BookAssignment < ApplicationRecord
   end
 
   def delivery_should_start_after_trial
-    errors.add(:base, "配信開始日は無料トライアルの開始日以降に設定してください") if channel.user.trial_start_date && start_date < channel.user.trial_start_date
+    errors.add(:base, "配信開始日は無料トライアルの開始日以降に設定してください") if user.trial_start_date && start_date < user.trial_start_date
   end
 end
