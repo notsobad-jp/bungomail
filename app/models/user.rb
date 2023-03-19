@@ -34,6 +34,10 @@ class User < ApplicationRecord
     Digest::SHA256.hexdigest(email)
   end
 
+  def admin?
+    email == "info@notsobad.jp"
+  end
+
   class << self
     # stripeで支払い中のメールアドレス一覧
     def active_emails_in_stripe

@@ -7,7 +7,7 @@
   <%= @feed.comment %>
 <% end %>
 
-<% if @owner.email == 'info@notsobad.jp' %>
+<% if @owner.admin? %>
   =========================
   ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　
   <%= @feed.book_assignment.twitter_share_url || "https://bit.ly/3wh90Ee" %>

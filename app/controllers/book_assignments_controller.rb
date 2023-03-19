@@ -25,7 +25,7 @@ class BookAssignmentsController < ApplicationController
 
   def cancel
     @ba = BookAssignment.find_by(id: params[:id])
-    raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.email == "info@notsobad.jp"
+    raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?
     @meta_title = '配信停止'
     @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
   rescue => e
@@ -36,7 +36,7 @@ class BookAssignmentsController < ApplicationController
 
   def destroy
     @ba = BookAssignment.find_by(id: params[:id])
-    raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.email == "info@notsobad.jp"
+    raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?
     @ba.destroy!
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信をキャンセルしました！'
