@@ -17,11 +17,7 @@ class BungoMailer < ApplicationMailer
     @word_count = @feed.content.gsub(" ", "").length
 
     sender_name = envelope_display_name("#{@book.author_name}（ブンゴウメール）")
-    if params[:send_to]
-      send_to = params[:send_to] # テスト配信用
-    else
-      send_to = @owner.admin? ? User.basic_plan.pluck(:email) : @owner.email
-    end
+    send_to = params[:send_to] || @feed.book_assignment.send_to
 
     xsmtp_api_params = { to: send_to, category: 'feed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)

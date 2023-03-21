@@ -42,6 +42,12 @@ class BookAssignment < ApplicationRecord
     res.rows.flatten  # 作成したfeedのid一覧を配列で返す
   end
 
+  # 配信対象
+  ## 公式チャネルのときは有料会員全員。それ以外のときは配信オーナーのみ
+  def send_to
+    user.admin? ? User.basic_plan.pluck(:email) : user.email
+  end
+
   def twitter_short_url
     begin
       Bitly.call(path: 'shorten', params: { long_url: self.twitter_long_url })
