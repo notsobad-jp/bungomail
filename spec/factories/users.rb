@@ -19,5 +19,12 @@ FactoryBot.define do
       trial_start_date { Time.zone.today.prev_month.beginning_of_month }
       trial_end_date { Time.zone.today.prev_month.end_of_month }
     end
+
+    factory :admin_user do
+      email { "info@notsobad.jp" }
+      plan { "basic" }
+      trial_start_date { Time.zone.today.prev_month.beginning_of_month }
+      trial_end_date { Time.zone.today.prev_month.end_of_month }
+    end
   end
 end

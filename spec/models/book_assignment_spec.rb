@@ -111,4 +111,34 @@ RSpec.describe BookAssignment, type: :model do
       end
     end
   end
+
+  # 配信先アドレス一覧
+  describe "#send_to" do
+    # 公式配信: 有料プランユーザー全員に配信
+    context "when it's an official assignment" do
+      it "should be all basic_plan users" do
+        free_users = create_list(:user, 3) # NG
+        scheduled_users = create_list(:user, 3, :trial_scheduled) # NG
+        trialing_users = create_list(:user, 3, :trialing) # OK
+        basic_users = create_list(:user, 3, :basic) # OK
+
+        admin_user = build(:admin_user)
+        ba = build(:book_assignment, :with_book, user: admin_user)
+        expect(ba.send_to.length).to eq(6)
+        expect(ba.send_to.to_set).to eq((trialing_users.pluck(:email) + basic_users.pluck(:email)).to_set)
+      end
+    end
+
+    # カスタム配信: 配信者だけに配信
+    context "when it's a custom assignment" do
+      it "should be only an owner" do
+        basic_users = create_list(:user, 3, :basic)
+
+        owner = build(:user)
+        ba = build(:book_assignment, :with_book, user: owner)
+        expect(ba.send_to.length).to eq(1)
+        expect(ba.send_to).to eq([owner.email])
+      end
+    end
+  end
 end
