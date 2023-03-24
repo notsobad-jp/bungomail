@@ -1,17 +1,30 @@
 FactoryBot.define do
   factory :user do
     sequence(:email) { |n| "test#{n}@example.com"}
+    plan { 'free' }
 
-    trait :with_novel_sub do
-      after(:create) do |user|
-        Subscription.insert({user_id: user.id, channel_id: Channel.find_by(code: 'long-novel').id})
-      end
+    trait :trial_scheduled do
+      trial_start_date { Time.zone.today.next_month.beginning_of_month }
+      trial_end_date { Time.zone.today.next_month.end_of_month }
     end
 
-    trait :with_official_sub do
-      after(:create) do |user|
-        Subscription.insert({user_id: user.id, channel_id: Channel.find_by(code: 'bungomail-official').id})
-      end
+    trait :trialing do
+      plan { 'basic' }
+      trial_start_date { Time.zone.today.beginning_of_month }
+      trial_end_date { Time.zone.today.end_of_month }
+    end
+
+    trait :basic do
+      plan { 'basic' }
+      trial_start_date { Time.zone.today.prev_month.beginning_of_month }
+      trial_end_date { Time.zone.today.prev_month.end_of_month }
+    end
+
+    factory :admin_user do
+      email { "info@notsobad.jp" }
+      plan { "basic" }
+      trial_start_date { Time.zone.today.prev_month.beginning_of_month }
+      trial_end_date { Time.zone.today.prev_month.end_of_month }
     end
   end
 end

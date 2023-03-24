@@ -1,6 +1,6 @@
 class BookAssignmentPolicy < ApplicationPolicy
-  # basicプラン && 自作チャネルへの配信予約
+  # Basicプラン || ( トライアル開始前 && トライアル開始日 < 配信開始日 )
   def create?
-    user && user.membership.plan == 'basic' && record.channel.user == user
+    user && user.basic_plan?
   end
 end

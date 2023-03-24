@@ -40,7 +40,7 @@ RSpec.describe BookAssignment, type: :model do
       # 対象期間が既存レコードに先行するとき
       context "when new period proceeds the existing record" do
         it "should not be valid" do
-          ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today, end_date: Time.zone.today.next_month)
+          ba = build(:book_assignment, user: book_assignment.user, book: book_assignment.book, start_date: Time.zone.today, end_date: Time.zone.today.next_month)
           expect(ba.valid?).to be_falsy
           expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
@@ -49,7 +49,7 @@ RSpec.describe BookAssignment, type: :model do
       # 対象期間が既存レコードに後続するとき
       context "when new period succeeds the existing record" do
         it "should not be valid" do
-          ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today.next_month, end_date: Time.zone.today.next_month + 29)
+          ba = build(:book_assignment, user: book_assignment.user, book: book_assignment.book, start_date: Time.zone.today.next_month, end_date: Time.zone.today.next_month + 29)
           expect(ba.valid?).to be_falsy
           expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
@@ -58,7 +58,7 @@ RSpec.describe BookAssignment, type: :model do
       # 対象期間が既存レコードを包含するとき
       context "when new period includes the existing record" do
         it "should not be valid" do
-          ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today, end_date: Time.zone.today + 50)
+          ba = build(:book_assignment, user: book_assignment.user, book: book_assignment.book, start_date: Time.zone.today, end_date: Time.zone.today + 50)
           expect(ba.valid?).to be_falsy
           expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
@@ -67,18 +67,10 @@ RSpec.describe BookAssignment, type: :model do
       # 対象期間が既存レコードに包含されるとき
       context "when new period is included by the existing record" do
         it "should not be valid" do
-          ba = build(:book_assignment, channel: book_assignment.channel, book: book_assignment.book, start_date: Time.zone.today.next_month.beginning_of_month + 2, end_date: Time.zone.today.next_month.beginning_of_month + 12)
+          ba = build(:book_assignment, user: book_assignment.user, book: book_assignment.book, start_date: Time.zone.today.next_month.beginning_of_month + 2, end_date: Time.zone.today.next_month.beginning_of_month + 12)
           expect(ba.valid?).to be_falsy
           expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
         end
-      end
-    end
-
-    # 期間重複してても他のチャネルならOK
-    context "when other channel has overlapping record" do
-      it "should be valid" do
-        ba = build(:book_assignment, book: book_assignment.book, start_date: Time.zone.today)
-        expect(ba.valid?).to be_truthy
       end
     end
   end
@@ -88,18 +80,16 @@ RSpec.describe BookAssignment, type: :model do
   describe "delivery_should_start_after_trial" do
     context "when start_date = trial_start_date" do
       it "should be valid" do
-        channel = build(:channel)
-        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
-        ba = create(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-09-01"))
+        user = build(:user, trial_start_date: Date.parse("2021-09-01"))
+        ba = create(:book_assignment, :with_book, user: user, start_date: Date.parse("2021-09-01"))
         expect(ba.valid?).to be_truthy
       end
     end
 
     context "when start_date < trial_start_date" do
       it "should not be valid" do
-        channel = build(:channel)
-        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
-        ba = build(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-08-01"))
+        user = build(:user, trial_start_date: Date.parse("2021-09-01"))
+        ba = build(:book_assignment, :with_book, user: user, start_date: Date.parse("2021-08-01"))
         expect(ba.valid?).to be_falsy
         expect(ba.errors[:base]).to include("配信開始日は無料トライアルの開始日以降に設定してください")
       end
@@ -107,18 +97,47 @@ RSpec.describe BookAssignment, type: :model do
 
     context "when start_date > trial_start_date" do
       it "should be valid" do
-        channel = build(:channel)
-        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
-        ba = create(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-10-01"))
+        user = build(:user, trial_start_date: Date.parse("2021-09-01"))
+        ba = create(:book_assignment, :with_book, user: user, start_date: Date.parse("2021-10-01"))
         expect(ba.valid?).to be_truthy
       end
     end
 
     context "when trial_start_date is blank" do
       it "should be valid" do
-        channel = build(:channel)
-        ba = create(:book_assignment, :with_book, channel: channel, start_date: Date.parse("2021-08-01"))
+        user = build(:user)
+        ba = create(:book_assignment, :with_book, user: user, start_date: Date.parse("2021-08-01"))
         expect(ba.valid?).to be_truthy
+      end
+    end
+  end
+
+  # 配信先アドレス一覧
+  describe "#send_to" do
+    # 公式配信: 有料プランユーザー全員に配信
+    context "when it's an official assignment" do
+      it "should be all basic_plan users" do
+        free_users = create_list(:user, 3) # NG
+        scheduled_users = create_list(:user, 3, :trial_scheduled) # NG
+        trialing_users = create_list(:user, 3, :trialing) # OK
+        basic_users = create_list(:user, 3, :basic) # OK
+
+        admin_user = build(:admin_user)
+        ba = build(:book_assignment, :with_book, user: admin_user)
+        expect(ba.send_to.length).to eq(6)
+        expect(ba.send_to.to_set).to eq((trialing_users.pluck(:email) + basic_users.pluck(:email)).to_set)
+      end
+    end
+
+    # カスタム配信: 配信者だけに配信
+    context "when it's a custom assignment" do
+      it "should be only an owner" do
+        basic_users = create_list(:user, 3, :basic)
+
+        owner = build(:user)
+        ba = build(:book_assignment, :with_book, user: owner)
+        expect(ba.send_to.length).to eq(1)
+        expect(ba.send_to).to eq([owner.email])
       end
     end
   end

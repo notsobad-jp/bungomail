@@ -3,10 +3,6 @@ Rails.application.routes.draw do
   resources :book_assignments do
     get :cancel, on: :member
   end
-  resources :channels do
-    get :feed, on: :member, defaults: { format: :rss }
-  end
-  resources :subscriptions
   resource :user
 
   get '/campaigns/dogramagra' => "pages#dogramagra"

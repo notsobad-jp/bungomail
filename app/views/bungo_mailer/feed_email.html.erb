@@ -7,7 +7,7 @@
   <%= simple_format @feed.comment.gsub(/(\r\n|\r|\n)/, "<br />") %>
 <% end %>
 
-<% if @channel.code == 'bungomail-official' %>
+<% if @owner.admin? %>
   <br />=========================<br />
   ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　<br />
   <%= link_to(nil, @feed.book_assignment.twitter_share_url || "https://bit.ly/3wh90Ee") %><br />
