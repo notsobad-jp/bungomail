@@ -6,9 +6,10 @@ RSpec.describe Feed, type: :model do
   end
 
   describe "send_at" do
-    let(:feed) { build(:feed, delivery_date: Time.zone.today) }
+    let(:ba) { build(:book_assignment, delivery_time: "07:00:00") }
+    let(:feed) { build(:feed, delivery_date: Time.zone.today, book_assignment: ba) }
 
-    it "should return datetime with channel hour" do
+    it "should return datetime with scheduled hour" do
       expect(feed.send_at).to eq(Time.current.change(hour: 7))
     end
   end
@@ -25,11 +26,8 @@ RSpec.describe Feed, type: :model do
     end
 
     context "when send_at not passed yet" do
-      let(:feed) { create(:feed, delivery_date: Time.zone.tomorrow) }
-
-      before do
-        feed.book_assignment.update(delivery_time: '10:00:00')
-      end
+    let(:ba) { create(:book_assignment, :with_book, delivery_time: "10:00:00") }
+      let(:feed) { create(:feed, delivery_date: Time.zone.tomorrow, book_assignment: ba) }
 
       it "should enqueue the job" do
         feed.schedule
@@ -44,8 +42,8 @@ RSpec.describe Feed, type: :model do
   end
 
   describe "scope: :delivered" do
-    let(:ba1) { create(:book_assignment, :with_book, delivery_time: Time.current.ago(1.minute).strftime("%T"), channel: create(:channel)) }
-    let(:ba2) { create(:book_assignment, book_id: ba1.book_id, delivery_time: Time.current.since(1.minute).strftime("%T"), channel: create(:channel)) }
+    let(:ba1) { create(:book_assignment, :with_book, delivery_time: Time.current.ago(1.minute).strftime("%T")) }
+    let(:ba2) { create(:book_assignment, book_id: ba1.book_id, delivery_time: Time.current.since(1.minute).strftime("%T")) }
 
     it "should include right records" do
       feed1 = create(:feed, book_assignment_id: ba1.id, delivery_date: Time.zone.yesterday)  # 日付が昨日: 対象
