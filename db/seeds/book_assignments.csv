@@ -1,4 +1,4 @@
-id,channel_id,book_type,book_id,count,start_at,created_at,updated_at
+id,user_id,book_type,book_id,count,start_at,created_at,updated_at
 c5c3568b-bdeb-4e20-9b88-080a29d50139,1418479c-d5a7-4d29-a174-c5133ca484b6,AozoraBook,1567,31,2018-05-01 0:00:00,2018-05-01 0:00:00,2018-05-01 0:00:00
 7f344ed0-12b7-47b8-936b-f87fd9520213,1418479c-d5a7-4d29-a174-c5133ca484b6,AozoraBook,799,30,2018-06-01 0:00:00,2018-06-01 0:00:00,2018-06-01 0:00:00
 56c237a1-61bf-48f0-b324-dcb517ba5db4,1418479c-d5a7-4d29-a174-c5133ca484b6,AozoraBook,45761,31,2018-07-01 0:00:00,2018-07-01 0:00:00,2018-07-01 0:00:00
