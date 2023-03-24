@@ -80,8 +80,7 @@ RSpec.describe BookAssignment, type: :model do
   describe "delivery_should_start_after_trial" do
     context "when start_date = trial_start_date" do
       it "should be valid" do
-        user = build(:user)
-        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
+        user = build(:user, trial_start_date: Date.parse("2021-09-01"))
         ba = create(:book_assignment, :with_book, user: user, start_date: Date.parse("2021-09-01"))
         expect(ba.valid?).to be_truthy
       end
@@ -89,8 +88,7 @@ RSpec.describe BookAssignment, type: :model do
 
     context "when start_date < trial_start_date" do
       it "should not be valid" do
-        user = build(:user)
-        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
+        user = build(:user, trial_start_date: Date.parse("2021-09-01"))
         ba = build(:book_assignment, :with_book, user: user, start_date: Date.parse("2021-08-01"))
         expect(ba.valid?).to be_falsy
         expect(ba.errors[:base]).to include("配信開始日は無料トライアルの開始日以降に設定してください")
@@ -99,8 +97,7 @@ RSpec.describe BookAssignment, type: :model do
 
     context "when start_date > trial_start_date" do
       it "should be valid" do
-        user = build(:user)
-        channel.user.update(trial_start_date: Date.parse("2021-09-01"))
+        user = build(:user, trial_start_date: Date.parse("2021-09-01"))
         ba = create(:book_assignment, :with_book, user: user, start_date: Date.parse("2021-10-01"))
         expect(ba.valid?).to be_truthy
       end
