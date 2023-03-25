@@ -65,7 +65,8 @@ class BookAssignment < ApplicationRecord
 
   # 同一チャネルで期間が重複するレコードが存在すればinvalid
   def delivery_period_should_not_overlap
-    overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).where("end_date > ? and ? > start_date", start_date, end_date)
+    return if user.basic_plan?
+    overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).where("end_date >= ? and ? >= start_date", start_date, end_date)
     errors.add(:base, "予約済みの配信と期間が重複しています") if overlapping.present?
   end
 
