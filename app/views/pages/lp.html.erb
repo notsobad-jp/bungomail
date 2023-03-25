@@ -1,67 +1,54 @@
-<!-- Header -->
-<header class="bg-transparent absolute w-full z-10">
-  <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-    <div class="flex items-center gap-x-12">
-      <h1 class="flex items-center space-x-4">
-        <img class="inline-block h-6 w-6 sm:h-8 sm:w-8 rounded-full shadow" src="/favicon.ico" alt="">
-        <img class="h-6 w-auto sm:h-8" src="/assets/images/logo_text.png" alt="ブンゴウメール">
-      </h1>
-    </div>
-    <div class="hidden lg:flex flex-1 items-center justify-end gap-x-6">
-      <%= link_to 'マイページ', edit_user_path, class: 'hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-gray-900' %>
-      <%= link_to new_user_path, class: "rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" do %>
-        アカウント登録
-      <% end %>
-    </div>
-  </nav>
-</header>
+<div style="background-image: url('/assets/images/seigaiha.png')">
+  <!-- Header -->
+  <%= render partial: 'layouts/header' %>
 
-<!-- Hero Secrions -->
-<div class="relative overflow-hidden bg-gray-50 pt-24" style="background-image: url('/assets/images/seigaiha.png')">
-  <!-- Flash -->
-  <% if flash.present? %>
-    <div class="mx-auto max-w-7xl px-6">
-      <%= render partial: 'layouts/flash', locals: { style: '' } %>
-    </div>
-  <% end %>
-
-  <div class="relative pt-6">
-    <div class="mx-auto max-w-7xl px-6 space-y-8 sm:space-y-0 lg:flex lg:items-center lg:gap-x-10 lg:px-8">
-      <div class="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
-        <p class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl !leading-snug">
-          1日3分のメールで、
-          <br class="hidden lg:block" />
-          ムリせず毎月本が読める
-        </p>
-        <p class="mt-6 text-lg leading-8 text-gray-600">
-          青空文庫の作品を小分けにして、毎日メールで配信。
-          <br class="hidden lg:block" />
-          気づいたら毎月1冊本が読めてしまう、
-          <br class="hidden lg:block" />
-          忙しいあなたのための読書サポートサービスです。
-        </p>
-        <div class="mt-10 flex items-center gap-x-6">
-          <form class="w-full max-w-lg lg:col-span-5 lg:pt-2">
-            <div class="flex gap-x-4">
-              <!--
-              <label for="email-address" class="sr-only">メールアドレス</label>
-              <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="メールアドレス">
-              <button type="submit" class="flex-none rounded-md bg-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">アカウント登録（無料）</button>
-              -->
-              <%= link_to new_user_path, class: "w-full block rounded-md py-3.5 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
-                新規登録（1ヶ月無料）
-              <% end %>
-            </div>
-            <p class="mt-4 text-xs leading-6 text-gray-900">
-              登録済みの方は
-              <%= link_to "マイページ", edit_user_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
-              から登録情報の確認ができます
-            </p>
-          </form>
-        </div>
+  <!-- Hero Secrions -->
+  <div>
+    <!-- Flash -->
+    <% if flash.present? %>
+      <div class="mx-auto max-w-7xl px-6">
+        <%= render partial: 'layouts/flash', locals: { style: '' } %>
       </div>
-      <div class="overflow-hidden aspect-[12/13] max-w-[600px]">
-        <img src="/assets/images/lp/screenshot/mockup.png" class="w-full" />
+    <% end %>
+
+    <div class="relative pt-6">
+      <div class="mx-auto max-w-7xl px-6 space-y-8 sm:space-y-0 lg:flex lg:items-center lg:gap-x-10 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
+          <p class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl !leading-snug">
+            1日3分のメールで、
+            <br class="hidden lg:block" />
+            ムリせず毎月本が読める
+          </p>
+          <p class="mt-6 text-lg leading-8 text-gray-600">
+            青空文庫の作品を小分けにして、毎日メールで配信。
+            <br class="hidden lg:block" />
+            気づいたら毎月1冊本が読めてしまう、
+            <br class="hidden lg:block" />
+            忙しいあなたのための読書サポートサービスです。
+          </p>
+          <div class="mt-10 flex items-center gap-x-6">
+            <form class="w-full max-w-lg lg:col-span-5 lg:pt-2">
+              <div class="flex gap-x-4">
+                <!--
+                <label for="email-address" class="sr-only">メールアドレス</label>
+                <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="メールアドレス">
+                <button type="submit" class="flex-none rounded-md bg-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">アカウント登録（無料）</button>
+                -->
+                <%= link_to new_user_path, class: "w-full block rounded-md py-3.5 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
+                  新規登録（1ヶ月無料）
+                <% end %>
+              </div>
+              <p class="mt-4 text-xs leading-6 text-gray-900">
+                登録済みの方は
+                <%= link_to "マイページ", edit_user_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+                から登録情報の確認ができます
+              </p>
+            </form>
+          </div>
+        </div>
+        <div class="overflow-hidden aspect-[12/13] max-w-[600px]">
+          <img src="/assets/images/lp/screenshot/mockup.png" class="w-full" />
+        </div>
       </div>
     </div>
   </div>
