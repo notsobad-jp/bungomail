@@ -37,17 +37,6 @@ class BungoMailer < ApplicationMailer
     logger.info "[LOGIN] Login mail sent to #{@user.id}"
   end
 
-  def activation_needed_email
-    @user = params[:user]
-    @url  = URI.join(root_url, "/users/#{@user.activation_token}/activate")
-
-    xsmtp_api_params = { category: 'activation' }
-    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-
-    mail(to: @user.email, subject: "【ブンゴウメール】アカウント確認")
-    logger.info "[ACTIVATION] Activation mail sent to #{@user.id}"
-  end
-
   def schedule_canceled_email
     @user = params[:user]
     @author_title = params[:author_title]

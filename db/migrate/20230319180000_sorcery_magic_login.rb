@@ -1,4 +1,4 @@
-class SorceryMagicLoginAndActivation < ActiveRecord::Migration[6.0]
+class SorceryMagicLogin < ActiveRecord::Migration[6.0]
   def change
     # magic login
     add_column :users, :magic_login_token, :string, default: nil
