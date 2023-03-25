@@ -46,7 +46,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_180000) do
   end
 
   create_table "book_assignments", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "channel_id", null: false
     t.integer "book_id", null: false
     t.string "book_type", null: false
     t.date "start_date", null: false
@@ -55,28 +54,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_180000) do
     t.string "twitter_share_url"
     t.date "end_date", null: false
     t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
-    t.index "channel_id, daterange(start_date, end_date)", name: "gist_index_book_assignments_on_delivery_period", using: :gist
+    t.uuid "user_id", null: false
     t.index ["book_id", "book_type"], name: "index_book_assignments_on_book_id_and_book_type"
-    t.index ["channel_id"], name: "index_book_assignments_on_channel_id"
     t.index ["end_date"], name: "index_book_assignments_on_end_date"
     t.index ["start_date"], name: "index_book_assignments_on_start_date"
-  end
-
-  create_table "channel_profiles", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.string "google_group_key"
-    t.string "title", null: false
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "channels", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "code"
-    t.index ["code"], name: "index_channels_on_code", unique: true
-    t.index ["user_id"], name: "index_channels_on_user_id"
+    t.index ["user_id"], name: "index_book_assignments_on_user_id"
   end
 
   create_table "delayed_jobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -155,17 +137,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_180000) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "subscriptions", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.uuid "channel_id", null: false
-    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "paused", default: false, null: false
-    t.index ["channel_id"], name: "index_subscriptions_on_channel_id"
-    t.index ["user_id", "channel_id"], name: "index_subscriptions_on_user_id_and_channel_id", unique: true
-    t.index ["user_id"], name: "index_subscriptions_on_user_id"
-  end
-
   create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "crypted_password"
@@ -173,29 +144,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_180000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_customer_id"
-    t.boolean "paid_member", default: false, null: false
     t.date "trial_start_date"
     t.date "trial_end_date"
+    t.string "plan", default: "free", null: false
     t.string "magic_login_token"
     t.datetime "magic_login_token_expires_at", precision: nil
     t.datetime "magic_login_email_sent_at", precision: nil
-    t.string "activation_state"
-    t.string "activation_token"
-    t.datetime "activation_token_expires_at", precision: nil
-    t.index ["activation_token"], name: "index_users_on_activation_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["magic_login_token"], name: "index_users_on_magic_login_token"
   end
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
-  add_foreign_key "book_assignments", "channels", on_delete: :cascade
-  add_foreign_key "channel_profiles", "channels", column: "id", on_delete: :cascade
-  add_foreign_key "channels", "users"
+  add_foreign_key "book_assignments", "users"
   add_foreign_key "feeds", "book_assignments", on_delete: :cascade
   add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
-  add_foreign_key "subscriptions", "channels", on_delete: :cascade
-  add_foreign_key "subscriptions", "users", on_delete: :cascade
 end
