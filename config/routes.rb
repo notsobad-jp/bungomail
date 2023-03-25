@@ -3,11 +3,7 @@ Rails.application.routes.draw do
   resources :book_assignments do
     get :cancel, on: :member
   end
-  resources :channels do
-    get :feed, on: :member, defaults: { format: :rss }
-  end
   resources :magic_tokens
-  resources :subscriptions
   resource :user
 
   get 'signup' => 'users#new'

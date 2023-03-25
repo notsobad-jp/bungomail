@@ -7,30 +7,20 @@ namespace :cron do
 
       # 解約した人のstatus更新
       unsubs = User.canceled_in_stripe(emails)
-      unsubs.update_all(paid_member: false, updated_at: Time.current)
+      unsubs.update_all(plan: :free, updated_at: Time.current)
       p "UnSubscribed users: #{unsubs.map(&:email)}"
 
       # 新規契約した人のstatus更新
       new_subs = User.activated_in_stripe(emails)
-      new_subs.update_all(paid_member: true, updated_at: Time.current)
+      new_subs.update_all(plan: :basic, updated_at: Time.current)
       p "Subscribing users: #{new_subs.map(&:email)}"
 
       # 月初時点で有料の人はトライアル体験済みにする
       digests = new_subs.map{|user| Digest::SHA256.hexdigest(user.email) }
       EmailDigest.where(digest: digests).update_all(trial_ended: true, updated_at: Time.current)
 
-      # 有料じゃないユーザーのchannel/subscriptionは全部削除
-      Channel.by_unpaid_users.where(code: nil).destroy_all
-      free_channel_ids = [Channel.find_by(code: 'long-novel')&.id]
-      Subscription.by_unpaid_users.where.not(channel_id: free_channel_ids).delete_all
-
-      # 有料ユーザーは全員公式チャネルを購読
-      ## TODO: 有料でも公式チャネルの購読on/offしたい
-      official_channel_id = Channel.find_by(code: 'bungomail-official').id
-      User.paid_without_official_subscription.each do |user|
-        user.subscriptions.create(channel_id: official_channel_id)
-        p "New subscription: #{user.email}"
-      end
+      # 有料じゃないユーザーのbook_assignmentsは全部削除
+      BookAssignment.by_unpaid_users.delete_all
     end
   end
 

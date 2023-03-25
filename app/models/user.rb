@@ -1,18 +1,12 @@
 class User < ApplicationRecord
   authenticates_with_sorcery!
-  has_many :channels, dependent: :destroy
-  has_many :subscriptions, dependent: :destroy
-  scope :activated_in_stripe, -> (active_emails) { where(paid_member: false).where(email: active_emails) }  # stripeで購読したけどまだDBの支払いステータスに反映されていないuser
-  scope :canceled_in_stripe, -> (active_emails) { where(paid_member: true).where.not(email: active_emails) }  # stripeで解約したけどまだDBの支払いステータスに反映されていないuser
-  scope :paid_without_official_subscription, -> { where(paid_member: true).where.not(id: Subscription.where(channel_id: Channel.find_by(code: 'bungomail-official').id).pluck(:user_id)) } # 有料プランなのに公式チャネル購読してないuser
 
-  # トライアル状況/契約プラン別のスコープ
-  scope :trial_started, -> { where("trial_start_date <= ?", Date.current) }
-  scope :trial_finished, -> { where("trial_end_date < ?", Date.current) }
-  scope :trial_scheduled, -> { trial_started.invert_where.where.not(trial_start_date: nil) }
-  scope :trialing, -> { trial_finished.invert_where.trial_started }
-  scope :free_plan, -> { trial_finished.where(paid_member: false) }
-  scope :basic_plan, -> { trial_finished.where(paid_member: true) }
+  has_many :book_assignments, dependent: :destroy
+
+  scope :activated_in_stripe, -> (active_emails) { where(plan: :free).where(email: active_emails) }  # stripeで購読したけどまだDBの支払いステータスに反映されていないuser
+  scope :canceled_in_stripe, -> (active_emails) { where(plan: :basic).where.not(email: active_emails) }  # stripeで解約したけどまだDBの支払いステータスに反映されていないuser
+
+  enum plan: { free_plan: "free", basic_plan: "basic" }
 
   validates :email, presence: true, uniqueness: true
 
@@ -43,26 +37,9 @@ class User < ApplicationRecord
     Digest::SHA256.hexdigest(email)
   end
 
-  def plan
-    if trial_finished?
-      paid_member? ? :basic : :free
-    elsif trial_started?
-      :trialing
-    elsif trial_start_date.present?
-      :trial_scheduled
-    else
-      nil # トライアル日時なし(過去ユーザーをインポートしたため)
-    end
+  def admin?
+    email == "info@notsobad.jp"
   end
-
-  def trial_started?
-    trial_start_date && trial_start_date >= Date.current
-  end
-
-  def trial_finished?
-    trial_end_date && trial_end_date < Date.current
-  end
-
 
   class << self
     # stripeで支払い中のメールアドレス一覧
