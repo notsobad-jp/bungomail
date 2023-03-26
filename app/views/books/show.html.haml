@@ -22,10 +22,10 @@
       = f.hidden_field :email, value: current_user.email
     - else
       = f.email_field :email, required: true, class: 'border rounded w-full p-2', placeholder: 'メールアドレス'
-    %small.text-xs
-      ※
-      = link_to 'ブンゴウメール有料プラン', new_user_path, class: 'text-link'
-      に登録済みのメールアドレスを入力してください
+      %small.text-xs
+        ※
+        = link_to 'ブンゴウメール有料プラン', signup_path, class: 'text-link'
+        に登録済みのメールアドレスを入力してください
   .mb-4
     %h5.mb-2.font-bold 配信期間
     %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")

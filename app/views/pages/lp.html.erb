@@ -34,13 +34,13 @@
                 <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="メールアドレス">
                 <button type="submit" class="flex-none rounded-md bg-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">アカウント登録（無料）</button>
                 -->
-                <%= link_to new_user_path, class: "w-full block rounded-md py-3.5 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
+                <%= link_to signup_path, class: "w-full block rounded-md py-3.5 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
                   新規登録（1ヶ月無料）
                 <% end %>
               </div>
               <p class="mt-4 text-xs leading-6 text-gray-900">
                 登録済みの方は
-                <%= link_to "マイページ", edit_user_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+                <%= link_to "マイページ", mypage_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
                 から登録情報の確認ができます
               </p>
             </form>
@@ -336,7 +336,7 @@
             </span>
           </li>
         </ul>
-        <%= link_to new_user_path, class: "mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
+        <%= link_to signup_path, class: "mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
           新規登録（1ヶ月無料）
         <% end %>
       </div>
@@ -361,7 +361,7 @@
         <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" placeholder="メールアドレス">
         <button type="submit" class="flex-none rounded-md bg-indigo-500 py-2.5 px-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">アカウント登録（無料）</button>
         -->
-        <%= link_to new_user_path, class: "w-full block rounded-md py-3 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
+        <%= link_to signup_path, class: "w-full block rounded-md py-3 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
           新規登録（1ヶ月無料）
         <% end %>
       </div>
@@ -480,10 +480,10 @@
           </dt>
           <dd class="mt-2 text-base leading-7 text-gray-600">
             <p>
-              解約を希望される場合は、「お支払い情報の管理」ページでご登録いただいているアドレスを入力してください。 お支払情報を管理するためのセキュアなURLをメールでお送りします。
+              解約を希望される場合は、マイページからいつでも解約することができます。
             </p>
             <div class="my-2">
-              <%= link_to "お支払い情報の管理（利用者メニュー）", edit_user_path, class: "text-link" %>
+              <%= link_to "マイページ", mypage_path, class: "text-link" %>
             </div>
             <p>
               解約をお申し込みいただくと、月末まで配信を続けたあと翌月の更新を行わず自動的に契約を終了します。 配信もすぐに停止したい場合はお手数ですが運営までお問い合わせください。 その場合も当月分の料金は返金されませんのでご了承ください。
