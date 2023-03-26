@@ -1,15 +1,4 @@
 class BungoMailer < ApplicationMailer
-  def customer_portal_email
-    @user = params[:user]
-    @url = params[:url]
-
-    xsmtp_api_params = { category: 'customer_portal' }
-    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-
-    mail(to: @user.email, subject: "【ブンゴウメール】ご登録情報の確認用URL")
-    logger.info "[CUSTOMER_PORTAL] email sent to #{@user.id}"
-  end
-
   def feed_email
     @feed = params[:feed]
     @book = @feed.book_assignment.book
