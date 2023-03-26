@@ -44,9 +44,9 @@
   %h5.font-bold.text-lg.mb-4.pb-2.border-b
     カスタム配信
   - if @upcoming_assignments.present?
-    %ul.space-y-4
+    %ul(class="space-y-8 sm:space-y-4")
       - @upcoming_assignments.each do |ua|
-        %li.flex.items-center.justify-between
+        %li(class="flex items-start sm:items-center flex-col sm:flex-row justify-between space-y-2 sm:space-y-0")
           %div
             %div= "#{ua.book.author_name}『#{ua.book.title}』"
             %div.text-sm.text-gray-500= "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"

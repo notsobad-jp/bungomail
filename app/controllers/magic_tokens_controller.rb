@@ -23,7 +23,7 @@ class MagicTokensController < ApplicationController
 
     auto_login(@user)
     flash[:success] = 'ログインしました！'
-    redirect_to root_path
+    redirect_to mypage_path
   end
 
   def destroy

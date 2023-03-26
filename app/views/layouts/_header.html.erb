@@ -9,7 +9,7 @@
     </div>
 
     <!-- PC -->
-    <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-6">
+    <div class="hidden sm:block">
       <% if current_user %>
         <details class="group ml-3 relative">
           <!-- Profile -->
@@ -44,8 +44,10 @@
           </div>
         </details>
       <% else %>
-        <%= link_to "ログイン", login_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
-        <%= link_to "アカウント登録", signup_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
+        <div class="flex items-center py-2 space-x-8">
+          <%= link_to "ログイン", login_path, class: "block text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
+          <%= link_to "アカウント登録", signup_path, class: "block rounded-md py-3 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500", role: 'menuitem', tabindex: -1 %>
+        </div>
       <% end %>
     </div>
 
