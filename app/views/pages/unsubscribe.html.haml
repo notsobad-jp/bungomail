@@ -9,7 +9,11 @@
 
 .mb-8
   = form_with(url: user_path, method: :delete, local: true, class: '') do |f|
-    = f.email_field :email, class: "block w-full p-2 rounded border mb-2", placeholder: 'メールアドレス', required: true
+    - if current_user
+      = f.email_field :email, class: "block w-full p-2 rounded border mb-2 bg-gray-200 text-gray-500", disabled: true, value: current_user.email
+      = f.hidden_field :email, value: current_user.email
+    - else
+      = f.email_field :email, class: "block w-full p-2 rounded border mb-2", placeholder: 'メールアドレス', required: true
     .flex{class: "sm:flex-row flex-col space-x-0 sm:space-x-2 space-y-2 sm:space-y-0"}
       = button_tag type: 'submit', name: 'action_type', value: 'unsubscribed', data: { confirm: "ブンゴウメールを退会します。本当によろしいですか？"}, class: 'flex-1 bg-red-600 border border-red-600 rounded text-white px-4 py-2 hover:opacity-75' do
         退会する
