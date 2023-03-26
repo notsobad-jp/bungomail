@@ -1,0 +1,58 @@
+.mb-8
+  %h1.text-lg.font-bold.mb-4.flex.items-center
+    %svg(class="w-6 h-6 mt-1 mr-2" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
+      %path(d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z")
+    マイページ
+
+.mb-12
+  .mb-4.text-sm.bg-gray-100.rounded.px-4.py-2
+    = current_user.email
+
+.mb-12
+  %h5.font-bold.text-lg.mb-4.pb-2.border-b
+    現在のプラン
+  %div.font-bold.mb-2.rounded.border.px-2.py-1.inline-block
+    = current_user.plan_before_type_cast.camelize
+  - if current_user.trialing?
+    .text-sm
+      （#{current_user.trial_end_date.strftime("%Y年%-m月%-d日")}まで無料トライアル）
+  - elsif current_user.trial_scheduled?
+    .text-sm
+      （#{current_user.trial_start_date.strftime("%Y年%-m月%-d日")}から無料トライアル）
+
+.mb-12
+  %h5.font-bold.text-lg.mb-4.pb-2.border-b
+    お支払い情報の管理
+  - if @customer_portal_url
+    %div.mb-4
+      = link_to  @customer_portal_url, class: "inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75" do
+        %span 支払情報管理ページを開く
+        %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
+          %path(stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25")
+
+    .mb-4.text-sm
+      .mb-2 リンク先のページでは、以下の操作が可能です。
+      %ul.list-disc.list-inside
+        %li クレジットカード情報の登録・更新
+        %li お支払履歴の確認
+        %li お支払いの停止（キャンセル）
+  - else
+    お支払い情報が登録されていません
+
+
+.mb-12
+  %h5.font-bold.text-lg.mb-4.pb-2.border-b
+    カスタム配信
+  - if @upcoming_assignments.present?
+    %ul(class="space-y-8 sm:space-y-4")
+      - @upcoming_assignments.each do |ua|
+        %li(class="flex items-start sm:items-center flex-col sm:flex-row justify-between space-y-2 sm:space-y-0")
+          %div
+            %div= "#{ua.book.author_name}『#{ua.book.title}』"
+            %div.text-sm.text-gray-500= "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"
+          %div
+            = link_to "配信停止", cancel_book_assignment_path(ua), class: "rounded border hover:bg-gray-50 px-2 py-1"
+  - else
+    %div
+      = link_to "カスタム配信", page_path(:custom_delivery), class: "text-link"
+      が登録されていません。

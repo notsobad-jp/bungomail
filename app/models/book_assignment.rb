@@ -5,6 +5,7 @@ class BookAssignment < ApplicationRecord
   has_many :delayed_jobs, through: :feeds
 
   scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
+  scope :upcoming, -> { where("? <= end_date", Date.current) }
 
   validates :start_date, presence: true
   validates :end_date, presence: true
@@ -63,9 +64,10 @@ class BookAssignment < ApplicationRecord
 
   private
 
-  # 同一チャネルで期間が重複するレコードが存在すればinvalid
+  # 同一チャネルで期間が重複するレコードが存在すればinvalid(Freeプランのみ)
   def delivery_period_should_not_overlap
-    overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).where("end_date > ? and ? > start_date", start_date, end_date)
+    return if user.basic_plan? # Basicプランは重複許可
+    overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).where("end_date >= ? and ? >= start_date", start_date, end_date)
     errors.add(:base, "予約済みの配信と期間が重複しています") if overlapping.present?
   end
 

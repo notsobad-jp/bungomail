@@ -28,7 +28,8 @@
     - if current_page?(root_url) || current_page?('/lp_new')
       = yield
     - else
-      = render partial: 'layouts/header'
+      .mb-10.shadow(style="background-image: url('/assets/images/seigaiha.png')")
+        = render partial: 'layouts/header'
       .container.mx-auto.max-w-screen-lg.px-2(class="sm:px-0")
         .mb-32.grid.grid-cols-1(class="sm:grid-cols-3 sm:gap-12")
           .col-span-2.border-b.pb-8.mb-8(class="sm:border-b-0 sm:pb-0 sm:mb-0")

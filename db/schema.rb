@@ -147,7 +147,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_181713) do
     t.date "trial_start_date"
     t.date "trial_end_date"
     t.string "plan", default: "free", null: false
+    t.string "magic_login_token"
+    t.datetime "magic_login_token_expires_at", precision: nil
+    t.datetime "magic_login_email_sent_at", precision: nil
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["magic_login_token"], name: "index_users_on_magic_login_token"
   end
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
