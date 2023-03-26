@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     # customerが過去にstripe登録済み（重複登録 or 退会→再登録）の場合はとりあえず手動対応
     if user.stripe_customer_id.present?
       flash[:error] = 'このメールアドレスはすでに登録されています。登録情報を確認・更新したい場合は「利用者メニュー」をご利用ください。'
-      redirect_to(signup_path_path) and return
+      redirect_to(signup_path) and return
     end
 
     # StripeにCustomer作成
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     redirect_to(root_path, flash: { success: 'ユーザー登録が完了しました！ご登録内容の確認メールをお送りしています。もし10分以上経ってもメールが届かない場合は運営までお問い合わせください。' })
   rescue => e
     logger.error "[Error]Stripe subscription failed. #{e}"
-    redirect_to(signup_path_path, flash: { error: '決済処理に失敗しました。。課金処理を中止したため、これにより支払いが発生することはありません。解決しない場合は運営までお問い合わせください。' })
+    redirect_to(signup_path, flash: { error: '決済処理に失敗しました。。課金処理を中止したため、これにより支払いが発生することはありません。解決しない場合は運営までお問い合わせください。' })
   end
 
   def show
