@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :require_login, only: [:show]
 
   def new
-    # redirect_to(mypage_path) if current_user
+    redirect_to(mypage_path) if current_user
 
     @meta_title = '新規ユーザー登録'
     @no_index = true
@@ -50,6 +50,8 @@ class UsersController < ApplicationController
   def show
     @meta_title = 'マイページ'
     @no_index = true
+
+    @upcoming_assignments = current_user.book_assignments.upcoming.order(:start_date)
 
     # Customer PortalのURL取得
     if current_user.stripe_customer_id

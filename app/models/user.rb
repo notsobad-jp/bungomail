@@ -33,12 +33,20 @@ class User < ApplicationRecord
     EmailDigest.find_by(digest: digest).update(canceled_at: Time.current)
   end
 
+  def admin?
+    email == "info@notsobad.jp"
+  end
+
   def digest
     Digest::SHA256.hexdigest(email)
   end
 
-  def admin?
-    email == "info@notsobad.jp"
+  def trialing?
+    trial_start_date <= Date.current && Date.current <= trial_end_date
+  end
+
+  def trial_scheduled?
+    Date.current <= trial_start_date
   end
 
   class << self

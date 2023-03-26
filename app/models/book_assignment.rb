@@ -5,6 +5,7 @@ class BookAssignment < ApplicationRecord
   has_many :delayed_jobs, through: :feeds
 
   scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
+  scope :upcoming, -> { where("? <= end_date", Date.current) }
 
   validates :start_date, presence: true
   validates :end_date, presence: true
