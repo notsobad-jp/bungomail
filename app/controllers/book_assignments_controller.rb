@@ -1,4 +1,12 @@
 class BookAssignmentsController < ApplicationController
+  # 公式チャネルの過去配信一覧
+  def index
+    year = params[:year] || Time.current.year
+    start = Time.current.change(year: year).beginning_of_year
+    @book_assignments = BookAssignment.includes(:book).where(user_id: User.find_by(email: 'info@notsobad.jp'), start_date: start..start.end_of_year).where("start_date < ?", Time.zone.today).order(:start_date)
+    @meta_title = "過去配信作品（#{year}）"
+  end
+
   def create
     # 有料会員（トライアル含む）or トライアル開始前（予約済み）の人が配信予約可能
     @user = User.where(email: ba_params[:email]).merge(

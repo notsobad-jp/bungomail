@@ -5,7 +5,7 @@
 .py-4.border-t.border-b.mb-8
   - [*(2018..Time.current.year)].reverse.each do |year|
     - active = 'bg-gray-100 font-bold' if year == params[:year].to_i || (params[:year].blank? && year == Time.current.year)
-    = link_to "#{year}年", books_list_path(id: params[:id], year: year), class: "rounded px-2 sm:px-4 py-2 #{active}"
+    = link_to "#{year}年", book_assignments_path(year: year), class: "rounded px-2 sm:px-4 py-2 #{active}"
 
 - colors = %w(red orange yellow olive green teal blue violet purple pink brown black)
 .mb-4.space-y-4
