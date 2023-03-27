@@ -14,11 +14,6 @@ Rails.application.routes.draw do
 
   get 'campaigns/dogramagra' => "pages#dogramagra"
 
-  # TODO: 新システム移行後は不要
-  resources :lists do
-    get 'books', on: :member
-  end
-
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   get ':page' => "pages#show", as: :page
