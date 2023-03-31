@@ -1,6 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe BookAssignment, type: :model do
+  describe "count" do
+    let(:book_assignment) { build(:book_assignment) }
+
+    context "when it has 30 count" do
+      it "should have 30 feeds" do
+        expect(book_assignment.count).to eq(30)
+      end
+    end
+
+    context "when it has 10 count" do
+      it "should have 10 feeds" do
+        book_assignment.end_date = book_assignment.start_date + 9
+        expect(book_assignment.count).to eq(10)
+      end
+    end
+  end
+
   describe "create_feeds" do
     let(:book_assignment) { create(:book_assignment, :with_book) }
 
