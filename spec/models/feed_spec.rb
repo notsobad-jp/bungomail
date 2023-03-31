@@ -5,6 +5,18 @@ RSpec.describe Feed, type: :model do
     WebMock.stub_request(:post, "https://api-ssl.bitly.com/v4/shorten").to_return(body: "https://bit.ly/3q3sjgW")
   end
 
+  describe "index" do
+    let(:ba) { create(:book_assignment, :with_book) }
+
+    it "should return correct index" do
+      ba.create_feeds
+      feeds = ba.feeds.order(:delivery_date)
+
+      expect(feeds.first.index).to eq(1)
+      expect(feeds.last.index).to eq(30)
+    end
+  end
+
   describe "send_at" do
     let(:ba) { build(:book_assignment, delivery_time: "07:00:00") }
     let(:feed) { build(:feed, delivery_date: Time.zone.today, book_assignment: ba) }
