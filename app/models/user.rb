@@ -42,11 +42,11 @@ class User < ApplicationRecord
   end
 
   def trialing?
-    trial_start_date <= Date.current && Date.current <= trial_end_date
+    trial_start_date && trial_start_date <= Date.current && Date.current <= trial_end_date
   end
 
   def trial_scheduled?
-    Date.current <= trial_start_date
+    trial_start_date && Date.current <= trial_start_date
   end
 
   class << self
