@@ -9,6 +9,9 @@ class Feed < ApplicationRecord
     self.delayed_job&.delete
   end
 
+  def index
+    (delivery_date - book_assignment.start_date).to_i + 1
+  end
 
   def schedule
     return if self.send_at < Time.current

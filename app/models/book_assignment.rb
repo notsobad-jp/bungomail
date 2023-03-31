@@ -16,7 +16,7 @@ class BookAssignment < ApplicationRecord
 
 
   def count
-    (end_date - start_date) + 1
+    (end_date - start_date).to_i + 1
   end
 
   def create_and_schedule_feeds
@@ -30,7 +30,7 @@ class BookAssignment < ApplicationRecord
     delivery_date = self.start_date
 
     contents.each.with_index(1) do |content, index|
-      title = "#{self.book.title}（#{index}/#{contents.count}）"
+      title = self.book.title
       feeds << {
         title: title,
         content: content,
