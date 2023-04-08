@@ -17,6 +17,7 @@
     = stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload"
     %link(rel="preconnect" href="https://fonts.gstatic.com")
     %link(href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet")
+    %link(rel="manifest" href="manifest.json")
 
 
   %body.text-gray-700.font-sans
@@ -40,3 +41,16 @@
             = render partial: 'layouts/sidebar'
 
     = render partial: 'layouts/footer'
+
+    -# ServiceWorker
+    :javascript
+      window.addEventListener('load', function () {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register("/service_worker.js")
+            .then(function (registration) {
+              console.log("serviceWorker registed.");
+            }).catch(function (error) {
+            console.warn("serviceWorker error.", error);
+          });
+        }
+      });

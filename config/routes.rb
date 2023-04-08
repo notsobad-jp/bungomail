@@ -16,6 +16,9 @@ Rails.application.routes.draw do
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
+  get '/service-worker.js' => "service_workers#service_worker"
+  get '/manifest.json' => "service_workers#manifest"
+
   get ':page' => "pages#show", as: :page
   root to: 'pages#lp'
 end
