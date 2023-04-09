@@ -6,6 +6,9 @@ self.addEventListener('activate', function (e) {
   console.log('ServiceWorker activate')
 });
 
-self.addEventListener('fetch', function (event) {
-  console.log('ServiceWorker loaded')
+self.addEventListener('push', (event) => {
+  console.log("-----------")
+  console.log("web pushed!!")
+  var message = event.data;
+  event.waitUntil(self.registration.showNotification('Example'));
 });

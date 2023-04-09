@@ -24,4 +24,19 @@ namespace :temp do
       sleep 0.3
     end
   end
+
+  task webpush_test: :environment do |_task, _args|
+    user = User.find_by(email: "tomomichi.onishi@gmail.com")
+    WebPush.payload_send(
+      message: "てすとだよーー",
+      endpoint: user.webpush_endpoint,
+      p256dh: user.webpush_p256dh,
+      auth: user.webpush_auth,
+      vapid: {
+        subject: "mailto:sender@example.com",
+        public_key: Rails.application.credentials.dig(:vapid, :public_key),
+        private_key: Rails.application.credentials.dig(:vapid, :private_key),
+      },
+    )
+  end
 end

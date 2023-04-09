@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_stripe_key
-  before_action :require_login, only: [:show]
+  before_action :require_login, only: [:show, :update]
 
   def new
     redirect_to(mypage_path) if current_user
@@ -61,6 +61,15 @@ class UsersController < ApplicationController
       ) rescue nil
       @customer_portal_url = portal_session&.url
     end
+  end
+
+  def update
+    current_user.update!(
+      webpush_endpoint: params[:endpoint],
+      webpush_p256dh: params.dig(:keys, :p256dh),
+      webpush_auth: params.dig(:keys, :auth),
+    )
+    head :ok
   end
 
   def destroy
