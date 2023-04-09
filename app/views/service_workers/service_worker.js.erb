@@ -7,8 +7,6 @@ self.addEventListener('activate', function (e) {
 });
 
 self.addEventListener('push', (event) => {
-  console.log("-----------")
-  console.log("web pushed!!")
-  var message = event.data;
-  event.waitUntil(self.registration.showNotification('Example'));
+  event.waitUntil(self.registration.showNotification(event.data));
+  console.log('Webpush sent!')
 });
