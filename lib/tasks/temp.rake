@@ -27,8 +27,14 @@ namespace :temp do
 
   task webpush_test: :environment do |_task, _args|
     user = User.find_by(email: "tomomichi.onishi@gmail.com")
+    message = {
+      title: "Example",
+      body: "Hello, world!",
+      icon: "https://bungomail.com/favicon.ico",
+    }
+
     WebPush.payload_send(
-      message: "てすとだよーー",
+      message: JSON.generate(message),
       endpoint: user.webpush_endpoint,
       p256dh: user.webpush_p256dh,
       auth: user.webpush_auth,

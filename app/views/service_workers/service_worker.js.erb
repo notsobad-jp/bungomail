@@ -7,6 +7,10 @@ self.addEventListener('activate', function (e) {
 });
 
 self.addEventListener('push', (event) => {
-  event.waitUntil(self.registration.showNotification(event.data));
-  console.log('Webpush sent!')
+  const data = JSON.parse(event.data.text());
+  const title = data["title"]
+  const options = { body: data["body"], icon: data["icon"] };
+  event.waitUntil(self.registration.showNotification(title, options));
+
+  console.log('Webpush received')
 });
