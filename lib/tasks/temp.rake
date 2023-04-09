@@ -36,6 +36,7 @@ namespace :temp do
         subject: "mailto:sender@example.com",
         public_key: Rails.application.credentials.dig(:vapid, :public_key),
         private_key: Rails.application.credentials.dig(:vapid, :private_key),
+        expiration: 12 * 60 * 60,
       },
     )
   end
