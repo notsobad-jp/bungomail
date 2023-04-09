@@ -15,9 +15,14 @@ class Feed < ApplicationRecord
 
   def schedule
     return if self.send_at < Time.current
-    res = WebPushJob.set(wait_until: self.send_at).perform_later(user: self.book_assignment.user, message: webpush_payload)
-    # res = BungoMailer.with(feed: self).feed_email.deliver_later(queue: 'feed_email', wait_until: self.send_at)
-    # self.update!(delayed_job_id: res.provider_job_id)
+
+    if true # FIXME: 配信方法に応じて分岐
+      res = WebPushJob.set(wait_until: self.send_at).perform_later(user: self.book_assignment.user, message: webpush_payload)
+    else
+      res = BungoMailer.with(feed: self).feed_email.deliver_later(queue: 'feed_email', wait_until: self.send_at)
+    end
+
+    self.update!(delayed_job_id: res.provider_job_id)
   end
 
   def send_at
