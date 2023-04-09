@@ -26,6 +26,7 @@ gem "tailwindcss-rails"
 gem 'propshaft'
 gem 'importmap-rails'
 gem 'turbo-rails'
+gem 'web-push'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
