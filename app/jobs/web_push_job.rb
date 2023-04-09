@@ -1,5 +1,5 @@
 class WebPushJob < ApplicationJob
-  queue_as :default
+  queue_as :web_push
 
   def perform(user:, message:)
     WebPush.payload_send(

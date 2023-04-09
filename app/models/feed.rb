@@ -15,11 +15,23 @@ class Feed < ApplicationRecord
 
   def schedule
     return if self.send_at < Time.current
-    res = BungoMailer.with(feed: self).feed_email.deliver_later(queue: 'feed_email', wait_until: self.send_at)
-    self.update!(delayed_job_id: res.provider_job_id)
+    res = WebPushJob.set(wait_until: self.send_at).perform_later(user: self.book_assignment.user, message: webpush_payload)
+    # res = BungoMailer.with(feed: self).feed_email.deliver_later(queue: 'feed_email', wait_until: self.send_at)
+    # self.update!(delayed_job_id: res.provider_job_id)
   end
 
   def send_at
     Time.zone.parse("#{delivery_date.to_s} #{book_assignment.delivery_time}")
   end
+
+  private
+
+    def webpush_payload
+      {
+        title: "#{book_assignment.book.author_name}『#{book_assignment.book.title}』",
+        body: "ブンゴウメール",
+        icon: "https://bungomail.com/favicon.ico",
+        url: "http://localhost:3000/feeds/#{id}",
+      }
+    end
 end
