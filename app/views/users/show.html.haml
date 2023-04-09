@@ -56,3 +56,38 @@
     %div
       = link_to "カスタム配信", page_path(:custom_delivery), class: "text-link"
       が登録されていません。
+
+- if current_user.admin?
+  .mb-12
+    %h5.font-bold.text-lg.mb-4.pb-2.border-b
+      プッシュ通知
+    %div
+      %div(onclick="subscribe()" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75")
+        通知を許可する
+
+  :javascript
+    function subscribe() {
+      navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+        serviceWorkerRegistration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: new Uint8Array(#{ vapid_key_decoded.bytes })
+        }).then(subscription => {
+          const csrfToken = document.getElementsByName("csrf-token")[0].content;
+
+          fetch('/user', {
+            method: 'PATCH',
+            headers: {
+              "X-CSRF-Token": csrfToken,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(subscription.toJSON())
+          })
+          .then(function(response){
+            const response_message = response.status + ':' + response.statusText
+            console.log(response_message);
+            alert("通知設定が完了しました！")
+          });
+        });
+      });
+    }

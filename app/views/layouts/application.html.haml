@@ -54,26 +54,3 @@
           });
         }
       });
-
-      navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-        serviceWorkerRegistration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: new Uint8Array(#{ vapid_key_decoded.bytes })
-        }).then(subscription => {
-          const csrfToken = document.getElementsByName("csrf-token")[0].content;
-
-          fetch('/user', {
-            method: 'PATCH',
-            headers: {
-              "X-CSRF-Token": csrfToken,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(subscription.toJSON())
-          })
-          .then(function(response){
-            const response_message = response.status + ':' + response.statusText
-            console.log(response_message);
-          });
-        });
-      });

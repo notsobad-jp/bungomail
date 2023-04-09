@@ -26,7 +26,7 @@ namespace :temp do
   end
 
   task webpush_test: :environment do |_task, _args|
-    user = User.find_by(email: "tomomichi.onishi@gmail.com")
+    user = User.find_by(email: "info@notsobad.jp")
     message = {
       title: "芥川龍之介『桃太郎』",
       body: "ブンゴウメール",
