@@ -9,13 +9,14 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('push', (event) => {
   const data = JSON.parse(event.data.text());
   const title = data["title"]
-  const options = { body: data["body"], icon: data["icon"] };
+  const options = { body: data["body"], icon: data["icon"], data: data["url"] };
   event.waitUntil(self.registration.showNotification(title, options));
   console.log('Webpush received')
 });
 
 self.addEventListener('notificationclick', (event) => {
   console.log("Webpush clicked")
+  const url = event.notification.data
   event.notification.close();
-  clients.openWindow("/books/10");
+  clients.openWindow(url);
 }, false);

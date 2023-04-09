@@ -28,9 +28,10 @@ namespace :temp do
   task webpush_test: :environment do |_task, _args|
     user = User.find_by(email: "tomomichi.onishi@gmail.com")
     message = {
-      title: "Example",
-      body: "Hello, world!",
+      title: "芥川龍之介『桃太郎』",
+      body: "ブンゴウメール",
       icon: "https://bungomail.com/favicon.ico",
+      url: "/books/100",
     }
 
     WebPush.payload_send(
@@ -39,7 +40,7 @@ namespace :temp do
       p256dh: user.webpush_p256dh,
       auth: user.webpush_auth,
       vapid: {
-        subject: "mailto:sender@example.com",
+        subject: "mailto:info@notsobad.jp",
         public_key: Rails.application.credentials.dig(:vapid, :public_key),
         private_key: Rails.application.credentials.dig(:vapid, :private_key),
         expiration: 12 * 60 * 60,
