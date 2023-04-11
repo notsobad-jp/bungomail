@@ -20,6 +20,7 @@ class BookAssignmentsController < ApplicationController
       start_date: ba_params[:start_date],
       end_date: ba_params[:end_date],
       delivery_time: ba_params[:delivery_time],
+      delivery_method: ba_params[:delivery_method].presence || "email",
     )
     BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
     @ba.delay.create_and_schedule_feeds
@@ -58,6 +59,6 @@ class BookAssignmentsController < ApplicationController
   private
 
   def ba_params
-    params.require(:book_assignment).permit(:book_id, :book_type, :user_id, :start_date, :end_date, :email, :delivery_time)
+    params.require(:book_assignment).permit(:book_id, :book_type, :user_id, :start_date, :end_date, :email, :delivery_time, :delivery_method)
   end
 end

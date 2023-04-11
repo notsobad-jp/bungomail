@@ -1,0 +1,9 @@
+.mb-4
+  %h1(class="mb-2 text-xl sm:text-2xl font-bold")
+    = @book.title
+  .text-gray-500.text-large
+    = @book.author_name
+.mb-8
+  .mb-4
+    （#{ @word_count.to_s(:delimited) }字。目安の読了時間：#{ @word_count.quo(500).ceil }分）
+  = simple_format @feed.content.gsub(/(\r\n|\r|\n)/, "<br />")
