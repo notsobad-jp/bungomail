@@ -34,7 +34,7 @@ class Feed < ApplicationRecord
     def webpush_payload
       {
         title: "#{book_assignment.book.author_name}『#{book_assignment.book.title}』",
-        body: "ブンゴウメール",
+        body: content,
         icon: "https://bungomail.com/favicon.ico",
         url: "http://localhost:3000/feeds/#{id}",
       }

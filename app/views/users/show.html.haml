@@ -57,7 +57,7 @@
       = link_to "カスタム配信", page_path(:custom_delivery), class: "text-link"
       が登録されていません。
 
-- if current_user.admin?
+- if current_user.email == "tomomichi.onishi@gmail.com"
   .mb-12
     %h5.font-bold.text-lg.mb-4.pb-2.border-b
       プッシュ通知
