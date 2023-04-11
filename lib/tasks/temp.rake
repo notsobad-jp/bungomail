@@ -24,4 +24,18 @@ namespace :temp do
       sleep 0.3
     end
   end
+
+  task webpush_test: :environment do |_task, _args|
+    user = User.find_by(email: "tomomichi.onishi@gmail.com")
+    feed = Feed.find("18c76b79-9e0a-44fd-8e1d-f2364d574c5f")
+    # message = {
+    #   title: "芥川龍之介『桃太郎』",
+    #   body: "ブンゴウメール",
+    #   icon: "https://bungomail.com/favicon.ico",
+    #   url: "/books/100",
+    # }
+
+    # WebPushJob.set(wait: 5.minutes).perform_later(user: user, message: message)
+    WebPushJob.perform_now(user: user, message: feed.send("webpush_payload"))
+  end
 end

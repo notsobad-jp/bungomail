@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   resources :books, only: [:show]
-  resources :book_assignments do
+  resources :book_assignments, shallow: true do
     get :cancel, on: :member
+    resources :feeds
   end
   resources :magic_tokens
   resource :user
@@ -15,6 +16,9 @@ Rails.application.routes.draw do
   get 'campaigns/dogramagra' => "pages#dogramagra"
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
+  get '/service-worker.js' => "service_workers#service_worker"
+  get '/manifest.json' => "service_workers#manifest"
 
   get ':page' => "pages#show", as: :page
   root to: 'pages#lp'

@@ -15,28 +15,34 @@
 = form_with model: @book_assignment, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
   = f.hidden_field :book_type, value: 'AozoraBook'
-  .mb-4
-    %h5.mb-2.font-bold 配信先
-    - if current_user
-      = f.email_field :email, class: 'border rounded w-full p-2 bg-gray-200 text-gray-500', disabled: true, value: current_user.email
-      = f.hidden_field :email, value: current_user.email
-    - else
-      = f.email_field :email, required: true, class: 'border rounded w-full p-2', placeholder: 'メールアドレス'
-      %small.text-xs
-        ※
-        = link_to 'ブンゴウメール有料プラン', signup_path, class: 'text-link'
-        に登録済みのメールアドレスを入力してください
-  .mb-4
-    %h5.mb-2.font-bold 配信期間
-    %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")
-      = f.date_field :start_date, min: Date.current.tomorrow, required: true, class: 'border rounded p-2 flex-1'
-      .text-center 〜
-      = f.date_field :end_date, min: Date.current.tomorrow, max: Date.tomorrow.since(12.months), required: true, class: 'border rounded p-2 flex-1'
-    %small.text-xs ※配信予約は最長で12ヶ月先までです
   .mb-8
-    %h5.mb-2.font-bold 配信時間
-    = f.time_field :delivery_time, class: 'border rounded w-full p-2', placeholder: '07:00', min: '05:00', max: '23:00'
-    %small.text-xs ※配信時間は5:00~23:00の間で指定可能です（実際の配信には数分程度の誤差があります）
+    .mb-4
+      %h5.mb-2.font-bold 配信先
+      - if current_user
+        = f.email_field :email, class: 'border rounded w-full p-2 bg-gray-200 text-gray-500', disabled: true, value: current_user.email
+        = f.hidden_field :email, value: current_user.email
+      - else
+        = f.email_field :email, required: true, class: 'border rounded w-full p-2', placeholder: 'メールアドレス'
+        %small.text-xs
+          ※
+          = link_to 'ブンゴウメール有料プラン', signup_path, class: 'text-link'
+          に登録済みのメールアドレスを入力してください
+    .mb-4
+      %h5.mb-2.font-bold 配信期間
+      %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")
+        = f.date_field :start_date, min: Date.current.tomorrow, required: true, class: 'border rounded p-2 flex-1'
+        .text-center 〜
+        = f.date_field :end_date, min: Date.current.tomorrow, max: Date.tomorrow.since(12.months), required: true, class: 'border rounded p-2 flex-1'
+      %small.text-xs ※配信予約は最長で12ヶ月先までです
+    .mb-4
+      %h5.mb-2.font-bold 配信時間
+      = f.time_field :delivery_time, class: 'border rounded w-full p-2', placeholder: '07:00', min: '05:00', max: '23:00'
+      %small.text-xs ※配信時間は5:00~23:00の間で指定可能です（実際の配信には数分程度の誤差があります）
+    - if current_user&.email == "tomomichi.onishi@gmail.com"
+      .mb-4
+        %h5.mb-2.font-bold 配信方法
+        = f.select :delivery_method, { "Eメール" => :email, "プッシュ通知" => :webpush }, {}, class: 'border rounded w-full p-2'
+        %small.text-xs ※プッシュ通知で配信する際は、配信開始前にプッシュ通知の許可設定を行ってください
 
   .mb-4
     - disabled = @book.rights_reserved
