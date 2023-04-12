@@ -63,13 +63,13 @@
       プッシュ通知
     - if current_user.webpush_endpoint
       %div.mb-4.flex.items-center.space-x-4
-        %div(class="inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 opacity-50")
-          通知許可済み
-        %div(onclick="unsubscribe()" class="cursor-pointer hover:opacity-75")
-          通知許可を取り消す
+        %div(onclick="unsubscribe()" class="cursor-pointer inline-flex items-center space-x-1 border border-red-700 text-red-700 rounded px-4 py-2 hover:opacity-75")
+          %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
+            %path(stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12")
+          %span 通知設定を解除する
       %div.mb-2
         = link_to webpush_test_user_path, data: { "turbo-method": :post }, remote: true, class: "inline-flex items-center space-x-1 border rounded px-4 py-2 hover:opacity-75" do
-          プッシュ通知をテスト配信する
+          テスト通知を配信する
     - else
       %div.mb-4
         %div(onclick="subscribe()" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75")
@@ -77,59 +77,46 @@
 
 
   :javascript
-    function subscribe() {
-      navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-        serviceWorkerRegistration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: new Uint8Array(#{ vapid_key_decoded.bytes })
-        }).then(subscription => {
-          const csrfToken = document.getElementsByName("csrf-token")[0].content;
-
-          fetch('/user', {
-            method: 'PATCH',
-            headers: {
-              "X-CSRF-Token": csrfToken,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(subscription.toJSON())
-          })
-          .then(function(response){
-            const response_message = response.status + ':' + response.statusText
-            console.log(response_message);
-            alert("通知設定が完了しました！")
-          });
-        }).catch(function(e) {
-          alert("通知設定に失敗しました...")
-        });
-      });
+    async function subscribe() {
+      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      const subscription = await serviceWorkerRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: new Uint8Array(#{ vapid_key_decoded.bytes })
+      })
+      const response = await postUser(subscription.toJSON());
+      const response_message = response.status + ':' + response.statusText
+      alert("通知設定が完了しました！")
+      location.reload();
     }
 
-    function unsubscribe() {
-      console.log("unsub start")
-      navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-        serviceWorkerRegistration.pushManager.unsubscribe().finally(() => {
-          console.log("finally")
-          const csrfToken = document.getElementsByName("csrf-token")[0].content;
+    async function unsubscribe() {
+      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      const subscription = await serviceWorkerRegistration.pushManager.getSubscription();
+      if(subscription) {
+        await subscription.unsubscribe();
+      }
 
-          fetch('/user', {
-            method: 'PATCH',
-            headers: {
-              "X-CSRF-Token": csrfToken,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              endpoint: null,
-              p256dh: null,
-              auth: null
-            })
-          })
-          .then(function(response){
-            const response_message = response.status + ':' + response.statusText
-            console.log(response_message);
-            alert("通知設定を解除しました！")
-          });
-        })
-      });
+      const params = {
+        endpoint: null,
+        p256dh: null,
+        auth: null
+      }
+      const response = await postUser(params);
+      const response_message = response.status + ':' + response.statusText
+      alert("通知設定を解除しました！")
+      location.reload();
+    }
+
+    function postUser(params) {
+      const csrfToken = document.getElementsByName("csrf-token")[0].content;
+
+      return fetch('/user', {
+        method: 'PATCH',
+        headers: {
+          "X-CSRF-Token": csrfToken,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+      })
     }
