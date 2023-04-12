@@ -32,6 +32,11 @@ class BookAssignmentsController < ApplicationController
     redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date], delivery_time: ba_params[:delivery_time])
   end
 
+  def show
+    @ba = BookAssignment.find_by(id: params[:id])
+    @meta_title = "#{@ba.book.author_name}『#{@ba.book.title}』"
+  end
+
   def cancel
     @ba = BookAssignment.find_by(id: params[:id])
     raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?

@@ -51,6 +51,27 @@ class BookAssignment < ApplicationRecord
     user.admin? ? User.basic_plan.pluck(:email) : [user.email]
   end
 
+  def status
+    if Date.current < start_date
+      "配信予定"
+    elsif Date.current > end_date
+      "配信終了"
+    else
+      "配信中"
+    end
+  end
+
+  def status_color
+    case status
+    when "配信予定"
+      "blue"
+    when "配信中"
+      "orange"
+    when "配信終了"
+      "gray"
+    end
+  end
+
   def twitter_short_url
     begin
       Bitly.call(path: 'shorten', params: { long_url: self.twitter_long_url })
