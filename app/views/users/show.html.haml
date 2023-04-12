@@ -61,9 +61,20 @@
   .mb-12
     %h5.font-bold.text-lg.mb-4.pb-2.border-b
       プッシュ通知
-    %div
-      %div(onclick="subscribe()" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75")
-        通知を許可する
+    - if current_user.webpush_endpoint
+      %div.mb-4.flex.items-center.space-x-4
+        %div(class="inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 opacity-50")
+          通知許可済み
+        %div(onclick="unsubscribe()" class="cursor-pointer hover:opacity-75")
+          通知許可を取り消す
+      %div.mb-2
+        = link_to webpush_test_user_path, data: { "turbo-method": :post }, remote: true, class: "inline-flex items-center space-x-1 border rounded px-4 py-2 hover:opacity-75" do
+          プッシュ通知をテスト配信する
+    - else
+      %div.mb-4
+        %div(onclick="subscribe()" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75")
+          通知を許可する
+
 
   :javascript
     function subscribe() {
@@ -88,6 +99,37 @@
             console.log(response_message);
             alert("通知設定が完了しました！")
           });
+        }).catch(function(e) {
+          alert("通知設定に失敗しました...")
         });
+      });
+    }
+
+    function unsubscribe() {
+      console.log("unsub start")
+      navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+        serviceWorkerRegistration.pushManager.unsubscribe().finally(() => {
+          console.log("finally")
+          const csrfToken = document.getElementsByName("csrf-token")[0].content;
+
+          fetch('/user', {
+            method: 'PATCH',
+            headers: {
+              "X-CSRF-Token": csrfToken,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              endpoint: null,
+              p256dh: null,
+              auth: null
+            })
+          })
+          .then(function(response){
+            const response_message = response.status + ':' + response.statusText
+            console.log(response_message);
+            alert("通知設定を解除しました！")
+          });
+        })
       });
     }

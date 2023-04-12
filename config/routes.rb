@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     resources :feeds
   end
   resources :magic_tokens
-  resource :user
+  resource :user do
+    post :webpush_test, on: :member
+  end
 
   get 'auth' => 'magic_tokens#auth'
   get 'login' => 'magic_tokens#new'
