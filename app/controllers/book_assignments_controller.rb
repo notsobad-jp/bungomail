@@ -34,6 +34,7 @@ class BookAssignmentsController < ApplicationController
 
   def show
     @ba = BookAssignment.find_by(id: params[:id])
+    @feeds = Feed.delivered.where(book_assignment_id: @ba.id).order(delivery_date: :desc) # FIXME
     @meta_title = "#{@ba.book.author_name}『#{@ba.book.title}』"
   end
 

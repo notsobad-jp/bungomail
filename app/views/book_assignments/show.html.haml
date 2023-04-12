@@ -1,27 +1,9 @@
--# bg-blue-100 text-blue-800 bg-gray-100 text-gray-800 bg-yellow-100 text-yellow-800 bg-orange-100 text-orange-800 bg-green-100 text-green-800 bg-red-100 text-red-800
 .mb-8
-  .mb-4.flex.items-center.flex-wrap
-    %h1(class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight")
-      = "#{@ba.book.author_name}『#{@ba.book.title}』"
-    %span(class="inline-flex items-center rounded-full bg-#{@ba.status_color}-100 px-2.5 py-0.5 text-xs font-medium text-#{@ba.status_color}-800")
-      = @ba.status
-
-  %ul.flex.items-center.space-x-4
-    %li.flex.items-center.space-x-2
-      %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
-        %path(stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5")
-      %span
-        = @ba.start_date
-        = " 〜 #{@ba.end_date}" if @ba.end_date != @ba.start_date
-        = "（全#{@ba.count}回）"
-    %li.flex.items-center.space-x-2
-      %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
-        %path(stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z")
-      %span= @ba.delivery_time.strftime("%H:%M")
+  = render "page_header", { ba: @ba }
 
 .mb-12
   - if current_user == @ba.user
-    = link_to book_assignment_path, method: :delete, class: "inline-block text-center w-full sm:w-auto px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700" do
+    = link_to book_assignment_path, data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
       %span 削除する
 
 .mb-12
@@ -30,8 +12,19 @@
       過去の配信
 
   %ul
-    - @ba.feeds.each do |feed|
-      %li
-        = link_to feed_path(feed), class: "flex justify-between items-center hover:bg-gray-50 px-2 py-3" do
-          = "##{feed.index}"
-          %small= feed.delivery_date
+    - if @feeds.blank?
+      %li まだ配信されていません
+    - else
+      - @feeds.each do |feed|
+        %li
+          = link_to feed_path(feed), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
+            %div.truncate
+              .flex.items-center.space-x-2
+                %span.font-bold= "##{feed.index}"
+                %span.text-sm
+                  = feed.delivery_date
+              .text-gray-400.text-xs.truncate
+                = feed.content
+            %div
+              %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
+                %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
