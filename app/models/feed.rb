@@ -1,4 +1,6 @@
 class Feed < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   belongs_to :book_assignment
   belongs_to :delayed_job, required: false
 
@@ -36,7 +38,11 @@ class Feed < ApplicationRecord
         title: "#{book_assignment.book.author_name}『#{book_assignment.book.title}』",
         body: content,
         icon: "https://bungomail.com/favicon.ico",
-        url: "http://localhost:3000/feeds/#{id}",
+        url: feed_url(id, host: host),
       }
+    end
+
+    def host
+      Rails.env.production? ? "https://bungomail.com" : "http://localhost:3000"
     end
 end
