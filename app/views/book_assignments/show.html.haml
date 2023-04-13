@@ -3,7 +3,7 @@
 
 .mb-12
   - if current_user == @ba.user && @ba.status != "配信終了"
-    = link_to book_assignment_path, data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
+    = link_to book_assignment_path, data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
       %span 配信を削除する
 
 .mb-12

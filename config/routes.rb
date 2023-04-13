@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   resources :books, only: [:show]
   resources :book_assignments, shallow: true do
-    get :cancel, on: :member
     resources :feeds
   end
   resources :magic_tokens

@@ -54,8 +54,8 @@ class BookAssignmentsController < ApplicationController
     raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?
     @ba.destroy!
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
-    flash[:success] = '配信をキャンセルしました！'
-    redirect_to page_path(:book_assignment_canceled)
+    flash[:success] = '配信を削除しました！'
+    redirect_to mypage_path, status: 303
   rescue => e
     logger.error e if e.class != ActiveRecord::RecordNotFound
     flash[:error] = e
