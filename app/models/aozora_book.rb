@@ -153,6 +153,10 @@ class AozoraBook < ApplicationRecord
     AozoraBook.author_name(author)
   end
 
+  def author_and_book_name
+    "#{author_name}『#{title}』"
+  end
+
   def beginning_from_file
     (self.aozora_file_text[0].split("。")[0] + "。").truncate(250).gsub(/(一|1|１|（一）|序)(\r\n|　|\s)/, "").delete("\r\n　")  # 書き出しに段落番号とかが入るのを防ぐ
   end

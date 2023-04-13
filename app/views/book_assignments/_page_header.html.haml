@@ -1,8 +1,8 @@
 -# bg-blue-100 text-blue-800 bg-gray-100 text-gray-800 bg-yellow-100 text-yellow-800 bg-orange-100 text-orange-800 bg-green-100 text-green-800 bg-red-100 text-red-800
 %div
   .mb-4.flex.items-center.flex-wrap
-    %h1(class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight")
-      = "#{ba.book.author_name}『#{ba.book.title}』"
+    %h1(class="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight")
+      = link_to_if !current_page?(book_assignment_path(ba)), ba.book.author_and_book_name, book_assignment_path(ba)
     %span(class="inline-flex items-center rounded-full bg-#{ba.status_color}-100 px-2.5 py-0.5 text-xs font-medium text-#{ba.status_color}-800")
       = ba.status
 
