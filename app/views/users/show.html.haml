@@ -46,12 +46,16 @@
   - if @upcoming_assignments.present?
     %ul(class="space-y-8 sm:space-y-4")
       - @upcoming_assignments.each do |ua|
-        %li(class="flex items-start sm:items-center flex-col sm:flex-row justify-between space-y-2 sm:space-y-0")
-          %div
-            %div= "#{ua.book.author_name}『#{ua.book.title}』"
-            %div.text-sm.text-gray-500= "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"
-          %div
-            = link_to "配信停止", cancel_book_assignment_path(ua), class: "rounded border hover:bg-gray-50 px-2 py-1"
+        %li
+          = link_to book_assignment_path(ua), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
+            %div.space-y-1
+              .font-bold= ua.book.author_and_book_name
+              .text-sm
+                = "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"
+            %div
+              %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
+                %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
+
   - else
     %div
       = link_to "カスタム配信", page_path(:custom_delivery), class: "text-link"

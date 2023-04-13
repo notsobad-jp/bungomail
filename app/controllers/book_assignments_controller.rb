@@ -25,7 +25,7 @@ class BookAssignmentsController < ApplicationController
     BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
     @ba.delay.create_and_schedule_feeds
     flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
-    redirect_to book_path(ba_params[:book_id])
+    redirect_to book_assignment_path(@ba)
   rescue => e
     logger.error e if ![ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid].include?(e.class)
     flash[:error] = e
