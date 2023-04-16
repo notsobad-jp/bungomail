@@ -7,7 +7,7 @@ class BookAssignment < ApplicationRecord
   scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
   scope :upcoming, -> { where("? <= end_date", Date.current) }
 
-  enum delivery_method: { email: "email", webpush: "webpush" }
+  enum delivery_method: { "Eメール" => "email", "プッシュ通知" => "webpush" }
 
   validates :start_date, presence: true
   validates :end_date, presence: true

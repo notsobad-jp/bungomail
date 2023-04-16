@@ -38,17 +38,6 @@ class BookAssignmentsController < ApplicationController
     @meta_title = @ba.book.author_and_book_name
   end
 
-  def cancel
-    @ba = BookAssignment.find_by(id: params[:id])
-    raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?
-    @meta_title = '配信停止'
-    @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
-  rescue => e
-    logger.error e if e.class != ActiveRecord::RecordNotFound
-    flash[:error] = e
-    redirect_to root_path
-  end
-
   def destroy
     @ba = BookAssignment.find_by(id: params[:id])
     raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?

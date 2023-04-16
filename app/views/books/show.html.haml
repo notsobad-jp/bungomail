@@ -41,7 +41,7 @@
     - if current_user&.email == "tomomichi.onishi@gmail.com"
       .mb-4
         %h5.mb-2.font-bold 配信方法
-        = f.select :delivery_method, { "Eメール" => :email, "プッシュ通知" => :webpush }, {}, class: 'border rounded w-full p-2'
+        = f.select :delivery_method, options_for_select(BookAssignment.delivery_methods), {}, class: 'border rounded w-full p-2'
         %small.text-xs ※プッシュ通知で配信する際は、配信開始前にプッシュ通知の許可設定を行ってください
 
   .mb-4
