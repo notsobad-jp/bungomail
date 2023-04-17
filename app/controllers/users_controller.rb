@@ -102,7 +102,7 @@ class UsersController < ApplicationController
       icon: "https://bungomail.com/favicon.ico",
       url: mypage_url,
     }
-    WebPushJob.perform_now(user: current_user, message: payload)
+    WebPushJob.perform_later(user: current_user, message: payload)
   rescue => e
     current_user.update!(
       webpush_endpoint: nil,
