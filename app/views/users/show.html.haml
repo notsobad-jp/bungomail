@@ -46,48 +46,107 @@
   - if @upcoming_assignments.present?
     %ul(class="space-y-8 sm:space-y-4")
       - @upcoming_assignments.each do |ua|
-        %li(class="flex items-start sm:items-center flex-col sm:flex-row justify-between space-y-2 sm:space-y-0")
-          %div
-            %div= "#{ua.book.author_name}『#{ua.book.title}』"
-            %div.text-sm.text-gray-500= "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"
-          %div
-            = link_to "配信停止", cancel_book_assignment_path(ua), class: "rounded border hover:bg-gray-50 px-2 py-1"
+        %li
+          = link_to book_assignment_path(ua), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
+            %div.space-y-1
+              .font-bold= ua.book.author_and_book_name
+              .text-sm
+                = "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"
+            %div
+              %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
+                %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
+
   - else
     %div
       = link_to "カスタム配信", page_path(:custom_delivery), class: "text-link"
       が登録されていません。
 
-- if current_user.email == "tomomichi.onishi@gmail.com"
-  .mb-12
-    %h5.font-bold.text-lg.mb-4.pb-2.border-b
-      プッシュ通知
-    %div
+.mb-12
+  %h5.font-bold.text-lg.mb-4.pb-2.border-b
+    プッシュ通知の設定
+  - if current_user.webpush_endpoint
+    %div.mb-4
+      通知設定が完了しています。
+    %div.mb-4.flex.items-center.space-x-4
+      %div(onclick="unsubscribe()" class="cursor-pointer inline-flex items-center space-x-1 border border-red-700 text-red-700 rounded px-4 py-2 hover:opacity-75")
+        %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
+          %path(stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12")
+        %span 通知設定を解除する
+      %div
+        = link_to webpush_test_user_path, data: { "turbo-method": :post }, remote: true, class: "inline-flex items-center space-x-1 border rounded px-4 py-2 hover:opacity-75" do
+          %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
+            %path(stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5")
+          %span 通知をテストする
+  - else
+    %div.mb-4
       %div(onclick="subscribe()" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75")
-        通知を許可する
+        この端末を通知先として登録する
+  .mb-4
+    %ul.text-sm.leading-7
+      %li ※プッシュ通知は実験的な機能で、確実な動作を保証するものではありません。
+      %li ※iPhoneをお使いの場合、Safariの通知許可に加えて「ホーム画面に追加」も必要です。またiOS/Safariのバージョンも16.4以上である必要があります。
+      %li ※プッシュ通知での配信を選択できるのはカスタム配信のみです。毎月1冊のおまかせ配信についてはこれまでどおりメールでの配信のみとなります。
+
+
 
   :javascript
-    function subscribe() {
-      navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-        serviceWorkerRegistration.pushManager.subscribe({
+    async function subscribe() {
+      if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        alert("申し訳ありませんがお使いのブラウザではプッシュ通知がサポートされていないようです。。")
+        return;
+      }
+
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          alert("プッシュ通知がブロックされています。ブラウザの設定でプッシュ通知を許可してください。")
+          return;
+        }
+
+        const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+        const subscription = await serviceWorkerRegistration.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: new Uint8Array(#{ vapid_key_decoded.bytes })
-        }).then(subscription => {
-          const csrfToken = document.getElementsByName("csrf-token")[0].content;
+        })
+        const response = await sendSubscriptionToServer(subscription.toJSON());
+        console.log(response.status + ':' + response.statusText);
+        alert("通知設定が完了しました！")
+        location.reload();
+      } catch (error) {
+        console.error('Failed to subscribe push notification:', error);
+        alert("通知設定に失敗しました。。")
+        return;
+      }
+    }
 
-          fetch('/user', {
-            method: 'PATCH',
-            headers: {
-              "X-CSRF-Token": csrfToken,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(subscription.toJSON())
-          })
-          .then(function(response){
-            const response_message = response.status + ':' + response.statusText
-            console.log(response_message);
-            alert("通知設定が完了しました！")
-          });
-        });
-      });
+    async function unsubscribe() {
+      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      const subscription = await serviceWorkerRegistration.pushManager.getSubscription();
+      if(subscription) {
+        await subscription.unsubscribe();
+      }
+
+      const params = {
+        endpoint: null,
+        p256dh: null,
+        auth: null
+      }
+      const response = await sendSubscriptionToServer(params);
+      console.log(response.status + ':' + response.statusText);
+      alert("通知設定を解除しました！")
+      location.reload();
+    }
+
+    function sendSubscriptionToServer(params) {
+      const csrfToken = document.getElementsByName("csrf-token")[0].content;
+
+      return fetch('/user', {
+        method: 'PATCH',
+        headers: {
+          "X-CSRF-Token": csrfToken,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+      })
     }

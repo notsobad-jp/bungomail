@@ -25,22 +25,17 @@ class BookAssignmentsController < ApplicationController
     BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
     @ba.delay.create_and_schedule_feeds
     flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
-    redirect_to book_path(ba_params[:book_id])
+    redirect_to book_assignment_path(@ba)
   rescue => e
     logger.error e if ![ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid].include?(e.class)
     flash[:error] = e
     redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date], delivery_time: ba_params[:delivery_time])
   end
 
-  def cancel
-    @ba = BookAssignment.find_by(id: params[:id])
-    raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?
-    @meta_title = '配信停止'
-    @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
-  rescue => e
-    logger.error e if e.class != ActiveRecord::RecordNotFound
-    flash[:error] = e
-    redirect_to root_path
+  def show
+    @ba = BookAssignment.find_by!(id: params[:id])
+    @feeds = Feed.delivered.where(book_assignment_id: @ba.id).order(delivery_date: :desc) # FIXME
+    @meta_title = @ba.book.author_and_book_name
   end
 
   def destroy
@@ -48,8 +43,8 @@ class BookAssignmentsController < ApplicationController
     raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?
     @ba.destroy!
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
-    flash[:success] = '配信をキャンセルしました！'
-    redirect_to page_path(:book_assignment_canceled)
+    flash[:success] = '配信を削除しました！'
+    redirect_to mypage_path, status: 303
   rescue => e
     logger.error e if e.class != ActiveRecord::RecordNotFound
     flash[:error] = e

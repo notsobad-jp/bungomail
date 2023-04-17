@@ -1,0 +1,30 @@
+.mb-8
+  = render "page_header", { ba: @ba }
+
+.mb-12
+  - if current_user == @ba.user && @ba.status != "配信終了"
+    = link_to book_assignment_path, data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
+      %span 配信を削除する
+
+.mb-12
+  .border-b.border-gray-200.pb-5.mb-5
+    %h3(class="text-base font-semibold leading-6 text-gray-900")
+      配信済みエピソード
+
+  %ul
+    - if @feeds.blank?
+      %li まだ配信されていません
+    - else
+      - @feeds.each do |feed|
+        %li
+          = link_to feed_path(feed), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
+            %div.truncate
+              .flex.items-center.space-x-2
+                %span.font-bold= "##{feed.index}"
+                %span.text-sm
+                  = feed.delivery_date
+              .text-gray-400.text-xs.truncate
+                = feed.content
+            %div
+              %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
+                %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
