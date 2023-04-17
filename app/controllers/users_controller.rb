@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_stripe_key
-  before_action :require_login, only: [:show, :update]
+  before_action :require_login, only: [:show, :update, :webpush_test]
 
   def new
     redirect_to(mypage_path) if current_user
@@ -93,6 +93,25 @@ class UsersController < ApplicationController
       flash[:error] = '処理に失敗しました。。何回か試してもうまくいかない場合、お手数ですが運営までお問い合わせください。'
       redirect_to page_path(:unsubscribe)
     end
+  end
+
+  def webpush_test
+    payload = {
+      title: "プッシュ通知テスト",
+      body: "ブンゴウメールのプッシュ通知テスト配信です。",
+      icon: "https://bungomail.com/favicon.ico",
+      url: mypage_url,
+    }
+    WebPushJob.perform_later(user: current_user, message: payload)
+  rescue => e
+    current_user.update!(
+      webpush_endpoint: nil,
+      webpush_p256dh: nil,
+      webpush_auth: nil,
+    )
+    logger.error "[Error] Test Notification failed: #{e.message}, #{current_user.id}"
+    flash[:error] = 'プッシュ通知のテスト送信に失敗しました。ブラウザの通知許可を再度ご設定ください。'
+    redirect_to mypage_path
   end
 
   private

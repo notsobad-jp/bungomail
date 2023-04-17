@@ -50,6 +50,13 @@ class BungoMailer < ApplicationMailer
     mail(to: @user.email, subject: "【ブンゴウメール】ユーザー登録が完了しました")
   end
 
+  def webpush_failed_email
+    @user = params[:user]
+    xsmtp_api_params = { category: 'webpush_failed' }
+    headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
+    mail(to: @user.email, subject: "【ブンゴウメール】プッシュ通知の送信に失敗しました")
+  end
+
 
   private
 

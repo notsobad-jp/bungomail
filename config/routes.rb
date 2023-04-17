@@ -1,11 +1,12 @@
 Rails.application.routes.draw do
   resources :books, only: [:show]
   resources :book_assignments, shallow: true do
-    get :cancel, on: :member
     resources :feeds
   end
   resources :magic_tokens
-  resource :user
+  resource :user do
+    post :webpush_test, on: :member
+  end
 
   get 'auth' => 'magic_tokens#auth'
   get 'login' => 'magic_tokens#new'

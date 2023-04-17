@@ -25,7 +25,6 @@ class PagesController < ApplicationController
       privacy: 'プライバシーポリシー',
       tokushoho: '特定商取引法に基づく表記',
       unsubscribe: '退会',
-      book_assignment_canceled: '配信停止',
       custom_delivery: 'カスタム配信',
     }
   end
