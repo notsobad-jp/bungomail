@@ -11,10 +11,11 @@
     %h3(class="text-base font-semibold leading-6 text-gray-900")
       配信済みエピソード
 
-  %ul
-    - if @feeds.blank?
+  - if @feeds.blank?
+    %ul.mb-8
       %li まだ配信されていません
-    - else
+  - else
+    %ul.mb-8
       - @feeds.each do |feed|
         %li
           = link_to feed_path(feed), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
@@ -28,3 +29,4 @@
             %div
               %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
                 %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
+    = paginate @feeds

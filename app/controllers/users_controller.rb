@@ -102,14 +102,8 @@ class UsersController < ApplicationController
       icon: "https://bungomail.com/favicon.ico",
       url: mypage_url,
     }
-    WebPushJob.perform_later(user: current_user, message: payload)
-  rescue => e
-    current_user.update!(
-      webpush_endpoint: nil,
-      webpush_p256dh: nil,
-      webpush_auth: nil,
-    )
-    logger.error "[Error] Test Notification failed: #{e.message}, #{current_user.id}"
+    WebPushJob.perform_now(user: current_user, message: payload)
+  rescue => e # ユーザーのwebpush設定をリセットしたりするのはJobのエラーハンドリングで対応してる
     flash[:error] = 'プッシュ通知のテスト送信に失敗しました。ブラウザの通知許可を再度ご設定ください。'
     redirect_to mypage_path
   end
