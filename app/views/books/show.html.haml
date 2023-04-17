@@ -38,11 +38,13 @@
       %h5.mb-2.font-bold 配信時間
       = f.time_field :delivery_time, class: 'border rounded w-full p-2', placeholder: '07:00', min: '05:00', max: '23:00'
       %small.text-xs ※配信時間は5:00~23:00の間で指定可能です（実際の配信には数分程度の誤差があります）
-    - if current_user&.email == "tomomichi.onishi@gmail.com"
-      .mb-4
-        %h5.mb-2.font-bold 配信方法
-        = f.select :delivery_method, options_for_select(BookAssignment.delivery_methods), {}, class: 'border rounded w-full p-2'
-        %small.text-xs ※プッシュ通知で配信する際は、配信開始前にプッシュ通知の許可設定を行ってください
+    .mb-4
+      %h5.mb-2.font-bold 配信方法
+      = f.select :delivery_method, options_for_select(BookAssignment.delivery_methods), {}, class: 'border rounded w-full p-2'
+      %small.text-xs
+        ※プッシュ通知で配信する際は、配信開始前に
+        = link_to "プッシュ通知の許可設定", mypage_path, class: "text-link"
+        を行ってください
 
   .mb-4
     - disabled = @book.rights_reserved
