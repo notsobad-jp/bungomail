@@ -36,7 +36,7 @@ class Feed < ApplicationRecord
     def webpush_payload
       {
         title: "#{book_assignment.book.author_name}『#{book_assignment.book.title}』",
-        body: content,
+        body: content.truncate(100),
         icon: "https://bungomail.com/favicon.ico",
         url: feed_url(id, host: host),
       }
