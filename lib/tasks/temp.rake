@@ -25,9 +25,10 @@ namespace :temp do
     end
   end
 
-  task :webpush_test, ['feed_id'] => :environment do |_task, args|
+  task :webpush_test, ['feed_id', 'run_at'] => :environment do |_task, args|
     user = User.find_by(email: "tomomichi.onishi@gmail.com")
     feed = Feed.find(args[:feed_id])
-    WebPushJob.perform_now(user: user, message: feed.send("webpush_payload"))
+    run_at = Time.zone.parse(args[:run_at])
+    WebPushJob.set(wait_until: run_at).perform_later(user: user, message: feed.send("webpush_payload"))
   end
 end
