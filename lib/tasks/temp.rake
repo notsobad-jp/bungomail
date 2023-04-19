@@ -25,9 +25,9 @@ namespace :temp do
     end
   end
 
-  task webpush_test: :environment do |_task, _args|
+  task :webpush_test, ['feed_id'] => :environment do |_task, args|
     user = User.find_by(email: "tomomichi.onishi@gmail.com")
-    feed = Feed.find("18c76b79-9e0a-44fd-8e1d-f2364d574c5f")
+    feed = Feed.find(args[:feed_id])
     WebPushJob.perform_now(user: user, message: feed.send("webpush_payload"))
   end
 end
