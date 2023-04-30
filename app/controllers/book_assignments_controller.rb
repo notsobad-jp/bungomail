@@ -1,4 +1,6 @@
 class BookAssignmentsController < ApplicationController
+  before_action :require_login, only: [:create]
+
   # 公式チャネルの過去配信一覧
   def index
     year = params[:year] || Time.current.year
@@ -9,20 +11,17 @@ class BookAssignmentsController < ApplicationController
 
   def create
     # 有料会員（トライアル含む）or トライアル開始前（予約済み）の人が配信予約可能
-    @user = User.where(email: ba_params[:email]).merge(
-      User.basic_plan.or(User.where("trial_start_date >= ?", Date.current))
-    ).first
-    raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', signup_path, class: 'text-link'}が必要です。") if !@user
+    if current_user.free_plan? && current_user.trial_start_date < Date.current
+      raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', signup_path, class: 'text-link'}が必要です。") if !@user
+    end
 
-    @ba = @user.book_assignments.create!(
-      book_id: ba_params[:book_id],
-      book_type: ba_params[:book_type],
-      start_date: ba_params[:start_date],
-      end_date: ba_params[:end_date],
-      delivery_time: ba_params[:delivery_time],
-      delivery_method: ba_params[:delivery_method].presence || "email",
-    )
-    BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
+    ActiveRecord::Base.transaction(joinable: false, requires_new: true) do
+      byebug
+      @ba = current_user.book_assignments.create!(ba_params)
+      current_user.subscribe(@ba, delivery_method: params[:delivery_method])
+    end
+
+    BungoMailer.with(user: current_user, book_assignment: @ba).schedule_completed_email.deliver_later
     @ba.delay.create_and_schedule_feeds
     flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
     redirect_to book_assignment_path(@ba)
@@ -54,6 +53,6 @@ class BookAssignmentsController < ApplicationController
   private
 
   def ba_params
-    params.require(:book_assignment).permit(:book_id, :book_type, :user_id, :start_date, :end_date, :email, :delivery_time, :delivery_method)
+    params.require(:book_assignment).permit(:book_id, :book_type, :start_date, :end_date, :delivery_time)
   end
 end

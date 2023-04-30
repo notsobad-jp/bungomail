@@ -42,6 +42,10 @@ class User < ApplicationRecord
     Digest::SHA256.hexdigest(email)
   end
 
+  def subscribe(book_assignment, delivery_method: "email")
+    subscriptions.create!(book_assignment: book_assignment, delivery_method: delivery_method)
+  end
+
   def trialing?
     trial_start_date && trial_start_date <= Date.current && Date.current <= trial_end_date
   end
