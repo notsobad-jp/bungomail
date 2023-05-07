@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe "BookAssignments", type: :request do
   let(:user) { create(:user, :basic) }
-  let(:trial_user) { create(:user, :trial_scheduled) }
+  let(:trial_scheduled_user) { create(:user, :trial_scheduled) }
+  let(:trialing_user) { create(:user, :trialing) }
   let(:non_authorized_user) { create(:user) }
   let(:admin_user) { User.find_by(email: "info@notsobad.jp") }
   let(:book) { create(:aozora_book) }
@@ -28,20 +29,22 @@ RSpec.describe "BookAssignments", type: :request do
 
       it "creates a new book assignment and redirects to its show page" do
         expect {
-          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "some_type", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
+          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
         }.to change(BookAssignment, :count).by(1)
-        expect(response).to redirect_to(book_assignment_path(BookAssignment.last))
+        follow_redirect!
+        expect(response.body).to include("配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。")
       end
     end
 
     context "when user is in trial period" do
-      before { login(trial_user) }
+      before { login(trialing_user) }
 
       it "creates a new book assignment and redirects to its show page" do
         expect {
-          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "some_type", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
+          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
         }.to change(BookAssignment, :count).by(1)
-        expect(response).to redirect_to(book_assignment_path(BookAssignment.last))
+        follow_redirect!
+        expect(response.body).to include("配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。")
       end
     end
 
@@ -50,9 +53,10 @@ RSpec.describe "BookAssignments", type: :request do
 
       it "does not create a new book assignment and redirects" do
         expect {
-          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "some_type", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
+          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
         }.not_to change(BookAssignment, :count)
-        expect(response).to redirect_to(root_path)
+        follow_redirect!
+        expect(response.body).to include("権限がありません")
       end
     end
   end
