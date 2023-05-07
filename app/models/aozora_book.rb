@@ -216,6 +216,15 @@ class AozoraBook < ApplicationRecord
     self.access_count
   end
 
+  def recommended_duration
+    if words_count < 25000
+      days = [words_count.fdiv(750).ceil, 30].min
+      "#{days}日"
+    else
+      "#{words_count.fdiv(22500).ceil}ヶ月"
+    end
+  end
+
 
   class << self
     def aozora_card_url(author_id:, book_id:)
