@@ -10,13 +10,7 @@ class BookAssignmentsController < ApplicationController
   end
 
   def create
-    # 有料会員（トライアル含む）or トライアル開始前（予約済み）の人が配信予約可能
-    if current_user.free_plan? && current_user.trial_start_date < Date.current
-      raise ActiveRecord::RecordNotFound.new("有料プランの登録が確認できませんでした。カスタム配信を利用する際は、事前に#{view_context.link_to 'ブンゴウメール有料プランへの登録', signup_path, class: 'text-link'}が必要です。") if !@user
-    end
-
     ActiveRecord::Base.transaction(joinable: false, requires_new: true) do
-      byebug
       @ba = current_user.book_assignments.create!(ba_params)
       current_user.subscribe(@ba, delivery_method: params[:delivery_method])
     end
@@ -32,14 +26,13 @@ class BookAssignmentsController < ApplicationController
   end
 
   def show
-    @ba = BookAssignment.find_by!(id: params[:id])
+    @ba = BookAssignment.find(params[:id])
     @feeds = Feed.delivered.where(book_assignment_id: @ba.id).order(delivery_date: :desc).page(params[:page]) # FIXME
     @meta_title = @ba.book.author_and_book_name
   end
 
   def destroy
-    @ba = BookAssignment.find_by(id: params[:id])
-    raise ActiveRecord::RecordNotFound.new('【エラー】配信が見つかりませんでした。。解決しない場合は運営までお問い合わせください。') if !@ba || @ba.user.admin?
+    @ba = BookAssignment.find(params[:id])
     @ba.destroy!
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信を削除しました！'
