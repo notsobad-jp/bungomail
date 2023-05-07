@@ -1,5 +1,6 @@
 class BookAssignmentsController < ApplicationController
-  before_action :require_login, :authorize_record, only: [:create, :destroy]
+  before_action :require_login, only: [:create, :destroy]
+  after_action :verify_authorized, only: [:create, :destroy]
 
   # 公式チャネルの過去配信一覧
   def index
@@ -10,6 +11,7 @@ class BookAssignmentsController < ApplicationController
   end
 
   def create
+    authorize BookAssignment
     @ba = current_user.book_assignments.create!(
       book_id: ba_params[:book_id],
       book_type: ba_params[:book_type],
@@ -36,6 +38,7 @@ class BookAssignmentsController < ApplicationController
 
   def destroy
     @ba = BookAssignment.find(params[:id])
+    authorize @ba
     @ba.destroy!
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信を削除しました！'
