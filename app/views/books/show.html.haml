@@ -9,7 +9,7 @@
     %small.text-xs 文字
     .inline
       .inline.text-sm （配信期間の目安:
-      .inline.text-red-600= @recommended_duration
+      .inline.text-red-600= @book.recommended_duration
       .inline.text-sm ）
 
 = form_with model: @book_assignment, local: true do |f|
