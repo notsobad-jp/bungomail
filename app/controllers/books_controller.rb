@@ -11,5 +11,9 @@ class BooksController < ApplicationController
 
     @meta_title = @book.title
     @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
+
+    if !current_user || (current_user.free_plan? && !current_user.trial_scheduled? )
+      flash[:warning] = "カスタム配信の利用には、有料プランのアカウントでログインする必要があります."
+    end
   end
 end

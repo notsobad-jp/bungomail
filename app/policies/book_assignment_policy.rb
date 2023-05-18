@@ -1,6 +1,11 @@
 class BookAssignmentPolicy < ApplicationPolicy
-  # Basicプラン || ( トライアル開始前 && トライアル開始日 < 配信開始日 )
+  # Basicプラン(トライアル中含む) || トライアル予約済み
   def create?
-    user && user.basic_plan?
+    user.basic_plan? || user.trial_scheduled?
+  end
+
+  # 配信のオーナー
+  def destroy?
+    record.user == user
   end
 end
