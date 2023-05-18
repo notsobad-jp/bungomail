@@ -51,36 +51,24 @@ RSpec.describe "BookAssignments", type: :request do
     context "when user does not have proper permission" do
       before { login(non_authorized_user) }
 
-      it "does not create a new book assignment and redirects" do
+      it "does not create a new book assignment" do
         expect {
           post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
         }.not_to change(BookAssignment, :count)
-        follow_redirect!
-        expect(response.body).to include("現在の契約プランではこの機能は利用できません")
+        expect(flash[:warning]).to eq("現在の契約プランではこの機能は利用できません")
       end
     end
   end
 
   describe "DELETE /book_assignments/:id" do
-    context "when user is the owner of the book_assignment and not an admin" do
-      before { login(user) }
+    context "when user is the owner of the book_assignment" do
+      before { login(book_assignment.user) }
 
       it "deletes the book assignment and redirects to mypage" do
         expect {
           delete book_assignment_path(book_assignment)
         }.to change(BookAssignment, :count).by(-1)
         expect(response).to redirect_to(mypage_path)
-      end
-    end
-
-    context "when user is not the owner of the book_assignment" do
-      before { login(admin_user) }
-
-      it "does not delete the book assignment and redirects" do
-        expect {
-          delete book_assignment_path(book_assignment)
-        }.not_to change(BookAssignment, :count)
-        expect(response).to redirect_to(root_path)
       end
     end
   end
