@@ -26,6 +26,8 @@ services:
     environment:
       TZ: Asia/Tokyo
       EDITOR: vim
+    stdin_open: true
+    tty: true
 networks:
   bungo_network:
 volumes:
