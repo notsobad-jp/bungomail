@@ -1,5 +1,6 @@
 class BookAssignmentsController < ApplicationController
-  before_action :require_login, only: [:create]
+  before_action :require_login, only: [:create, :destroy]
+  after_action :verify_authorized, only: [:create, :destroy]
 
   # 公式チャネルの過去配信一覧
   def index
@@ -10,19 +11,23 @@ class BookAssignmentsController < ApplicationController
   end
 
   def create
-    ActiveRecord::Base.transaction(joinable: false, requires_new: true) do
-      @ba = current_user.book_assignments.create!(ba_params)
-      current_user.subscribe(@ba, delivery_method: params[:delivery_method])
-    end
+    authorize BookAssignment
+    @book_assignment = current_user.book_assignments.new(ba_params)
 
-    BungoMailer.with(user: current_user, book_assignment: @ba).schedule_completed_email.deliver_later
-    @ba.delay.create_and_schedule_feeds
-    flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
-    redirect_to book_assignment_path(@ba)
-  rescue => e
-    logger.error e if ![ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid].include?(e.class)
-    flash[:error] = e
-    redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date], delivery_time: ba_params[:delivery_time])
+    if @book_assignment.save
+      current_user.subscribe(@book_assignment, delivery_method: params[:delivery_method])
+      BungoMailer.with(user: current_user, book_assignment: @book_assignment).schedule_completed_email.deliver_later
+      @book_assignment.delay.create_and_schedule_feeds
+      flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
+      redirect_to book_assignment_path(@book_assignment)
+    else
+      @book = @book_assignment.book
+      @meta_title = @book.title
+      @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
+
+      flash.now[:error] = @book_assignment.errors.full_messages.join('. ')
+      render template: 'books/show', status: 422
+    end
   end
 
   def show
@@ -33,14 +38,11 @@ class BookAssignmentsController < ApplicationController
 
   def destroy
     @ba = BookAssignment.find(params[:id])
+    authorize @ba
     @ba.destroy!
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信を削除しました！'
     redirect_to mypage_path, status: 303
-  rescue => e
-    logger.error e if e.class != ActiveRecord::RecordNotFound
-    flash[:error] = e
-    redirect_to root_path
   end
 
   private

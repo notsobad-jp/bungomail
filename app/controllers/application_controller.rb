@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authorized
-    flash[:warning] = '権限がありません。。ログイン状態をご確認ください。'
+    flash[:warning] = '現在の契約プランではこの機能は利用できません'
     redirect_to request.referer || login_path
   end
 

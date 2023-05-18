@@ -17,16 +17,6 @@
   = f.hidden_field :book_type, value: 'AozoraBook'
   .mb-8
     .mb-4
-      %h5.mb-2.font-bold 配信先
-      - if current_user
-        = email_field_tag :email, current_user.email, class: 'border rounded w-full p-2 bg-gray-200 text-gray-500', disabled: true
-      - else
-        = f.email_field :email, required: true, class: 'border rounded w-full p-2', placeholder: 'メールアドレス'
-        %small.text-xs
-          ※
-          = link_to 'ブンゴウメール有料プラン', signup_path, class: 'text-link'
-          に登録済みのメールアドレスを入力してください
-    .mb-4
       %h5.mb-2.font-bold 配信期間
       %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")
         = f.date_field :start_date, min: Date.current.tomorrow, required: true, class: 'border rounded p-2 flex-1'
