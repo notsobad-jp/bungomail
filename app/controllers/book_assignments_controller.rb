@@ -12,22 +12,11 @@ class BookAssignmentsController < ApplicationController
 
   def create
     authorize BookAssignment
-    @ba = current_user.book_assignments.create!(
-      book_id: ba_params[:book_id],
-      book_type: ba_params[:book_type],
-      start_date: ba_params[:start_date],
-      end_date: ba_params[:end_date],
-      delivery_time: ba_params[:delivery_time],
-      delivery_method: ba_params[:delivery_method].presence || "email",
-    )
+    @ba = current_user.book_assignments.create!(ba_params)
     BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
     @ba.delay.create_and_schedule_feeds
     flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
     redirect_to book_assignment_path(@ba)
-  rescue => e
-    logger.error e if ![ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid].include?(e.class)
-    flash[:error] = e
-    redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date], delivery_time: ba_params[:delivery_time])
   end
 
   def show
@@ -43,10 +32,6 @@ class BookAssignmentsController < ApplicationController
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信を削除しました！'
     redirect_to mypage_path, status: 303
-  rescue => e
-    logger.error e if e.class != ActiveRecord::RecordNotFound
-    flash[:error] = e
-    redirect_to root_path
   end
 
   private
