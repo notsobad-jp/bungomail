@@ -12,11 +12,17 @@ class BookAssignmentsController < ApplicationController
 
   def create
     authorize BookAssignment
-    @ba = current_user.book_assignments.create!(ba_params)
-    BungoMailer.with(user: @user, book_assignment: @ba).schedule_completed_email.deliver_later
-    @ba.delay.create_and_schedule_feeds
-    flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
-    redirect_to book_assignment_path(@ba)
+    @ba = current_user.book_assignments.new(ba_params)
+
+    if @ba.save
+      BungoMailer.with(user: current_user, book_assignment: @ba).schedule_completed_email.deliver_later
+      @ba.delay.create_and_schedule_feeds
+      flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
+      redirect_to book_assignment_path(@ba)
+    else
+      flash[:error] = @ba.errors.full_messages.join('. ')
+      redirect_to book_path(id: ba_params[:book_id], start_date: ba_params[:start_date], end_date: ba_params[:end_date], delivery_time: ba_params[:delivery_time], delivery_method: ba_params[:delivery_method])
+    end
   end
 
   def show
@@ -37,6 +43,6 @@ class BookAssignmentsController < ApplicationController
   private
 
   def ba_params
-    params.require(:book_assignment).permit(:book_id, :book_type, :user_id, :start_date, :end_date, :email, :delivery_time, :delivery_method)
+    params.require(:book_assignment).permit(:book_id, :book_type, :user_id, :start_date, :end_date, :delivery_time, :delivery_method)
   end
 end

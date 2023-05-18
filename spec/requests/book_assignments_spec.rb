@@ -56,7 +56,7 @@ RSpec.describe "BookAssignments", type: :request do
           post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
         }.not_to change(BookAssignment, :count)
         follow_redirect!
-        expect(response.body).to include("権限がありません")
+        expect(response.body).to include("現在の契約プランではこの機能は利用できません")
       end
     end
   end
