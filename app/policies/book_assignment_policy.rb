@@ -4,8 +4,8 @@ class BookAssignmentPolicy < ApplicationPolicy
     user.basic_plan? || user.trial_scheduled?
   end
 
-  # 配信のオーナー && 公式配信以外
+  # 配信のオーナー
   def destroy?
-    record.user == user && !record.user.admin?
+    record.user == user
   end
 end
