@@ -29,7 +29,7 @@
       %small.text-xs ※配信時間は5:00~23:00の間で指定可能です（実際の配信には数分程度の誤差があります）
     .mb-4
       %h5.mb-2.font-bold 配信方法
-      = f.select :delivery_method, options_for_select(BookAssignment.delivery_methods), {}, class: 'border rounded w-full p-2'
+      = select_tag "delivery_method", options_for_select(Subscription.delivery_methods, "email"), class: 'border rounded w-full p-2'
       %small.text-xs
         ※プッシュ通知で配信する際は、配信開始前に
         = link_to "プッシュ通知の許可設定", mypage_path, class: "text-link"
