@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_09_141602) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_30_072503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -55,7 +55,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_141602) do
     t.date "end_date", null: false
     t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
     t.uuid "user_id", null: false
-    t.string "delivery_method", default: "email", null: false
     t.index ["book_id", "book_type"], name: "index_book_assignments_on_book_id_and_book_type"
     t.index ["end_date"], name: "index_book_assignments_on_end_date"
     t.index ["start_date"], name: "index_book_assignments_on_start_date"
@@ -138,6 +137,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_141602) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "book_assignment_id", null: false
+    t.string "delivery_method", default: "email", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["book_assignment_id"], name: "index_subscriptions_on_book_assignment_id"
+    t.index ["delivery_method"], name: "index_subscriptions_on_delivery_method"
+    t.index ["user_id", "book_assignment_id"], name: "index_subscriptions_on_user_id_and_book_assignment_id", unique: true
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "crypted_password"
@@ -165,4 +176,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_141602) do
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
+  add_foreign_key "subscriptions", "book_assignments"
+  add_foreign_key "subscriptions", "users"
 end

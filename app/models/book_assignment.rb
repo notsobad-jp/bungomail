@@ -2,12 +2,11 @@ class BookAssignment < ApplicationRecord
   belongs_to :user
   belongs_to :book, polymorphic: true
   has_many :feeds, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
   has_many :delayed_jobs, through: :feeds
 
   scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
   scope :upcoming, -> { where("? <= end_date", Date.current) }
-
-  enum delivery_method: { "Eメール" => "email", "プッシュ通知" => "webpush" }
 
   validates :start_date, presence: true
   validates :end_date, presence: true
