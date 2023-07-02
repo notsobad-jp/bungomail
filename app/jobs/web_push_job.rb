@@ -2,7 +2,9 @@ class WebPushJob < ApplicationJob
   queue_as :web_push
 
   def perform(feed:, message:)
-    users = feed.subscriptions.deliver_by_webpush.map(&:user)
+    users = feed.book_assignment.subscriptions.deliver_by_webpush.map(&:user)
+    return if users.blank?
+
     message_json = JSON.generate(message)
     public_key = Rails.application.credentials.dig(:vapid, :public_key)
     private_key = Rails.application.credentials.dig(:vapid, :private_key)

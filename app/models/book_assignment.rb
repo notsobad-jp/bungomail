@@ -3,7 +3,8 @@ class BookAssignment < ApplicationRecord
   belongs_to :book, polymorphic: true
   has_many :feeds, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-  has_many :delayed_jobs, through: :feeds
+  has_many :delayed_job_for_emails, through: :feeds
+  has_many :delayed_job_for_webpushs, through: :feeds
 
   scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
   scope :upcoming, -> { where("? <= end_date", Date.current) }
