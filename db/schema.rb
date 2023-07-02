@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_30_072503) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_02_055335) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -86,15 +86,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_30_072503) do
 
   create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "book_assignment_id", null: false
-    t.uuid "delayed_job_id"
+    t.uuid "delayed_job_email_id"
     t.string "title", null: false
     t.text "content", null: false
     t.date "delivery_date", null: false
     t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.text "comment"
+    t.uuid "delayed_job_webpush_id"
     t.index ["book_assignment_id"], name: "index_feeds_on_book_assignment_id"
-    t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
+    t.index ["delayed_job_email_id"], name: "index_feeds_on_delayed_job_email_id"
+    t.index ["delayed_job_webpush_id"], name: "index_feeds_on_delayed_job_webpush_id"
   end
 
   create_table "guten_books", force: :cascade do |t|
@@ -172,7 +174,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_30_072503) do
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
   add_foreign_key "book_assignments", "users"
   add_foreign_key "feeds", "book_assignments", on_delete: :cascade
-  add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
+  add_foreign_key "feeds", "delayed_jobs", column: "delayed_job_email_id", on_delete: :nullify
+  add_foreign_key "feeds", "delayed_jobs", column: "delayed_job_webpush_id"
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
