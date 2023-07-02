@@ -28,27 +28,28 @@ RSpec.describe Feed, type: :model do
 
   describe "schedule" do
     context "when send_at already passed" do
-      let(:feed) { build(:feed, delivery_date: Time.zone.yesterday) }
+      let(:ba) { create(:book_assignment, :with_book, :with_subscription) }
+      let(:feed) { build(:feed, book_assignment: ba, delivery_date: Time.zone.yesterday) }
 
       it "should return without enqueueing" do
         res = feed.schedule
         expect(res).to be_nil
-        expect(feed.delayed_job_id).to be_nil
+        expect(feed.delayed_job_email_id).to be_nil
       end
     end
 
     context "when send_at not passed yet" do
-    let(:ba) { create(:book_assignment, :with_book, delivery_time: "10:00:00") }
+      let(:ba) { create(:book_assignment, :with_book, :with_subscription, delivery_time: "10:00:00") }
       let(:feed) { create(:feed, delivery_date: Time.zone.tomorrow, book_assignment: ba) }
 
       it "should enqueue the job" do
         feed.schedule
-        expect(feed.delayed_job_id).not_to be_nil
+        expect(feed.delayed_job_email_id).not_to be_nil
       end
 
       it "should has correct run_at on job" do
         feed.schedule
-        expect(feed.delayed_job.run_at).to eq(Time.zone.tomorrow.to_time.change(hour: 10))
+        expect(feed.delayed_job_for_email.run_at).to eq(Time.zone.tomorrow.to_time.change(hour: 10))
       end
     end
   end

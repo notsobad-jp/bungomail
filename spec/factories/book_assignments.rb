@@ -9,5 +9,9 @@ FactoryBot.define do
     trait :with_book do
       before(:create) { |ba| create(:aozora_book_meros) }
     end
+
+    trait :with_subscription do
+      after(:create) { |ba| create(:subscription, book_assignment: ba, user: ba.user) }
+    end
   end
 end

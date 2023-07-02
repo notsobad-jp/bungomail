@@ -48,7 +48,7 @@ class BookAssignment < ApplicationRecord
   # メール配信対象
   ## 公式チャネルのときは有料会員全員。それ以外のときはEmailのSubscription
   def send_to
-    user.admin? ? User.basic_plan.pluck(:email) : subscriptions.deliver_by_email.pluck(:email)
+    user.admin? ? User.basic_plan.pluck(:email) : subscriptions.deliver_by_email.preload(:user).map(&:user).pluck(:email)
   end
 
   def status
