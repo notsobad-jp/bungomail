@@ -1,18 +1,18 @@
 class WebPushJob < ApplicationJob
   queue_as :web_push
 
-  def perform(feed:, message:)
-    users = feed.book_assignment.subscriptions.deliver_by_webpush.map(&:user)
+  def perform(feed:, payload:)
+    users = feed.book_assignment.subscriptions.deliver_by_webpush.preload(:user).map(&:user)
     return if users.blank?
 
-    message_json = JSON.generate(message)
+    payload_json = JSON.generate(payload)
     public_key = Rails.application.credentials.dig(:vapid, :public_key)
     private_key = Rails.application.credentials.dig(:vapid, :private_key)
 
     users.each do |user|
       begin
         WebPush.payload_send(
-          message: message_json,
+          message: payload_json,
           endpoint: user.webpush_endpoint,
           p256dh: user.webpush_p256dh,
           auth: user.webpush_auth,

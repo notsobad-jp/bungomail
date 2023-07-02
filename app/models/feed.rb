@@ -20,7 +20,7 @@ class Feed < ApplicationRecord
     return if self.send_at < Time.current
 
     res_email = BungoMailer.with(feed: self).feed_email.deliver_later(queue: 'feed_email', wait_until: self.send_at)
-    res_webpush = WebPushJob.set(wait_until: self.send_at).perform_later(feed: self, message: webpush_payload)
+    res_webpush = WebPushJob.set(wait_until: self.send_at).perform_later(feed: self, payload: webpush_payload)
 
     self.update!(
       delayed_job_email_id: res_email.provider_job_id,
