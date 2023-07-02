@@ -175,7 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_055335) do
   add_foreign_key "book_assignments", "users"
   add_foreign_key "feeds", "book_assignments", on_delete: :cascade
   add_foreign_key "feeds", "delayed_jobs", column: "delayed_job_email_id", on_delete: :nullify
-  add_foreign_key "feeds", "delayed_jobs", column: "delayed_job_webpush_id"
+  add_foreign_key "feeds", "delayed_jobs", column: "delayed_job_webpush_id", on_delete: :nullify
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
