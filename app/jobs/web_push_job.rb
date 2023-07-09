@@ -10,6 +10,8 @@ class WebPushJob < ApplicationJob
     private_key = Rails.application.credentials.dig(:vapid, :private_key)
 
     users.each do |user|
+      next if user.webpush_endpoint.blank? || user.webpush_p256dh.blank? || user.webpush_auth.blank?
+
       begin
         WebPush.payload_send(
           message: payload_json,
