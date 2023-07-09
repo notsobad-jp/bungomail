@@ -3,7 +3,8 @@ class BookAssignment < ApplicationRecord
   belongs_to :book, polymorphic: true
   has_many :feeds, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-  has_many :delayed_jobs, through: :feeds
+  has_many :delayed_job_for_emails, through: :feeds
+  has_many :delayed_job_for_webpushs, through: :feeds
 
   scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
   scope :upcoming, -> { where("? <= end_date", Date.current) }
@@ -44,10 +45,10 @@ class BookAssignment < ApplicationRecord
     res.rows.flatten  # 作成したfeedのid一覧を配列で返す
   end
 
-  # 配信対象
-  ## 公式チャネルのときは有料会員全員。それ以外のときは配信オーナーのみ
+  # メール配信対象
+  ## 公式チャネルのときは有料会員全員。それ以外のときはEmailのSubscription
   def send_to
-    user.admin? ? User.basic_plan.pluck(:email) : [user.email]
+    user.admin? ? User.basic_plan.pluck(:email) : subscriptions.deliver_by_email.preload(:user).map(&:user).pluck(:email)
   end
 
   def status
