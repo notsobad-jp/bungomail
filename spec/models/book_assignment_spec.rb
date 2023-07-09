@@ -210,13 +210,17 @@ RSpec.describe BookAssignment, type: :model do
 
     # カスタム配信: 配信者だけに配信
     context "when it's a custom assignment" do
-      it "should be only an owner" do
+      it "should be email subscribers" do
         basic_users = create_list(:user, 3, :basic)
+        free_user = create(:user)
 
-        owner = build(:user)
-        ba = build(:book_assignment, :with_book, user: owner)
-        expect(ba.send_to.length).to eq(1)
-        expect(ba.send_to).to eq([owner.email])
+        owner = create(:user)
+        ba = create(:book_assignment, :with_book, user: owner)
+        owner.subscribe(ba, delivery_method: "email")
+        free_user.subscribe(ba, delivery_method: "email")
+
+        expect(ba.send_to.length).to eq(2)
+        expect(ba.send_to).to eq([owner.email, free_user.email])
       end
     end
   end

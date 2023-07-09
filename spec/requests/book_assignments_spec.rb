@@ -7,7 +7,7 @@ RSpec.describe "BookAssignments", type: :request do
   let(:non_authorized_user) { create(:user) }
   let(:admin_user) { User.find_by(email: "info@notsobad.jp") }
   let(:book) { create(:aozora_book) }
-  let!(:book_assignment) { create(:book_assignment, book: book) }
+  let!(:book_assignment) { create(:book_assignment, :with_subscription, book: book) }
 
   describe "GET /book_assignments" do
     it "returns http success" do
@@ -29,7 +29,10 @@ RSpec.describe "BookAssignments", type: :request do
 
       it "creates a new book assignment and redirects to its show page" do
         expect {
-          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
+          post book_assignments_path, params: {
+            book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00" },
+            delivery_method: "email",
+          }
         }.to change(BookAssignment, :count).by(1)
         follow_redirect!
         expect(response.body).to include("配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。")
@@ -41,7 +44,10 @@ RSpec.describe "BookAssignments", type: :request do
 
       it "creates a new book assignment and redirects to its show page" do
         expect {
-          post book_assignments_path, params: { book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00", delivery_method: "email" } }
+          post book_assignments_path, params: {
+            book_assignment: { book_id: book.id, book_type: "AozoraBook", start_date: Date.today, end_date: Date.today + 1.week, delivery_time: "10:00" },
+            delivery_method: "email",
+          }
         }.to change(BookAssignment, :count).by(1)
         follow_redirect!
         expect(response.body).to include("配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。")
