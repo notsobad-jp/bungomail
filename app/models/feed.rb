@@ -21,10 +21,10 @@ class Feed < ApplicationRecord
   end
 
   def schedule
-    return if self.send_at < Time.current
+    return if send_at < Time.current
 
-    job_id = delay(run_at: self.send_at).deliver
-    self.update!(delayed_job_id: job_id)
+    res = FeedDeliveryJob.set(wait_until: send_at).perform_later(feed: self)
+    update!(delayed_job_id: res.provider_job_id)
   end
 
   def send_at
