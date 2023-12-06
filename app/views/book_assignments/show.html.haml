@@ -7,7 +7,10 @@
       %span 配信を削除する
 
   - if current_user != @ba.user
-    - if @ba.subscriptions.where(user_id: current_user.id).blank?
+    - if @subscription.present?
+      = link_to subscription_path(@subscription), data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
+        %span 購読をキャンセルする
+    - else
       .border.rounded.p-4
         = form_with model: @ba.subscriptions.build, local: true do |f|
           = hidden_field_tag :book_assignment_id, @ba.id
@@ -20,9 +23,6 @@
                 = radio_button_tag :delivery_method, :email
                 %span Eメール
             = f.submit "この配信を購読する", class: "cursor-pointer text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700"
-    - else
-      = link_to book_assignment_path, data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
-        %span 購読をキャンセルする
 
 .mb-12
   .border-b.border-gray-200.pb-5.mb-5

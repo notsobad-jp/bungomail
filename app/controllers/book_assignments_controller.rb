@@ -33,6 +33,7 @@ class BookAssignmentsController < ApplicationController
   def show
     @ba = BookAssignment.find(params[:id])
     @feeds = Feed.delivered.where(book_assignment_id: @ba.id).order(delivery_date: :desc).page(params[:page]) # FIXME
+    @subscription = current_user.subscriptions.find_by(book_assignment_id: @ba.id) if current_user
     @meta_title = @ba.book.author_and_book_name
   end
 
