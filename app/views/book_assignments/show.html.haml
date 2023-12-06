@@ -10,14 +10,14 @@
     - if @ba.subscriptions.where(user_id: current_user.id).blank?
       .border.rounded.p-4
         = form_with model: @ba.subscriptions.build, local: true do |f|
-          = f.hidden_field :book_assignment_id, value: @ba.id
+          = hidden_field_tag :book_assignment_id, @ba.id
           .flex.flex-col.sm:flex-row.items-center.space-y-2.sm:space-y-0.sm:space-x-4
             .mb-2.space-x-4
               %label
-                = f.radio_button :delivery_method, :webpush, checked: true
+                = radio_button_tag :delivery_method, :webpush, checked: true
                 %span プッシュ通知
               %label
-                = f.radio_button :delivery_method, :email
+                = radio_button_tag :delivery_method, :email
                 %span Eメール
             = f.submit "この配信を購読する", class: "cursor-pointer text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700"
     - else
