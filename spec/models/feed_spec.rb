@@ -34,7 +34,7 @@ RSpec.describe Feed, type: :model do
       it "should return without enqueueing" do
         res = feed.schedule
         expect(res).to be_nil
-        expect(feed.delayed_job_email_id).to be_nil
+        expect(feed.delayed_job_id).to be_nil
       end
     end
 
@@ -44,12 +44,12 @@ RSpec.describe Feed, type: :model do
 
       it "should enqueue the job" do
         feed.schedule
-        expect(feed.delayed_job_email_id).not_to be_nil
+        expect(feed.delayed_job_id).not_to be_nil
       end
 
       it "should has correct run_at on job" do
         feed.schedule
-        expect(feed.delayed_job_for_email.run_at).to eq(Time.zone.tomorrow.to_time.change(hour: 10))
+        expect(feed.delayed_job.run_at).to eq(Time.zone.tomorrow.to_time.change(hour: 10))
       end
     end
   end
