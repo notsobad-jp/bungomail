@@ -2,8 +2,7 @@ class Feed < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :book_assignment
-  belongs_to :delayed_job_for_email, class_name: 'DelayedJob', foreign_key: :delayed_job_email_id, required: false
-  belongs_to :delayed_job_for_webpush, class_name: 'DelayedJob', foreign_key: :delayed_job_webpush_id, required: false
+  belongs_to :delayed_job, required: false
 
   # 配信日が昨日以前のもの or 配信日が今日ですでに配信時刻を過ぎているもの
   scope :delivered, -> { Feed.joins(:book_assignment).where("delivery_date < ?", Time.zone.today).or(Feed.joins(:book_assignment).where(delivery_date: Time.zone.today).where("book_assignments.delivery_time < ?", Time.current.strftime("%T"))) }
