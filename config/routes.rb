@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :feeds
   end
   resources :magic_tokens
+  resources :subscriptions
   resource :user do
     post :webpush_test, on: :member
   end
