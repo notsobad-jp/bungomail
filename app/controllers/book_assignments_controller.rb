@@ -1,13 +1,16 @@
 class BookAssignmentsController < ApplicationController
-  before_action :require_login, only: [:create, :destroy]
+  before_action :require_login, only: [:index, :create, :destroy]
   after_action :verify_authorized, only: [:create, :destroy]
 
-  # 公式チャネルの過去配信一覧
   def index
-    year = params[:year] || Time.current.year
-    start = Time.current.change(year: year).beginning_of_year
-    @book_assignments = BookAssignment.includes(:book).where(user_id: User.find_by(email: 'info@notsobad.jp'), start_date: start..start.end_of_year).where("start_date < ?", Time.zone.today).order(:start_date)
-    @meta_title = "過去配信作品（#{year}）"
+    @meta_title = "配信管理"
+    @breadcrumbs = [ {text: @meta_title} ]
+
+    if params[:finished].present?
+      @book_assignments = current_user.book_assignments.finished.order(start_date: :desc).page(params[:page])
+    else
+      @book_assignments = current_user.book_assignments.upcoming.order(start_date: :desc).page(params[:page])
+    end
   end
 
   def create
