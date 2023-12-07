@@ -1,31 +1,36 @@
-.mb-4
-  %h1.text-lg.font-bold
-    過去の配信作品一覧
+.mb-8
+  %h1.text-lg.font-bold.mb-4.flex.items-center
+    %svg(class="w-6 h-6 mt-1 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor")
+      %path(stroke-linecap="round" stroke-linejoin="round" d="M12.75 19.5v-.75a7.5 7.5 0 00-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z")
+    配信管理
 
-.py-4.border-t.border-b.mb-8
-  - [*(2018..Time.current.year)].reverse.each do |year|
-    - active = 'bg-gray-100 font-bold' if year == params[:year].to_i || (params[:year].blank? && year == Time.current.year)
-    = link_to "#{year}年", book_assignments_path(year: year), class: "rounded px-2 sm:px-4 py-2 #{active}"
+.mb-12
+  %div
+    %div
+      %div{class: "border-b border-gray-200"}
+        %nav{class: "-mb-px flex space-x-8", 'aria-label': "Tabs"}
+          - if params[:finished].present?
+            = link_to "配信中/配信予定", book_assignments_path, class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
+            %a{href: "#", class: "border-indigo-500 text-indigo-600 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium", 'aria-current': "page"} 配信終了
+          - else
+            %a{href: "#", class: "border-indigo-500 text-indigo-600 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium", 'aria-current': "page"} 配信中/配信予定
+            = link_to "配信終了", book_assignments_path(finished: true), class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
 
-- colors = %w(red orange yellow olive green teal blue violet purple pink brown black)
-.mb-4.space-y-4
-  - @book_assignments.each do |ba|
-    - month = ba.start_date.month
-    - end_month = (ba.count - 1).days.since(ba.start_date).month
-    .item
-      .content
-        = link_to "https://bungo-search.com/authors/#{ba.book.author_id}/categories/#{ba.book.category_id}/books/#{ba.book_id}", class: 'header', target: :blank do
-          %span.text-sm{class: colors[month - 1]} #{month}月
-          - if month != end_month # ２ヶ月配信対応
-            %span.text-sm{class: colors[end_month - 1]} #{end_month}月
-          &nbsp;
-          .inline.font-bold 『#{ba.book.title}』
-          = ba.book.author_name
-          &nbsp;
-          %small
-            %i.icon.external.small
-        .extra
-          %small
-            = ba.start_date.strftime("%Y年%-m月%-d日")
-            〜
-            = (ba.count - 1).days.since(ba.start_date).strftime("%Y年%-m月%-d日")
+  .mt-4
+    - if @book_assignments.present?
+      %ul.mb-8
+        - @book_assignments.each do |ua|
+          %li
+            = link_to book_assignment_path(ua), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
+              %div.space-y-1
+                .font-bold= ua.book.author_and_book_name
+                .text-gray-400.text-xs.truncate
+                  = "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"
+              %div
+                %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
+                  %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
+      = paginate @book_assignments
+
+    - else
+      %div.text-gray-500
+        データがありません

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :feeds
   end
   resources :magic_tokens
+  resources :subscriptions
   resource :user do
     post :webpush_test, on: :member
   end
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
   get 'signup' => 'users#new'
 
   get 'campaigns/dogramagra' => "pages#dogramagra"
+  get 'past_deliveries' => "pages#past_deliveries"
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
