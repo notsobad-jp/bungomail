@@ -4,7 +4,6 @@ class BookAssignmentsController < ApplicationController
 
   def index
     @meta_title = "配信管理"
-    @breadcrumbs = [ {text: @meta_title} ]
 
     if params[:finished].present?
       @book_assignments = current_user.book_assignments.finished.order(start_date: :desc).page(params[:page])
@@ -37,16 +36,17 @@ class BookAssignmentsController < ApplicationController
     @ba = BookAssignment.find(params[:id])
     @feeds = Feed.delivered.where(book_assignment_id: @ba.id).order(delivery_date: :desc).page(params[:page]) # FIXME
     @subscription = current_user.subscriptions.find_by(book_assignment_id: @ba.id) if current_user
+
     @meta_title = @ba.book.author_and_book_name
+    @breadcrumbs = [ {text: "配信管理", link: book_assignments_path}, {text: @meta_title} ] if @ba.user_id == current_user&.id
   end
 
   def destroy
-    @ba = BookAssignment.find(params[:id])
-    authorize @ba
+    @ba = authorize BookAssignment.find(params[:id])
     @ba.destroy!
     BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信を削除しました！'
-    redirect_to mypage_path, status: 303
+    redirect_to book_assignments_path, status: 303
   end
 
   private
