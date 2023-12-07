@@ -18,7 +18,7 @@
 
   .mt-4
     - if @book_assignments.present?
-      %ul(class="")
+      %ul.mb-8
         - @book_assignments.each do |ua|
           %li
             = link_to book_assignment_path(ua), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
@@ -29,6 +29,7 @@
               %div
                 %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
                   %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
+      = paginate @book_assignments
 
     - else
       %div.text-gray-500
