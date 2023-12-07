@@ -51,8 +51,6 @@ class UsersController < ApplicationController
     @meta_title = 'マイページ'
     @no_index = true
 
-    @upcoming_assignments = current_user.book_assignments.upcoming.order(:start_date)
-
     # Customer PortalのURL取得
     if current_user.stripe_customer_id
       portal_session = Stripe::BillingPortal::Session.create(

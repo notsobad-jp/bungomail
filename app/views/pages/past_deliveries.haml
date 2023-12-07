@@ -1,0 +1,31 @@
+.mb-4
+  %h1.text-lg.font-bold
+    過去の配信作品一覧
+
+.py-4.border-t.border-b.mb-8
+  - [*(2018..Time.current.year)].reverse.each do |year|
+    - active = 'bg-gray-100 font-bold' if year == params[:year].to_i || (params[:year].blank? && year == Time.current.year)
+    = link_to "#{year}年", page_path(:past_deliveries, year: year), class: "rounded px-2 sm:px-4 py-2 #{active}"
+
+- colors = %w(red orange yellow olive green teal blue violet purple pink brown black)
+.mb-4.space-y-4
+  - @book_assignments.each do |ba|
+    - month = ba.start_date.month
+    - end_month = (ba.count - 1).days.since(ba.start_date).month
+    .item
+      .content
+        = link_to "https://bungo-search.com/authors/#{ba.book.author_id}/categories/#{ba.book.category_id}/books/#{ba.book_id}", class: 'header', target: :blank do
+          %span.text-sm{class: colors[month - 1]} #{month}月
+          - if month != end_month # ２ヶ月配信対応
+            %span.text-sm{class: colors[end_month - 1]} #{end_month}月
+          &nbsp;
+          .inline.font-bold 『#{ba.book.title}』
+          = ba.book.author_name
+          &nbsp;
+          %small
+            %i.icon.external.small
+        .extra
+          %small
+            = ba.start_date.strftime("%Y年%-m月%-d日")
+            〜
+            = (ba.count - 1).days.since(ba.start_date).strftime("%Y年%-m月%-d日")

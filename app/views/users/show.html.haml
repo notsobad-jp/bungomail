@@ -2,7 +2,7 @@
   %h1.text-lg.font-bold.mb-4.flex.items-center
     %svg(class="w-6 h-6 mt-1 mr-2" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
       %path(d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z")
-    マイページ
+    アカウント設定
 
 .mb-12
   .mb-4.text-sm.bg-gray-100.rounded.px-4.py-2
@@ -37,36 +37,24 @@
         %li お支払履歴の確認
         %li お支払いの停止（キャンセル）
   - else
-    お支払い情報が登録されていません
+    .text-gray-500
+      お支払い情報が登録されていません
 
 
 .mb-12
   %h5.font-bold.text-lg.mb-4.pb-2.border-b
     カスタム配信
-  - if @upcoming_assignments.present?
-    %ul(class="space-y-8 sm:space-y-4")
-      - @upcoming_assignments.each do |ua|
-        %li
-          = link_to book_assignment_path(ua), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
-            %div.space-y-1
-              .font-bold= ua.book.author_and_book_name
-              .text-sm
-                = "#{ua.start_date.strftime("%Y年%-m月%-d日")} 〜 #{ua.end_date.strftime("%Y年%-m月%-d日")}"
-            %div
-              %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
-                %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
 
-  - else
-    %div
-      = link_to "カスタム配信", page_path(:custom_delivery), class: "text-link"
-      が登録されていません。
+  .text-gray-500
+    = link_to "配信管理", book_assignments_path, class: "text-link"
+    メニューに移動しました。
 
 .mb-12
   %h5.font-bold.text-lg.mb-4.pb-2.border-b
     プッシュ通知の設定
   - if current_user.webpush_endpoint
-    %div.mb-4
-      通知設定が完了しています。
+    .mb-4
+      ✅ 通知設定が完了しています。
     %div(class="mb-4 flex flex-col sm:flex-row sm:items-center space-x-0 sm:space-x-4 space-y-4 sm:space-y-0")
       %div(onclick="unsubscribe()" class="cursor-pointer inline-flex items-center space-x-1 border border-red-700 text-red-700 rounded px-4 py-2 hover:opacity-75")
         %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
