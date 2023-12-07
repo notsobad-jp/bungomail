@@ -8,8 +8,8 @@
 
   - if current_user != @ba.user
     - if @subscription.present?
-      = link_to subscription_path(@subscription), data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
-        %span 購読をキャンセルする
+      = link_to subscription_path(@subscription), data: { turbo_method: :delete, turbo_confirm: "この配信の購読を解除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
+        %span 購読を解除する
     - else
       .border.rounded.p-4
         = form_with model: @ba.subscriptions.build, local: true do |f|
