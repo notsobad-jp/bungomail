@@ -2,16 +2,15 @@ class SubscriptionsController < ApplicationController
   before_action :require_login, only: [:create, :destroy]
 
   def create
-    book_assignment = BookAssignment.find(params[:book_assignment_id])
-    delivery_method = params[:delivery_method] == "email" && current_user.basic_plan? ? "email" : "webpush"
+    @subscription = current_user.subscriptions.new(subscription_params)
 
-    Subscription.create!(
-      book_assignment: book_assignment,
-      delivery_method: delivery_method,
-      user: current_user,
-    )
-
-    redirect_to book_assignment_path(book_assignment), flash: { success: '配信の購読が完了しました！' }
+    if @subscription.save
+      flash[:success] = '配信の購読が完了しました！'
+      redirect_to book_assignment_path(@subscription.book_assignment_id)
+    else
+      flash[:error] = @subscription.errors.full_messages.join('. ')
+      redirect_to book_assignment_path(@subscription.book_assignment_id), status: 422
+    end
   end
 
   def destroy
@@ -19,4 +18,10 @@ class SubscriptionsController < ApplicationController
     subscription.destroy!
     redirect_to book_assignment_path(subscription.book_assignment), flash: { success: "配信の購読を解除しました。" }, status: 303
   end
+
+  private
+
+    def subscription_params
+      params.require(:subscription).permit(:book_assignment_id, :delivery_method)
+    end
 end
