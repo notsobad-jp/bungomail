@@ -6,9 +6,9 @@ class BookAssignmentsController < ApplicationController
     @meta_title = "配信管理"
 
     if params[:finished].present?
-      @book_assignments = current_user.book_assignments.finished.order(start_date: :desc).page(params[:page])
+      @book_assignments = BookAssignment.subscribed_by(current_user).finished.order(start_date: :desc).page(params[:page])
     else
-      @book_assignments = current_user.book_assignments.upcoming.order(start_date: :desc).page(params[:page])
+      @book_assignments = BookAssignment.subscribed_by(current_user).upcoming.order(start_date: :desc).page(params[:page])
     end
   end
 
