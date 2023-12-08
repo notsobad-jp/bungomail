@@ -17,14 +17,17 @@
         = form_with model: @ba.subscriptions.build, local: true do |f|
           = f.hidden_field :book_assignment_id, value: @ba.id
           .flex.flex-col.sm:flex-row.items-center.space-y-2.sm:space-y-0.sm:space-x-4
-            .mb-2.space-x-4
-              %label
+            .flex.items-center.mb-2.space-x-4
+              %label.flex.items-center.space-x-2
                 = f.radio_button :delivery_method, :webpush, checked: true
                 %span プッシュ通知
-              %label
-                = f.radio_button :delivery_method, :email
-                %span Eメール
+              %label.flex.items-center.space-x-2
+                = f.radio_button :delivery_method, :email, disabled: !@email_subscribable, class: "peer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-50"
+                %span(class="peer-disabled:text-gray-400 peer-disabled:cursor-not-allowed") Eメール
             = f.submit "この配信を購読する", class: "cursor-pointer text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700"
+      - if !@email_subscribable
+        .mt-2.text-sm.text-gray-500
+          ※Eメールでの購読は、有料プランへの登録が必要です。
 
   -# 未ログイン
   - if current_user.nil?
