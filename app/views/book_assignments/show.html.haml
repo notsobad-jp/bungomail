@@ -2,11 +2,13 @@
   = render "page_header", { ba: @ba }
 
 .mb-12
+  -# 自分が配信オーナー && 配信がまだ未完了
   - if current_user == @ba.user && @ba.status != "配信終了"
     = link_to book_assignment_path, data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
       %span 配信を削除する
 
-  - if current_user != @ba.user
+  -# 他ユーザーの配信
+  - if current_user && current_user != @ba.user
     - if @subscription.present?
       = link_to subscription_path(@subscription), data: { turbo_method: :delete, turbo_confirm: "この配信の購読を解除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
         %span 購読を解除する
@@ -23,6 +25,17 @@
                 = f.radio_button :delivery_method, :email
                 %span Eメール
             = f.submit "この配信を購読する", class: "cursor-pointer text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700"
+
+  -# 未ログイン
+  - if current_user.nil?
+    .px-4.py-2.rounded.bg-yellow-50.border.border-yellow-500.text-yellow-700
+      .flex.items-center.space-x-4
+        %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
+          %path(stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z")
+        %div
+          配信を購読するには
+          = link_to "ログイン", new_magic_token_path, class: "text-link"
+          が必要です。
 
 .mb-12
   .border-b.border-gray-200.pb-5.mb-5
