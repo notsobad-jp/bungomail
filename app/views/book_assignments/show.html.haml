@@ -19,13 +19,16 @@
           .flex.flex-col.sm:flex-row.items-center.space-y-2.sm:space-y-0.sm:space-x-4
             .flex.items-center.mb-2.space-x-4
               %label.flex.items-center.space-x-2
-                = f.radio_button :delivery_method, :webpush, checked: true
-                %span プッシュ通知
+                = f.radio_button :delivery_method, :webpush, disabled: current_user.webpush_auth.blank?, class: "peer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-50"
+                %span(class="peer-disabled:text-gray-400 peer-disabled:cursor-not-allowed") プッシュ通知
               %label.flex.items-center.space-x-2
-                = f.radio_button :delivery_method, :email, disabled: !@email_subscribable, class: "peer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-50"
+                = f.radio_button :delivery_method, :email, disabled: !current_user.basic_plan?, class: "peer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-50"
                 %span(class="peer-disabled:text-gray-400 peer-disabled:cursor-not-allowed") Eメール
-            = f.submit "この配信を購読する", class: "cursor-pointer text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700"
-      - if !@email_subscribable
+            = f.submit "この配信を購読する", class: "cursor-pointer text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50", disabled: current_user.webpush_auth.blank? && !current_user.basic_plan?
+      - if current_user.webpush_auth.blank?
+        .mt-2.text-sm.text-gray-500
+          ※プッシュ通知での購読は、通知の許可設定が必要です。
+      - if !current_user.basic_plan?
         .mt-2.text-sm.text-gray-500
           ※Eメールでの購読は、有料プランへの登録が必要です。
 

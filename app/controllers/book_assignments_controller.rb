@@ -40,9 +40,6 @@ class BookAssignmentsController < ApplicationController
 
     if @ba.user_id == current_user&.id
       @breadcrumbs = [ {text: "配信管理", link: book_assignments_path}, {text: @meta_title} ]
-    else
-      @email_subscribable = current_user.plan_at(@ba.start_date) == :basic # FIXME: 配信開始時点で有料プランかどうか
-      @subscribable = true # FIXME: 無料プランで購読数が上限に達していないかどうか
     end
   end
 
