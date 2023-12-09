@@ -9,6 +9,7 @@ class BookAssignment < ApplicationRecord
   scope :upcoming, -> { where("? <= end_date", Date.current) }
   scope :finished, -> { where("? > end_date", Date.current) }
   scope :subscribed_by, -> (user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }
+  scope :overlapping_with, -> (start_date, end_date) { where("end_date >= ? and ? >= start_date", start_date, end_date) }
 
   validates :start_date, presence: true
   validates :end_date, presence: true
@@ -90,7 +91,7 @@ class BookAssignment < ApplicationRecord
 
   # 同一チャネルで期間が重複するレコードが存在すればinvalid(Freeプランのみ)
   def delivery_period_should_not_overlap
-    overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).where("end_date >= ? and ? >= start_date", start_date, end_date)
+    overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).overlapping_with(start_date, end_date)
     errors.add(:base, "購読済みの他の配信と期間が重複しています") if overlapping.present?
   end
 

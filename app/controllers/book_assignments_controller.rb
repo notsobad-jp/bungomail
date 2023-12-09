@@ -42,7 +42,7 @@ class BookAssignmentsController < ApplicationController
       @breadcrumbs = [ {text: "配信管理", link: book_assignments_path}, {text: @meta_title} ]
     else
       # 配信期間が重複している配信を取得
-      @overlapping_assignments = BookAssignment.subscribed_by(current_user).where.not(id: @ba.id).where("start_date <= ? AND ? <= end_date", @ba.end_date, @ba.start_date)
+      @overlapping_assignments = BookAssignment.subscribed_by(current_user).where.not(id: @ba.id).overlapping_with(@ba.end_date, @ba.start_date)
     end
   end
 
