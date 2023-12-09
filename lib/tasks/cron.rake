@@ -20,7 +20,7 @@ namespace :cron do
       EmailDigest.where(digest: digests).update_all(trial_ended: true, updated_at: Time.current)
 
       # 有料じゃないユーザーのbook_assignmentsは全部削除
-      BookAssignment.by_unpaid_users.destroy_all
+      BookAssignment.by_unpaid_users.upcoming.destroy_all
     end
   end
 
