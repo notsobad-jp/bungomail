@@ -17,31 +17,25 @@
           <p class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl !leading-snug">
             1日3分のメールで、
             <br class="hidden lg:block" />
-            ムリせず毎月本が読める
+            ムリせず毎日読書できる
           </p>
           <p class="mt-6 text-lg leading-8 text-gray-600">
             青空文庫の作品を小分けにして、毎日メールで配信。
             <br class="hidden lg:block" />
-            気づいたら毎月1冊本が読めてしまう、
+            スキマ時間で毎日ちょっとずつ名作に触れる、
             <br class="hidden lg:block" />
             忙しいあなたのための読書サポートサービスです。
           </p>
           <div class="mt-10 flex items-center gap-x-6">
             <form class="w-full max-w-lg lg:col-span-5 lg:pt-2">
-              <div class="flex gap-x-4">
-                <!--
-                <label for="email-address" class="sr-only">メールアドレス</label>
+              <div class="flex flex-col sm:flex-row gap-x-4 gap-y-4 sm:gap-y-0">
                 <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="メールアドレス">
                 <button type="submit" class="flex-none rounded-md bg-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">アカウント登録（無料）</button>
-                -->
-                <%= link_to signup_path, class: "w-full block rounded-md py-3.5 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
-                  新規登録（1ヶ月無料）
-                <% end %>
               </div>
               <p class="mt-4 text-xs leading-6 text-gray-900">
-                登録済みの方は
-                <%= link_to "マイページ", mypage_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
-                から登録情報の確認ができます
+                登録済みの方はこちらから
+                <%= link_to "ログイン", login_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+                してください。
               </p>
             </form>
           </div>
@@ -116,7 +110,7 @@
           </dt>
           <dd class="mt-1 flex flex-auto flex-col text-base leading-7 text-gray-600">
             <p class="flex-auto">
-              名前は知ってるけど読んでなかった名作、青空文庫にはいっぱいあります。普段自分では選ばない本を読めるのもいいものです。
+              青空文庫の収録数はなんと16,000作品以上。名前は知ってても読んだことのなかった名作を、この機会にぜひ。
             </p>
           </dd>
         </div>
@@ -137,9 +131,6 @@
       </h2>
       <p class="mt-6 leading-8 text-gray-600">
         1日3分のメールを読み続けるだけで、1年ではこれだけの作品を読むことができます。
-        <div class="text-xs text-center mt-2">
-          （あくまで一例なので、実際に配信する内容とは異なります）
-        </div>
       </p>
     </div>
 
@@ -217,10 +208,6 @@
         </div>
       </div>
     </div>
-
-    <div class="text-center mt-8">
-      <%= link_to "これまでの配信作品はこちら", page_path(:past_deliveries), class: "text-link" %>
-    </div>
   </div>
 </div>
 
@@ -240,51 +227,51 @@
     <div class="mx-auto mt-16 flow-root max-w-2xl sm:mt-20 lg:mx-0 lg:max-w-none">
       <div class="-mt-8 sm:-mx-4 sm:text-[0] flex flex-col sm:flex-row">
         <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+          <figure class="flex items-center sm:items-start flex-row sm:flex-col-reverse space-x-4 sm:space-x-0 rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <figcaption class="flex-none sm:mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/helen.jpg" alt="">
+            </figcaption>
             <blockquote class="text-gray-900">
               <p>
                 短くて読みやすい…！ささっと読めるちょうどいい長さだから毎日続けられそうだし、何よりこう、続きが気になってくる👏
               </p>
             </blockquote>
-            <figcaption class="mt-6 flex items-center gap-x-4">
-              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/helen.jpg" alt="">
-            </figcaption>
           </figure>
         </div>
         <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+          <figure class="flex items-center sm:items-start flex-row sm:flex-col-reverse space-x-4 sm:space-x-0 rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <figcaption class="flex-none sm:mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/elyse.png" alt="">
+            </figcaption>
             <blockquote class="text-gray-900">
               <p>
                 知ってはいるけど、なんとなく避けていた太宰。 こういう機会でもないと、一生読まなかっただろうなと思うと感慨深い。短いから無理なく読めるし。
               </p>
             </blockquote>
-            <figcaption class="mt-6 flex items-center gap-x-4">
-              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/elyse.png" alt="">
-            </figcaption>
           </figure>
         </div>
         <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+          <figure class="flex items-center sm:items-start flex-row sm:flex-col-reverse space-x-4 sm:space-x-0 rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <figcaption class="flex-none sm:mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/stevie.jpg" alt="">
+            </figcaption>
             <blockquote class="text-gray-900">
               <p>
                 毎日育児に追われててもどうにか読める長さが毎日届くの画期的だしありがたすぎる…🙏
               </p>
             </blockquote>
-            <figcaption class="mt-6 flex items-center gap-x-4">
-              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/stevie.jpg" alt="">
-            </figcaption>
           </figure>
         </div>
         <div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-          <figure class="rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+          <figure class="flex items-center sm:items-start flex-row sm:flex-col-reverse space-x-4 sm:space-x-0 rounded-2xl bg-gray-50 p-8 text-sm leading-6">
+            <figcaption class="flex-none sm:mt-6 flex items-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/elliot.jpg" alt="">
+            </figcaption>
             <blockquote class="text-gray-900">
               <p>
                 ほんの1分で読める量だから、「今日は『反駁』の『駁』を調べてみよう」と辞書を開くきっかけにしたり、一言一句を気まぐれに噛み締めてみたりしている
               </p>
             </blockquote>
-            <figcaption class="mt-6 flex items-center gap-x-4">
-              <img class="h-10 w-10 rounded-full bg-gray-50" src="/assets/images/lp/feedback/elliot.jpg" alt="">
-            </figcaption>
           </figure>
         </div>
       </div>
@@ -303,42 +290,103 @@
         料金プラン
       </h2>
       <p class="mt-6 leading-8 text-gray-600">
-        登録日に関わらず、翌月1日から1ヶ月間が無料トライアル期間となります。
-        <br class="hidden sm:block" />
-        トライアル終了前に解約した場合、料金は一切発生しません。
+        現在有料プランの受付は一時停止しております。再開まで今しばらくお待ちください。
       </p>
     </div>
 
-    <div class="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-lg lg:grid-cols-1">
+    <div class="mx-auto mt-16 grid grid-cols-1 items-center gap-x-12 gap-y-12 sm:mt-20 sm:gap-y-0 lg:grid-cols-2">
       <div class="rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 relative bg-white shadow-2xl">
-        <h3 id="tier-personal" class="text-base font-semibold leading-7 text-indigo-600">Basic</h3>
+        <h3 id="tier-personal" class="text-base font-semibold leading-7 text-indigo-600">Free</h3>
         <p class="mt-4 flex items-baseline gap-x-2">
-          <span class="text-5xl font-bold tracking-tight text-gray-900">¥500</span>
-          <span class="text-base text-gray-500">/月</span>
-          <span class="text-base text-gray-500 text-sm">（税込550円）</span>
+          <span class="text-5xl font-bold tracking-tight text-gray-900">無料</span>
         </p>
-        <p class="mt-6 text-base leading-7 text-gray-600">毎月1冊おまかせ読書</p>
+        <p class="mt-6 text-base leading-7 text-gray-600">まずはプッシュ通知でお手軽に</p>
         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10">
-          <li class="flex gap-x-3">
+          <li class="flex items-end gap-x-3">
             <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
             </svg>
-            ブンゴウメール公式チャネルの配信
+            <div class="space-x-1">
+              <span class="text-gray-500 text-sm">受信方法:</span>
+              <strong class="text-bold text-lg">プッシュ通知</strong>
+            </div>
           </li>
 
-          <li class="flex gap-x-3">
+          <li class="flex items-end gap-x-3">
+            <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            <div class="space-x-1">
+              <span class="text-gray-500 text-sm">同時購読数:</span>
+              <strong class="text-bold text-lg">1作品</strong>
+            </div>
+          </li>
+
+          <li class="flex items-end gap-x-3">
+            <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            <div class="space-x-1">
+              <span class="text-gray-500 text-sm">ユーザーサポート:</span>
+              <strong class="text-bold text-lg">なし</strong>
+            </div>
+          </li>
+        </ul>
+        <%= link_to signup_path, class: "mt-8 block rounded-md py-3 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10 bg-indigo-600 text-white shadow hover:opacity-50" do %>
+          アカウント登録（無料）
+        <% end %>
+        <div class="text-xs text-gray-500 mt-2">
+          　
+        </div>
+      </div>
+
+      <div class="rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 relative bg-white shadow-2xl">
+        <h3 id="tier-personal" class="text-base font-semibold leading-7 text-indigo-600">Basic</h3>
+        <p class="mt-4 flex items-baseline gap-x-2">
+          <span class="text-5xl font-bold tracking-tight text-gray-900">¥350</span>
+          <span class="text-base text-gray-500">/月</span>
+          <span class="text-base text-gray-500 text-sm">（税込385円）</span>
+        </p>
+        <p class="mt-6 text-base leading-7 text-gray-600">メールだと後から見返せるのもいいですよね</p>
+        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10">
+          <li class="flex items-end gap-x-3">
+            <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            <div class="space-x-1">
+              <span class="text-gray-500 text-sm">受信方法:</span>
+              <strong class="text-bold text-lg">プッシュ通知・Eメール</strong>
+            </div>
+          </li>
+
+          <li class="flex items-end gap-x-3">
             <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
             </svg>
             <span>
-              好きな作品を配信できる
-              <%= link_to "カスタム配信機能", page_path(:custom_delivery), class: "text-link" %>
-            </span>
+            <div class="space-x-1">
+              <span class="text-gray-500 text-sm">同時購読数:</span>
+              <strong class="text-bold text-lg">5作品</strong>
+            </div>
+          </li>
+
+          <li class="flex items-end gap-x-3">
+            <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            <div class="space-x-1">
+              <span class="text-gray-500 text-sm">ユーザーサポート:</span>
+              <strong class="text-bold text-lg">メール（3営業日以内）</strong>
+            </div>
           </li>
         </ul>
-        <%= link_to signup_path, class: "mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
-          新規登録（1ヶ月無料）
-        <% end %>
+        <div class="mt-8 block rounded-md py-3 px-3.5 text-center text-sm font-semibold sm:mt-10 bg-red-600 text-white shadow opacity-50">
+          有料プランに登録（1ヶ月無料）
+        </div>
+
+        <div class="text-xs text-gray-500 mt-2">
+          ※現在有料プランの受付は一時停止しております。再開まで今しばらくお待ちください。
+        </div>
       </div>
     </div>
   </div>
@@ -349,9 +397,9 @@
   <div class="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-12 lg:gap-8 lg:px-8">
     <div class="max-w-xl text-3xl font-bold tracking-tight text-white sm:text-4xl lg:col-span-7">
       <p class="inline sm:block lg:inline xl:block sm:leading-snug">
-        まずは1ヶ月間の
+        アカウント登録は無料です。
         <br class="hidden sm:block" />
-        無料トライアルをお試しください
+        まずはお試しください。
       </p>
     </div>
     <form class="w-full max-w-md lg:col-span-5 lg:pt-2">
@@ -362,7 +410,7 @@
         <button type="submit" class="flex-none rounded-md bg-indigo-500 py-2.5 px-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">アカウント登録（無料）</button>
         -->
         <%= link_to signup_path, class: "w-full block rounded-md py-3 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500" do %>
-          新規登録（1ヶ月無料）
+          アカウント登録（無料）
         <% end %>
       </div>
       <p class="mt-4 text-xs leading-6 text-gray-300">
@@ -442,18 +490,6 @@
       <dl class="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:gap-x-10">
         <div>
           <dt class="text-base font-semibold leading-7 text-gray-900">
-            配信される作品は選べないのですか？
-          </dt>
-          <dd class="mt-2 text-base leading-7 text-gray-600">
-            <p>ブンゴウメールは毎月1冊おまかせで作品が選ばれ、全員が同じ作品を同時に読むことも特徴となっています。 そのためこのおまかせ配信に関しては作品を変更することはできません。</p>
-            <p>ただし有料プランユーザーは、月1冊のおまかせ配信とは別に自分で好きな作品を選んで配信する「カスタム配信機能」も利用することができます。 どうしても本編の作品が合わない場合や、他に読みたい作品がある場合などはぜひこちらもご活用ください。</p>
-            <div class="my-2">
-              <%= link_to "カスタム配信機能を利用する（有料プラン）", page_path(:custom_delivery), class: "text-link" %>
-            </div>
-          </dd>
-        </div>
-        <div>
-          <dt class="text-base font-semibold leading-7 text-gray-900">
             登録したけどメールが届きません
           </dt>
           <dd class="mt-2 text-base leading-7 text-gray-600">
@@ -492,22 +528,14 @@
         </div>
         <div>
           <dt class="text-base font-semibold leading-7 text-gray-900">
-            登録したメールアドレスを変更できますか？
-          </dt>
-          <dd class="mt-2 text-base leading-7 text-gray-600">
-            はい、可能です。メールアドレスの変更を希望される場合は、お手数ですが運営までお問い合わせください。
-          </dd>
-        </div>
-        <div>
-          <dt class="text-base font-semibold leading-7 text-gray-900">
             配信されたメールの文面などをSNSでシェアしても大丈夫ですか？
           </dt>
           <dd class="mt-2 text-base leading-7 text-gray-600">
             <p>
-              ブンゴウメールで配信しているのは著作権の切れたパブリックドメインの作品であるため、配信された文章をSNS等にシェアいただいても基本的には問題ありません。 また今月はどの作品が配信されている、などの情報もシェアして頂いて大丈夫です。
+              ブンゴウメールで配信しているのは著作権の切れたパブリックドメインの作品であるため、配信された文章をSNS等にシェアいただいても基本的には問題ありません。
             </p>
             <p>
-              ただ毎月の選本およびメールの分割配信システムはブンゴウメール運営によるものですので、その点は尊重いただけると幸いです。 具体的には、「毎日すべての配信内容をシェアする」「メール配信を第三者に転送する」などの行為はお控えいただきますようお願いいたします。
+              ただ配信する本の選定およびメールの分割配信システムは、配信者およびブンゴウメール運営によるものですので、その点は尊重いただけると幸いです。 具体的には、「毎日すべての配信内容をシェアする」「メール配信を第三者に転送する」などの行為はお控えいただきますようお願いいたします。
           </dd>
         </div>
         <div>
@@ -516,14 +544,22 @@
           </dt>
           <dd class="mt-2 text-base leading-7 text-gray-600">
             <p>
-              大変申し訳ありませんが、現在ブンゴウメールの利用は原則有料となっております。
+              はい、ブンゴウメールは無料プランで利用することも可能です。
+              <br />
+              無料プランではメールではなくプッシュ通知での配信のみとなり、また同時に購読できるのも1作品までとなります。
             </p>
             <p>
-              なおブンゴウメール本編とは別に、無料の企画配信なども不定期に行っています。 配信開始の際は公式Twitterなどでお知らせしますので、興味のある方はぜひチェックしてみてください。
+              またプッシュ通知に関するトラブルなどのサポートも一切ご提供できませんのでご了承ください。
+              確実に受信したい、複数の作品を同時に購読したい、といった場合は有料プランの利用をご検討ください。
             </p>
-            <div class="my-2">
-              <%= link_to "ブンゴウメール公式Twitter", "https://twitter.com/bungomail", class: "text-link", target: :_blank %>
-            </div>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-base font-semibold leading-7 text-gray-900">
+            登録したメールアドレスを変更できますか？
+          </dt>
+          <dd class="mt-2 text-base leading-7 text-gray-600">
+            はい、可能です。メールアドレスの変更を希望される場合は、お手数ですが運営までお問い合わせください。
           </dd>
         </div>
       </dl>
