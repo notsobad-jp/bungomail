@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :authors do
+    resources :categories do
+      resources :books
+    end
+  end
   resources :books, only: [:show]
   resources :book_assignments, shallow: true do
     resources :feeds

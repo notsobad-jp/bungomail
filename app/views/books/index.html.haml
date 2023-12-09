@@ -1,0 +1,74 @@
+.mb-4
+  %h1.font-bold.text-xl.sm:text-2xl.mb-2
+    = @meta_title
+  .text-sm
+    %p= @search_page_description
+    - if @category[:id] != 'all'
+      %small.text-xs
+        = t :category_range, scope: [:search, :books, :index], range: AozoraBook.category_range(@category[:id].to_sym), words_per_minutes: AozoraBook::WORDS_PER_MINUTES
+
+.mb-4.border-t.border-b.divide-y.border-gray-100.divide-gray-100.text-sm
+  .flex.items-center.py-4
+    %i.far.fa-clock.text-gray-500.mr-4
+    .space-x-4.flex.overflow-x-scroll
+      - @categories.each do |category_id, category|
+        - active = 'bg-gray-100 font-bold' if @category == category
+        - path = (category_id == :all && @author[:id] == "all") ? author_category_books_path : author_category_books_path(author_id: @author[:id], category_id: category[:id])
+        = link_to category[:name], path, class: "rounded p-2 whitespace-nowrap #{active}"
+  .py-3
+    = form_tag(authors_path, method: :get, target: '_top', class: 'flex items-center space-x-4') do
+      %i.far.fa-user.text-gray-500
+      - author_name = @author[:name] unless @author[:id] == 'all'
+      = text_field_tag :author_name, author_name, required: true, placeholder: t(:author_name, scope: [:search, :books, :index]), class: 'flex-1 p-2 border-none rounded'
+      = hidden_field_tag :category_id, @category[:id]
+      - if @author[:id] != 'all'
+        = link_to author_category_books_path(author_id: 'all', category_id: @category[:id]), class: 'hover:opacity-75' do
+          %i.fas.fa-times.gray
+      %button.text-gray-500.rounded.border.p-2.hover:bg-gray-100(type="submit")
+        %i.fas.fa-search
+        %span.hidden.sm:inline= t :search, scope: [:search, :defaults]
+
+.flex.justify-between.items-end.mb-4
+  .text-xs
+    = t(:search_offset, scope: [:search, :books, :index], from: @books.offset_value + 1, to: @books.offset_value + @books.length, count: @books.total_count.to_formatted_s(:delimited))
+  %div
+    - canonical_url = @meta_canonical_url || url_for(only_path: false)
+    - text = (@author[:id]=="all" && @category[:id]=="all") ? t(:default_title, scope: [:search, :layouts, :meta]).gsub("|", "-") : @meta_title
+    = link_to "https://twitter.com/intent/tweet?hashtags=#{t(:bungo_search, scope: [:search, :defaults]).downcase.delete(' ')}&url=#{canonical_url}&text=#{text}", target: :_blank, class: 'rounded bg-blue-400 text-white text-xs px-2 py-1 hover:bg-blue-500' do
+      %i.fab.fa-twitter
+      Tweet
+
+.flex.text-xs.font-bold.bg-gray-50.px-2.sm:px-4.py-4.rounded-t.border-t.border-r.border-l.border-gray-100
+  %div(class="w-1/3 sm:w-1/4")= t :title, scope: [:search, :defaults]
+  %div(class="w-1/3 sm:w-1/5")= t :author, scope: [:search, :defaults]
+  %div(class="w-1/2 sm:w-1/5 flex justify-between")
+    = t :minutes_to_read, scope: [:search, :defaults]
+    .block.sm:hidden= t :popularity, scope: [:search, :defaults]
+  .hidden.sm:block(class="w-1/12")= t :popularity, scope: [:search, :defaults]
+  .hidden.sm:block(class="w-1/4")= t :beginning, scope: [:search, :defaults]
+
+%div.border-r.border-l.border-t.border-gray-100.rounded-b.mb-4
+  - if @books.blank?
+    .border-b.border-gray-100.text-sm.py-3
+      = t 'no_results', scope: [:search, :books, :index]
+  = render partial: 'row', collection: @books, as: :book, locals: { category: @category }
+
+.text-xs.mb-4
+  = t 'copyright_reserved.html', scope: [:search, :books, :index]
+
+.flex.justify-center.mb-8
+  - params = current_page?(author_category_books_path) ? { locale: nil, juvenile: nil } : {}  # /en, /juvenileなどの直下URLで、paginationがおかしくなる問題対応
+  = paginate @books, window: 2, params: params
+
+.mb-4.text-center
+  .hidden(class="lg:block")
+    - if Rails.env.production?
+      %ins(class="adsbygoogle"
+        style="display:inline-block;width:728px;height:100px"
+        data-ad-client="ca-pub-7840479109197513"
+        data-ad-slot="4898448160")
+      %script
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    - else
+      .flex.items-center.justify-center.bg-gray-700.w-full.text-white(style="height:100px")
+        広告枠
