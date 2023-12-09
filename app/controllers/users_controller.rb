@@ -5,46 +5,24 @@ class UsersController < ApplicationController
   def new
     redirect_to(mypage_path) if current_user
 
-    @meta_title = '新規ユーザー登録'
+    @meta_title = 'アカウント登録'
     @no_index = true
   end
 
   def create
     user = User.find_or_initialize_by(email: user_params[:email])
 
-    # customerが過去にstripe登録済み（重複登録 or 退会→再登録）の場合はとりあえず手動対応
-    if user.stripe_customer_id.present?
-      flash[:error] = 'このメールアドレスはすでに登録されています。登録情報を確認・更新したい場合は「利用者メニュー」をご利用ください。'
-      redirect_to(signup_path) and return
+    # すでに登録済みの場合はログイン画面へ
+    if user.persisted?
+      flash[:error] = 'このメールアドレスはすでに登録されています。登録情報を確認・更新したい場合はログインしてください。'
+      redirect_to(login_path) and return
     end
 
-    # StripeにCustomer作成
-    customer = Stripe::Customer.create(email: user.email)
-
-    # DBにユーザー登録（翌月初からトライアル開始）
-    user.update!(
-      stripe_customer_id: customer.id,
-      trial_start_date: Date.current.next_month.beginning_of_month,
-      trial_end_date: Date.current.next_month.end_of_month,
-    )
-
-    # StripeにSucscription作成
-    ## CustomerPortalを使えるようにするため、Stripe上はこの時点からトライアル扱い（実際の配信はまだしない）
-    beginning_of_next_next_month = Time.current.next_month.next_month.beginning_of_month
-    Stripe::Subscription.create({
-      customer: customer.id,
-      default_tax_rates: [ Rails.application.credentials.dig(:stripe, :tax_rate_id) ],
-      trial_end: beginning_of_next_next_month.to_i,
-      items: [
-        {price: Rails.application.credentials.dig(:stripe, :plan_id) }
-      ],
-    })
+    user.save
+    user.generate_magic_login_token!
 
     BungoMailer.with(user: user).user_registered_email.deliver_later
     redirect_to(root_path, flash: { success: 'ユーザー登録が完了しました！ご登録内容の確認メールをお送りしています。もし10分以上経ってもメールが届かない場合は運営までお問い合わせください。' })
-  rescue => e
-    logger.error "[Error]Stripe subscription failed. #{e}"
-    redirect_to(signup_path, flash: { error: '決済処理に失敗しました。。課金処理を中止したため、これにより支払いが発生することはありません。解決しない場合は運営までお問い合わせください。' })
   end
 
   def show
