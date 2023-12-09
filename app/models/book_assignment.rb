@@ -14,8 +14,8 @@ class BookAssignment < ApplicationRecord
   validates :end_date, presence: true
   validate :delivery_should_start_after_trial # トライアル開始前の配信予約は不可
   validate :end_date_should_come_after_start_date
-  validate :delivery_period_should_not_overlap # 同一チャネルで期間が重複するレコードが存在すればinvalid
   validate :end_date_should_not_be_too_far # 12ヶ月以上先の予約は禁止
+  validate :delivery_period_should_not_overlap, if: -> { user.free_plan? } # 同一チャネルで期間が重複するレコードが存在すればinvalid
 
 
   def count
@@ -90,9 +90,8 @@ class BookAssignment < ApplicationRecord
 
   # 同一チャネルで期間が重複するレコードが存在すればinvalid(Freeプランのみ)
   def delivery_period_should_not_overlap
-    return if user.basic_plan? # Basicプランは重複許可
     overlapping = BookAssignment.where.not(id: id).where(user_id: user_id).where("end_date >= ? and ? >= start_date", start_date, end_date)
-    errors.add(:base, "予約済みの配信と期間が重複しています") if overlapping.present?
+    errors.add(:base, "購読済みの他の配信と期間が重複しています") if overlapping.present?
   end
 
   def end_date_should_come_after_start_date
