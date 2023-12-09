@@ -35,7 +35,9 @@
             = f.submit "この配信を購読する", class: "cursor-pointer text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50", disabled: current_user.webpush_auth.blank? && !current_user.basic_plan?
       - if current_user.webpush_auth.blank?
         .mt-2.text-sm.text-gray-500
-          ※プッシュ通知での購読は、通知の許可設定が必要です。
+          ※プッシュ通知での購読は、
+          = link_to "通知の許可設定", mypage_path, class: "text-link"
+          が必要です。
       - if !current_user.basic_plan?
         .mt-2.text-sm.text-gray-500
           ※Eメールでの購読は、有料プランへの登録が必要です。
