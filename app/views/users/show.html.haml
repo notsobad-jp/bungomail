@@ -24,18 +24,18 @@
   .mb-12
     %h5.font-bold.text-lg.mb-4.pb-2.border-b
       お支払い情報の管理
-      %div.mb-4
-        = link_to  @customer_portal_url, target: :_blank, class: "inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75" do
-          %span 支払情報管理ページを開く
-          %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
-            %path(stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25")
+    %div.mb-4
+      = link_to  @customer_portal_url, target: :_blank, class: "inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75" do
+        %span 支払情報管理ページを開く
+        %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
+          %path(stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25")
 
-      .mb-4.text-sm
-        .mb-2 リンク先のページでは、以下の操作が可能です。
-        %ul.list-disc.list-inside
-          %li クレジットカード情報の登録・更新
-          %li お支払履歴の確認
-          %li お支払いの停止（キャンセル）
+    .mb-4.text-sm
+      .mb-2 リンク先のページでは、以下の操作が可能です。
+      %ul.list-disc.list-inside
+        %li クレジットカード情報の登録・更新
+        %li お支払履歴の確認
+        %li お支払いの停止（キャンセル）
 
 .mb-12
   %h5.font-bold.text-lg.mb-4.pb-2.border-b
