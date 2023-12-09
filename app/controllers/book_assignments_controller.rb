@@ -37,11 +37,10 @@ class BookAssignmentsController < ApplicationController
     @feeds = Feed.delivered.where(book_assignment_id: @ba.id).order(delivery_date: :desc).page(params[:page]) # FIXME
     @subscription = current_user.subscriptions.find_by(book_assignment_id: @ba.id) if current_user
     @meta_title = @ba.book.author_and_book_name
+    @breadcrumbs = [ {text: "配信管理", link: book_assignments_path}, {text: @meta_title} ] if current_user
 
-    if @ba.user_id == current_user&.id
-      @breadcrumbs = [ {text: "配信管理", link: book_assignments_path}, {text: @meta_title} ]
-    else
-      # 配信期間が重複している配信を取得
+    # 配信期間が重複している配信が存在してるかチェック
+    if current_user && current_user.id != @ba.user_id
       @overlapping_assignments = BookAssignment.subscribed_by(current_user).where.not(id: @ba.id).overlapping_with(@ba.end_date, @ba.start_date)
     end
   end
