@@ -7,9 +7,6 @@
     = f.email_field :email, class: "p-2 flex-1 rounded-l rounded-r sm:rounded-r-none border sm:border-r-0 mb-2 sm:mb-0 #{flash[:error] ? 'border-red-500' : ''}", placeholder: 'メールアドレス', required: true
     = button_tag type: 'submit', class: 'bg-indigo-600 border border-indigo-600 rounded-l sm:rounded-l-none rounded-r text-white px-6 py-2' do
       送信
-  - if flash[:error]
-    .text-red-600
-      = flash[:error]
 
 .mb-4
   .text-xs.block 入力したアドレスにログイン用URLを送信します。

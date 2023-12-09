@@ -2,103 +2,20 @@
   %h1.text-lg.font-bold.mb-4.flex.items-center
     %svg(class="w-6 h-6 mt-1 mr-2" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
       %path(d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z")
-    新規ユーザー登録
+    アカウント登録
 
 .mb-20
   .mb-4.text-sm
-    メールアドレス登録のみで無料トライアルを開始できます。
-    トライアル終了後も継続される場合は、トライアル終了前にクレジットカード情報を登録してください。
+    無料プランに登録します。
+    有料プラン利用をご希望の場合は、無料プラン登録完了後、マイページから有料プランにアップグレードしてください。
 
   .mb-4
     = form_with model: User.new, url: user_path, local: true, class: "flex flex-col sm:flex-row space-y-4 sm:space-y-0" do |f|
       =f.text_field :email, type: :email, required: true, class: "flex-1 rounded py-3 sm:rounded-r-none sm:border-r-0 border-gray-300", placeholder: "メールアドレス"
       %button(type="submit" class="block rounded-l sm:rounded-l-none rounded-r py-4 px-4 bg-red-600 text-white text-sm hover:opacity-75")
-        無料トライアルを開始する
+        登録する
 
-.mb-20
-  %h5.font-bold.text-lg.mb-4.pb-2.border-b
-    ご利用の流れ
-  %table.table-fixed.w-full.mb-8
-    %thead.bg-gray-100
-      %tr
-        %th.border.py-2
-          = Time.current.month
-          月
-        %th.border
-          = Time.current.since(1.month).month
-          月
-        %th.border
-          = Time.current.since(2.month).month
-          月
-    %tbody
-      %tr
-        %td.border.py-12.flex.items-center
-          .text-center.text-yellow-600.min-w-content.text-sm.pr-2(class="sm:pl-6 sm:pr-6 sm:text-base")
-            %svg(class="inline w-6 h-6 fill-current text-yellow-600" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
-              %path(d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z")
-            %br
-            ユーザー
-            %br
-            登録
-          .flex-1.border-b-2.border-dashed.border-yellow-700
-          %svg(class="w-8 h-8 fill-current text-yellow-700 w-content" focusable="false" viewBox="0 0 24 24" aria-hidden="true" style="margin-left: -15px")
-            %path(d="M10 17l5-5-5-5v10z")
-        %td.border.px-2
-          .px-2.right-triangle._yellow.inline-block.bg-yellow-200.text-yellow-700.relative.text-sm.font-bold(style="height:50px; line-height:50px; width: calc(100% - 25px);")
-            無料期間
-        %td.border.px-2
-          .px-2.right-triangle._red.inline-block.bg-red-200.text-red-700.relative.text-sm.font-bold(style="height:50px; line-height:50px; width: calc(100% - 25px);")
-            課金開始
-
-  %ul.list-disc.list-inside.mb-8
-    %li
-      登録日に関わらず、
-      .inline.font-bold.text-red-600
-        翌月初から1ヶ月間が無料トライアル期間
-      となります。配信開始までしばらくお待ちください。
-    %li
-      トライアル後も継続利用をご希望の場合は、トライアル終了前にクレジットカード情報を登録してください。
-    %li
-      無料トライアル終了前に解約いただいた場合、
-      .inline.font-bold.text-red-600
-        料金は一切発生しません。
-    %li
-      トライアル終了後、
-      .inline.font-bold.text-red-600
-        毎月1日
-      に当月分の料金をご請求します。
-
-  .text-sm.px-4.py-2.rounded.bg-blue-50.border.border-blue-500.text-blue-900.flex.items-center
-    ブンゴウメールでは毎月1日から新しい作品を配信するため、トライアルも月初から開始するように調整しています。
-    作品の途中からになってもすぐに配信を開始したいという場合は、運営までお問い合わせください（その場合は翌月初から課金開始となります）。
-
-.mb-12
-  %h5.font-bold.text-lg.mb-4.pb-2.border-b
-    その他・注意事項
-  %ul.list-disc.list-inside
-    %li
-      プランの解約はいつでも可能です。ただしすでにお支払いいただいた分の返金は致しかねますので、あらかじめご了承ください。
-    %li
-      決済に失敗した場合はメールでお知らせしますので、必要に応じて登録カード情報をご修正ください。数日経っても決済に失敗する場合、自動的に契約を解除させていただきます。
-    %li
-      一度解約してから再度ご契約いただいた場合、無料トライアルは付与されません。ご了承ください。
-    %li
-      利用可能なクレジットカードブランドは、 Visa, MasterCard, AmericanExpress, JCB, DinersClub, Discoverです。
-      = image_tag('/assets/images/memberships/cards.png', class: 'h-10 mt-1')
-
-
-
-:css
-  .right-triangle:after {
-    position: absolute;
-    display: block;
-    content: '';
-    width: 0;
-    height: 0;
-    top: 0;
-    right: -25px;
-    border: 25px solid transparent;
-    border-right-width: 0;
-  }
-  .right-triangle._yellow:after { border-left-color: rgba(253, 230, 138, var(--tw-bg-opacity)); }
-  .right-triangle._red:after { border-left-color: rgba(254, 202, 202, var(--tw-bg-opacity)); }
+  %p(class="mt-4 text-xs leading-6 text-gray-900")
+    登録済みの方はこちらから
+    = link_to "ログイン", login_path, class: "font-semibold text-indigo-600 hover:text-indigo-500"
+    してください。
