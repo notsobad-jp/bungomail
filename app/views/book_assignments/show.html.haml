@@ -12,6 +12,14 @@
     - if @subscription.present?
       = link_to subscription_path(@subscription), data: { turbo_method: :delete, turbo_confirm: "この配信の購読を解除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
         %span 購読を解除する
+    - elsif @overlapping_subscription.present?
+      .px-4.py-2.rounded.bg-yellow-50.border.border-yellow-500.text-yellow-700
+        .flex.items-center.space-x-4
+          %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
+            %path(stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z")
+          %div
+            購読済みの配信と配信期間が重複しています。
+            同時配信は有料プランへの登録が必要です。
     - else
       .border.rounded.p-4
         = form_with model: @ba.subscriptions.build, local: true do |f|
