@@ -33,22 +33,22 @@ class DistributionsController < ApplicationController
   end
 
   def show
-    @ba = Distribution.find(params[:id])
-    @feeds = Feed.delivered.where(distribution_id: @ba.id).order(delivery_date: :desc).page(params[:page]) # FIXME
-    @subscription = current_user.subscriptions.find_by(distribution_id: @ba.id) if current_user
-    @meta_title = @ba.book.author_and_book_name
+    @distribution = Distribution.find(params[:id])
+    @feeds = Feed.delivered.where(distribution_id: @distribution.id).order(delivery_date: :desc).page(params[:page]) # FIXME
+    @subscription = current_user.subscriptions.find_by(distribution_id: @distribution.id) if current_user
+    @meta_title = @distribution.book.author_and_book_name
     @breadcrumbs = [ {text: "配信管理", link: distributions_path}, {text: @meta_title} ] if current_user
 
     # 配信期間が重複している配信が存在してるかチェック
-    if current_user && current_user.id != @ba.user_id
-      @overlapping_assignments = Distribution.subscribed_by(current_user).where.not(id: @ba.id).overlapping_with(@ba.end_date, @ba.start_date)
+    if current_user && current_user.id != @distribution.user_id
+      @overlapping_distributions = Distribution.subscribed_by(current_user).where.not(id: @distribution.id).overlapping_with(@distribution.end_date, @distribution.start_date)
     end
   end
 
   def destroy
-    @ba = authorize Distribution.find(params[:id])
-    @ba.destroy!
-    BungoMailer.with(user: @ba.user, author_title: "#{@ba.book.author}『#{@ba.book.title}』", delivery_period: "#{@ba.start_date} 〜 #{@ba.end_date}").schedule_canceled_email.deliver_later
+    @distribution = authorize Distribution.find(params[:id])
+    @distribution.destroy!
+    BungoMailer.with(user: @distribution.user, author_title: "#{@distribution.book.author}『#{@distribution.book.title}』", delivery_period: "#{@distribution.start_date} 〜 #{@distribution.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信を削除しました！'
     redirect_to distributions_path, status: 303
   end

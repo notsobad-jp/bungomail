@@ -194,7 +194,7 @@ RSpec.describe Distribution, type: :model do
   # 配信先アドレス一覧
   describe "#send_to" do
     # 公式配信: 有料プランユーザー全員に配信
-    context "when it's an official assignment" do
+    context "when it's an official distribution" do
       it "should be all basic_plan users" do
         free_users = create_list(:user, 3) # NG
         scheduled_users = create_list(:user, 3, :trial_scheduled) # NG
@@ -209,7 +209,7 @@ RSpec.describe Distribution, type: :model do
     end
 
     # カスタム配信: 配信者だけに配信
-    context "when it's a custom assignment" do
+    context "when it's a custom distribution" do
       it "should be email subscribers" do
         basic_users = create_list(:user, 3, :basic)
         free_user = create(:user)

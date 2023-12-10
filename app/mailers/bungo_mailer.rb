@@ -35,7 +35,7 @@ class BungoMailer < ApplicationMailer
 
   def schedule_completed_email
     @user = params[:user]
-    @ba = params[:distribution]
+    @distribution = params[:distribution]
     xsmtp_api_params = { category: 'schedule_completed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
     mail(to: @user.email, subject: "【ブンゴウメール】配信予約が完了しました")

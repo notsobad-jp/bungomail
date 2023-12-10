@@ -1,18 +1,18 @@
 .mb-8
-  = render "page_header", { ba: @ba }
+  = render "page_header", { distribution: @distribution }
 
 .mb-12
   -# 自分が配信オーナー && 配信がまだ未完了
-  - if current_user == @ba.user && @ba.status != "配信終了"
+  - if current_user == @distribution.user && @distribution.status != "配信終了"
     = link_to distribution_path, data: { turbo_method: :delete, turbo_confirm: "この配信を削除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
       %span 配信を削除する
 
   -# 他ユーザーの配信
-  - if current_user && current_user != @ba.user
+  - if current_user && current_user != @distribution.user
     - if @subscription.present?
       = link_to subscription_path(@subscription), data: { turbo_method: :delete, turbo_confirm: "この配信の購読を解除します。本当によろしいですか？" }, local: true, class: "inline-block text-center w-full sm:w-auto px-4 py-2.5 border border-transparent rounded-md text-white bg-red-600 hover:bg-red-700" do
         %span 購読を解除する
-    - elsif @overlapping_assignments.present?
+    - elsif @overlapping_distributions.present?
       .px-4.py-2.rounded.bg-yellow-50.border.border-yellow-500.text-yellow-700
         .flex.items-center.space-x-4
           %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
@@ -22,8 +22,8 @@
             複数配信の同時購読は有料プランへの登録が必要です。
     - else
       .border.rounded.p-4
-        = form_with model: @ba.subscriptions.build, local: true do |f|
-          = f.hidden_field :distribution_id, value: @ba.id
+        = form_with model: @distribution.subscriptions.build, local: true do |f|
+          = f.hidden_field :distribution_id, value: @distribution.id
           .flex.flex-col.sm:flex-row.items-center.space-y-2.sm:space-y-0.sm:space-x-4
             .flex.items-center.mb-2.space-x-4
               %label.flex.items-center.space-x-2
