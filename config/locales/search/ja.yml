@@ -22,3 +22,4 @@ ja:
     books:
       index:
         search_offset: "%{from}〜%{to}件 / 全%{count}件"
+        no_results: （作品がありません）

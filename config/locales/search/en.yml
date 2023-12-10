@@ -21,4 +21,5 @@ en:
       juvenile_version: Juvenile Books
     books:
       index:
+        no_results: (No results)
         search_offset: "Showing %{from} - %{to} of %{count} items"
