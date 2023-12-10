@@ -3,7 +3,7 @@ require 'csv'
 
 class GutenBook < ApplicationRecord
   has_and_belongs_to_many :subjects
-  has_many :book_assignments, as: :book, dependent: :restrict_with_exception
+  has_many :distributions, as: :book, dependent: :restrict_with_exception
   has_many :variants, class_name: 'GutenBook', foreign_key: :canonical_book_id
   belongs_to :canonical, class_name: 'GutenBook', foreign_key: :canonical_book_id, required: false
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_06_052850) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_10_073929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -45,22 +45,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_052850) do
     t.index ["words_count"], name: "index_aozora_books_on_words_count"
   end
 
-  create_table "book_assignments", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "book_id", null: false
-    t.string "book_type", null: false
-    t.date "start_date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "twitter_share_url"
-    t.date "end_date", null: false
-    t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
-    t.uuid "user_id", null: false
-    t.index ["book_id", "book_type"], name: "index_book_assignments_on_book_id_and_book_type"
-    t.index ["end_date"], name: "index_book_assignments_on_end_date"
-    t.index ["start_date"], name: "index_book_assignments_on_start_date"
-    t.index ["user_id"], name: "index_book_assignments_on_user_id"
-  end
-
   create_table "delayed_jobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -76,6 +60,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_052850) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "distributions", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "book_id", null: false
+    t.string "book_type", null: false
+    t.date "start_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "twitter_share_url"
+    t.date "end_date", null: false
+    t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
+    t.uuid "user_id", null: false
+    t.index ["book_id", "book_type"], name: "index_distributions_on_book_id_and_book_type"
+    t.index ["end_date"], name: "index_distributions_on_end_date"
+    t.index ["start_date"], name: "index_distributions_on_start_date"
+    t.index ["user_id"], name: "index_distributions_on_user_id"
+  end
+
   create_table "email_digests", primary_key: "digest", id: :string, force: :cascade do |t|
     t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
@@ -85,7 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_052850) do
   end
 
   create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "book_assignment_id", null: false
+    t.uuid "distribution_id", null: false
     t.uuid "delayed_job_id"
     t.string "title", null: false
     t.text "content", null: false
@@ -93,8 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_052850) do
     t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.text "comment"
-    t.index ["book_assignment_id"], name: "index_feeds_on_book_assignment_id"
     t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
+    t.index ["distribution_id"], name: "index_feeds_on_distribution_id"
   end
 
   create_table "guten_books", force: :cascade do |t|
@@ -139,13 +139,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_052850) do
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
-    t.uuid "book_assignment_id", null: false
+    t.uuid "distribution_id", null: false
     t.string "delivery_method", default: "email", null: false
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.index ["book_assignment_id"], name: "index_subscriptions_on_book_assignment_id"
     t.index ["delivery_method"], name: "index_subscriptions_on_delivery_method"
-    t.index ["user_id", "book_assignment_id"], name: "index_subscriptions_on_user_id_and_book_assignment_id", unique: true
+    t.index ["distribution_id"], name: "index_subscriptions_on_distribution_id"
+    t.index ["user_id", "distribution_id"], name: "index_subscriptions_on_user_id_and_distribution_id", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
@@ -170,12 +170,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_06_052850) do
   end
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
-  add_foreign_key "book_assignments", "users"
-  add_foreign_key "feeds", "book_assignments", on_delete: :cascade
+  add_foreign_key "distributions", "users"
   add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
+  add_foreign_key "feeds", "distributions", on_delete: :cascade
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
-  add_foreign_key "subscriptions", "book_assignments"
+  add_foreign_key "subscriptions", "distributions"
   add_foreign_key "subscriptions", "users"
 end

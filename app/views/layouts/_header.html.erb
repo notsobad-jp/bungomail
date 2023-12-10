@@ -12,7 +12,7 @@
     <div class="hidden sm:block">
       <% if current_user %>
         <div class="flex items-center py-2 space-x-8">
-          <%= link_to "配信管理", book_assignments_path, class: "block text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
+          <%= link_to "配信管理", distributions_path, class: "block text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
           <%= link_to "作品検索", books_path, class: "block text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
 
           <details class="group ml-3 relative">
@@ -91,7 +91,7 @@
             <div class="mt-3 space-y-1">
               <% if current_user %>
                 <%= link_to "アカウント設定", mypage_path, class: "block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
-                <%= link_to "配信管理", book_assignments_path, class: "block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
+                <%= link_to "配信管理", distributions_path, class: "block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
                 <%= link_to "作品検索", books_path, class: "block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
                 <%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
               <% else %>

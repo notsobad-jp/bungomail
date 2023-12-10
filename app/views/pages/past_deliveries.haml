@@ -9,7 +9,7 @@
 
 - colors = %w(red orange yellow olive green teal blue violet purple pink brown black)
 .mb-4.space-y-4
-  - @book_assignments.each do |ba|
+  - @distributions.each do |ba|
     - month = ba.start_date.month
     - end_month = (ba.count - 1).days.since(ba.start_date).month
     .item

@@ -1,0 +1,2 @@
+class DistributionPolicy < ApplicationPolicy
+end

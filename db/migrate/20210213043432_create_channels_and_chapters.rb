@@ -8,7 +8,7 @@ class CreateChannelsAndChapters < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    create_table :book_assignments, id: :uuid do |t|
+    create_table :distributions, id: :uuid do |t|
       t.references :channel, type: :uuid, null: false, foreign_key: true
       t.integer :book_id, null: false
       t.string :book_type, null: false
@@ -16,10 +16,10 @@ class CreateChannelsAndChapters < ActiveRecord::Migration[6.0]
       t.datetime :start_at, null: false
       t.timestamps
     end
-    add_index :book_assignments, [:book_id, :book_type]
+    add_index :distributions, [:book_id, :book_type]
 
     create_table :chapters, id: :uuid do |t|
-      t.references :book_assignment, type: :uuid, null: false, foreign_key: true
+      t.references :distribution, type: :uuid, null: false, foreign_key: true
       t.references :delayed_job, type: :uuid, null: true, foreign_key: true
       t.string :title, null: false
       t.text :content, null: false

@@ -1,11 +1,11 @@
 class Feed < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  belongs_to :book_assignment
+  belongs_to :distribution
   belongs_to :delayed_job, required: false
 
   # 配信日が昨日以前のもの or 配信日が今日ですでに配信時刻を過ぎているもの
-  scope :delivered, -> { Feed.joins(:book_assignment).where("delivery_date < ?", Time.zone.today).or(Feed.joins(:book_assignment).where(delivery_date: Time.zone.today).where("book_assignments.delivery_time < ?", Time.current.strftime("%T"))) }
+  scope :delivered, -> { Feed.joins(:distribution).where("delivery_date < ?", Time.zone.today).or(Feed.joins(:distribution).where(delivery_date: Time.zone.today).where("distributions.delivery_time < ?", Time.current.strftime("%T"))) }
 
   after_destroy do
     self.delayed_job&.delete
@@ -17,7 +17,7 @@ class Feed < ApplicationRecord
   end
 
   def index
-    (delivery_date - book_assignment.start_date).to_i + 1
+    (delivery_date - distribution.start_date).to_i + 1
   end
 
   def schedule
@@ -28,13 +28,13 @@ class Feed < ApplicationRecord
   end
 
   def send_at
-    Time.zone.parse("#{delivery_date.to_s} #{book_assignment.delivery_time}")
+    Time.zone.parse("#{delivery_date.to_s} #{distribution.delivery_time}")
   end
 
   private
 
     def deliver_webpush
-      users = book_assignment.subscriptions.where(delivery_method: :webpush).preload(:user).map(&:user)
+      users = distribution.subscriptions.where(delivery_method: :webpush).preload(:user).map(&:user)
       return if users.blank?
 
       payload_json = JSON.generate(webpush_payload)
@@ -72,7 +72,7 @@ class Feed < ApplicationRecord
 
     def webpush_payload
       {
-        title: "#{book_assignment.book.author_name}『#{book_assignment.book.title}』",
+        title: "#{distribution.book.author_name}『#{distribution.book.title}』",
         body: content.truncate(100),
         icon: "https://bungomail.com/favicon.ico",
         url: feed_url(id, host: host),

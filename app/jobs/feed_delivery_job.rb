@@ -1,5 +1,5 @@
 class FeedDeliveryJob < ApplicationJob
-  queue_as :delivery
+  queue_as :feed_delivery
 
   def perform(feed:)
     feed.deliver

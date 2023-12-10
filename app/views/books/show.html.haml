@@ -12,7 +12,7 @@
       .inline.text-red-600= @book.recommended_duration
       .inline.text-sm ）
 
-= form_with model: @book_assignment, local: true do |f|
+= form_with model: @distribution, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
   = f.hidden_field :book_type, value: 'AozoraBook'
   .mb-8

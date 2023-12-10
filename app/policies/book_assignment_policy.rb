@@ -1,2 +1,0 @@
-class BookAssignmentPolicy < ApplicationPolicy
-end

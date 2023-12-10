@@ -1,4 +1,4 @@
-（<%= "#{@feed.index}/#{@feed.book_assignment.count}。#{ @word_count.to_s(:delimited) }字。目安の読了時間：#{ @word_count.quo(500).ceil }分" %>）
+（<%= "#{@feed.index}/#{@feed.distribution.count}。#{ @word_count.to_s(:delimited) }字。目安の読了時間：#{ @word_count.quo(500).ceil }分" %>）
 
 <%= simple_format @feed.content.gsub(/(\r\n|\r|\n)/, "<br />") %>
 
@@ -10,7 +10,7 @@
 <% if @owner.admin? %>
   <br />=========================<br />
   ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　<br />
-  <%= link_to(nil, @feed.book_assignment.twitter_share_url || "https://bit.ly/3wh90Ee") %><br />
+  <%= link_to(nil, @feed.distribution.twitter_share_url || "https://bit.ly/3wh90Ee") %><br />
   <br />
   ■Twitterでみんなの感想を見る：<%= link_to(nil, "https://goo.gl/rgfoDv") %><br />
   ■ブンゴウメール公式サイト：<%= link_to(nil, "https://bungomail.com") %><br />
