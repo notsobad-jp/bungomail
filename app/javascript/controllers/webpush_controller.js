@@ -23,7 +23,7 @@ export default class extends Controller {
         userVisibleOnly: true,
         applicationServerKey: new Uint8Array(atob(this.vapidValue.replace(/_/g, '/').replace(/-/g, '+')).split("").map((char) => char.charCodeAt(0)))
       })
-      await sendSubscriptionToServer(subscription.toJSON());
+      // await sendSubscriptionToServer(subscription.toJSON());
       alert("通知設定が完了しました！")
       location.reload();
     } catch (error) {
@@ -45,12 +45,12 @@ export default class extends Controller {
       p256dh: null,
       auth: null
     }
-    await sendSubscriptionToServer(params);
+    // await sendSubscriptionToServer(params);
     alert("通知設定を解除しました！")
     location.reload();
   }
 
-  sendSubscriptionToServer(params) {
+  async sendSubscriptionToServer(params) {
     return
     // const csrfToken = document.getElementsByName("csrf-token")[0].content;
 
