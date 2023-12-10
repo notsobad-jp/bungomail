@@ -5,7 +5,7 @@ export default class extends Controller {
     vapid: String
   }
 
-  async subscribe(event) {
+  async subscribe() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
       alert("申し訳ありませんがお使いのブラウザではプッシュ通知がサポートされていないようです。。")
       return;
@@ -21,10 +21,9 @@ export default class extends Controller {
       const serviceWorkerRegistration = await navigator.serviceWorker.ready;
       const subscription = await serviceWorkerRegistration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: new Uint8Array(this.vapidValue)
+        applicationServerKey: new Uint8Array(atob(this.vapidValue.replace(/_/g, '/').replace(/-/g, '+')).split("").map((char) => char.charCodeAt(0)))
       })
-      const response = await sendSubscriptionToServer(subscription.toJSON());
-      console.log(response.status + ':' + response.statusText);
+      await sendSubscriptionToServer(subscription.toJSON());
       alert("通知設定が完了しました！")
       location.reload();
     } catch (error) {
@@ -34,11 +33,35 @@ export default class extends Controller {
     }
   }
 
-  unsubscribe(event) {
-    console.log("unsubscribe")
+  async unsubscribe() {
+    const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+    const subscription = await serviceWorkerRegistration.pushManager.getSubscription();
+    if(subscription) {
+      await subscription.unsubscribe();
+    }
+
+    const params = {
+      endpoint: null,
+      p256dh: null,
+      auth: null
+    }
+    await sendSubscriptionToServer(params);
+    alert("通知設定を解除しました！")
+    location.reload();
   }
 
-  sendSubscriptionToServer() {
-    return;
+  sendSubscriptionToServer(params) {
+    return
+    // const csrfToken = document.getElementsByName("csrf-token")[0].content;
+
+    // return fetch('/user', {
+    //   method: 'PATCH',
+    //   headers: {
+    //     "X-CSRF-Token": csrfToken,
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(params)
+    // })
   }
 }
