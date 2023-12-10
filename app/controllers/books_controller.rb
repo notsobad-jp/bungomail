@@ -1,6 +1,12 @@
 class BooksController < ApplicationController
   def index
-    @books = AozoraBook.where.not(words_count: 0).where(rights_reserved: false).where.not(category_id: nil).where(canonical_book_id: nil).sorted.order(:words_count).page(params[:page]).per(50)
+    @keyword = params[:keyword]
+    @category = params[:category]
+    query = AozoraBook.where.not(words_count: 0).where(rights_reserved: false).where.not(category_id: nil).where(canonical_book_id: nil)
+    query = query.where("author LIKE ? OR title LIKE ?", "%#{@keyword}%", "%#{@keyword}%") if @keyword
+    query = query.where(category_id: @category) if @category && @category != 'all'
+    @books = query.sorted.order(:words_count).page(params[:page]).per(50)
+
     @meta_title = "配信する作品を探す"
     @meta_noindex = true
   end

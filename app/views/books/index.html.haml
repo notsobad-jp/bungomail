@@ -1,8 +1,12 @@
 .mb-4
   %h1.font-bold.text-xl.sm:text-2xl.mb-2
     = @meta_title
-  .text-sm
-    %p= @search_page_description
+
+.mb-12
+  = form_with url: books_path, method: :get, local: true, class: "flex flex-col sm:flex-row items-center space-x-0 sm:space-x-2 space-y-2 sm:space-y-0" do |f|
+    = f.text_field :keyword, value: @keyword, class: 'w-full border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500', placeholder: "作品名または著者名"
+    = f.select :category, AozoraBook::CATEGORIES.map{|m| [m[1][:name], m[0]] }, { selected: @category }, class: 'w-full sm:w-auto border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500'
+    = f.submit "検索", class: 'flex-1 rounded block w-full py-3 px-4 bg-blue-600 text-white text-sm hover:opacity-75'
 
 .flex.justify-between.items-end.mb-4
   .text-xs
