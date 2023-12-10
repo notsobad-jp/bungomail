@@ -1,0 +1,21 @@
+ja:
+  search:
+    defaults:
+      bungo_search: ブンゴウサーチ
+      bungo_mail: ブンゴウメール
+      title: 作品名
+      author: 著者
+      words_count: 文字数
+      words: 文字
+      popularity: 人気
+      beginning: 書き出し
+      minutes_to_read: 読了時間
+      published_at: 初出
+      source: 底本
+      character_type: 表記
+      search: 検索
+      about_this_site: このサイトについて
+      items: 件
+      juvenile_books: 児童書
+      normal_version: 通常版
+      juvenile_version: 児童書版
