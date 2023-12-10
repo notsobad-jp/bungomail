@@ -61,7 +61,7 @@ RSpec.describe Distribution, type: :model do
           it "should not be valid" do
             ba = build(:distribution, user: distribution.user, book: distribution.book, start_date: Time.zone.today, end_date: Time.zone.today.next_month)
             expect(ba.valid?).to be_falsy
-            expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
+            expect(ba.errors[:base]).to include("購読済みの他の配信と期間が重複しています")
           end
         end
 
@@ -70,7 +70,7 @@ RSpec.describe Distribution, type: :model do
           it "should not be valid" do
             ba = build(:distribution, user: distribution.user, book: distribution.book, start_date: Time.zone.today.next_month, end_date: Time.zone.today.next_month + 29)
             expect(ba.valid?).to be_falsy
-            expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
+            expect(ba.errors[:base]).to include("購読済みの他の配信と期間が重複しています")
           end
         end
 
@@ -79,7 +79,7 @@ RSpec.describe Distribution, type: :model do
           it "should not be valid" do
             ba = build(:distribution, user: distribution.user, book: distribution.book, start_date: Time.zone.today, end_date: Time.zone.today + 50)
             expect(ba.valid?).to be_falsy
-            expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
+            expect(ba.errors[:base]).to include("購読済みの他の配信と期間が重複しています")
           end
         end
 
@@ -88,7 +88,7 @@ RSpec.describe Distribution, type: :model do
           it "should not be valid" do
             ba = build(:distribution, user: distribution.user, book: distribution.book, start_date: Time.zone.today.next_month.beginning_of_month + 2, end_date: Time.zone.today.next_month.beginning_of_month + 12)
             expect(ba.valid?).to be_falsy
-            expect(ba.errors[:base]).to include("予約済みの配信と期間が重複しています")
+            expect(ba.errors[:base]).to include("購読済みの他の配信と期間が重複しています")
           end
         end
 
@@ -98,7 +98,7 @@ RSpec.describe Distribution, type: :model do
             ba1 = create(:distribution, user: distribution.user, book: distribution.book, start_date: Time.zone.today, end_date: Time.zone.today)
             ba2 = build(:distribution, user: distribution.user, book: distribution.book, start_date: Time.zone.today, end_date: Time.zone.today)
             expect(ba2.valid?).to be_falsy
-            expect(ba2.errors[:base]).to include("予約済みの配信と期間が重複しています")
+            expect(ba2.errors[:base]).to include("購読済みの他の配信と期間が重複しています")
           end
         end
       end
