@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :books, only: [:index, :show]
-  resources :book_assignments, shallow: true do
+  resources :distributions, shallow: true do
     resources :feeds
   end
   resources :magic_tokens

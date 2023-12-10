@@ -1,2 +1,2 @@
-class BookAssignmentPolicy < ApplicationPolicy
+class DistributionPolicy < ApplicationPolicy
 end

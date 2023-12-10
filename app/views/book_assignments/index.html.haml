@@ -10,18 +10,18 @@
       %div{class: "border-b border-gray-200"}
         %nav{class: "-mb-px flex space-x-8", 'aria-label': "Tabs"}
           - if params[:finished].present?
-            = link_to "配信中/配信予定", book_assignments_path, class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
+            = link_to "配信中/配信予定", distributions_path, class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
             %a{href: "#", class: "border-indigo-500 text-indigo-600 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium", 'aria-current': "page"} 配信終了
           - else
             %a{href: "#", class: "border-indigo-500 text-indigo-600 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium", 'aria-current': "page"} 配信中/配信予定
-            = link_to "配信終了", book_assignments_path(finished: true), class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
+            = link_to "配信終了", distributions_path(finished: true), class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
 
   .mt-4
-    - if @book_assignments.present?
+    - if @distributions.present?
       %ul.mb-8
-        - @book_assignments.each do |ba|
+        - @distributions.each do |ba|
           %li
-            = link_to book_assignment_path(ba), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
+            = link_to distribution_path(ba), class: "flex justify-between space-x-4 items-center hover:bg-gray-50 px-2 py-3" do
               .space-y-1
                 .flex.space-x-1.items-center
                   .font-bold= ba.book.author_and_book_name
@@ -34,7 +34,7 @@
               %div
                 %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500")
                   %path(stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5")
-      = paginate @book_assignments
+      = paginate @distributions
 
     - else
       %div.text-gray-500

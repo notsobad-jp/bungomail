@@ -14,6 +14,6 @@ class CreateChannelProfiles < ActiveRecord::Migration[6.0]
     end
     add_foreign_key :channel_profiles, :channels, column: :id
 
-    add_index :book_assignments, :start_at
+    add_index :distributions, :start_at
   end
 end

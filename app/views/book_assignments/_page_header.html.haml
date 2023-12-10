@@ -2,7 +2,7 @@
 %div
   %div(class="mb-4 flex flex-col items-start flex-wrap space-y-2")
     %h1(class="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight")
-      = link_to_if !current_page?(book_assignment_path(ba)), ba.book.author_and_book_name, book_assignment_path(ba)
+      = link_to_if !current_page?(distribution_path(ba)), ba.book.author_and_book_name, distribution_path(ba)
     %span(class="inline-flex items-center rounded-full bg-#{ba.status_color}-100 px-2.5 py-0.5 text-xs font-medium text-#{ba.status_color}-800")
       = ba.status
 

@@ -6,7 +6,7 @@ RSpec.describe Feed, type: :model do
   end
 
   describe "index" do
-    let(:ba) { create(:book_assignment, :with_book) }
+    let(:ba) { create(:distribution, :with_book) }
 
     it "should return correct index" do
       ba.create_feeds
@@ -18,8 +18,8 @@ RSpec.describe Feed, type: :model do
   end
 
   describe "send_at" do
-    let(:ba) { build(:book_assignment, delivery_time: "07:00:00") }
-    let(:feed) { build(:feed, delivery_date: Time.zone.today, book_assignment: ba) }
+    let(:ba) { build(:distribution, delivery_time: "07:00:00") }
+    let(:feed) { build(:feed, delivery_date: Time.zone.today, distribution: ba) }
 
     it "should return datetime with scheduled hour" do
       expect(feed.send_at).to eq(Time.current.change(hour: 7))
@@ -28,8 +28,8 @@ RSpec.describe Feed, type: :model do
 
   describe "schedule" do
     context "when send_at already passed" do
-      let(:ba) { create(:book_assignment, :with_book, :with_subscription) }
-      let(:feed) { build(:feed, book_assignment: ba, delivery_date: Time.zone.yesterday) }
+      let(:ba) { create(:distribution, :with_book, :with_subscription) }
+      let(:feed) { build(:feed, distribution: ba, delivery_date: Time.zone.yesterday) }
 
       it "should return without enqueueing" do
         res = feed.schedule
@@ -39,8 +39,8 @@ RSpec.describe Feed, type: :model do
     end
 
     context "when send_at not passed yet" do
-      let(:ba) { create(:book_assignment, :with_book, :with_subscription, delivery_time: "10:00:00") }
-      let(:feed) { create(:feed, delivery_date: Time.zone.tomorrow, book_assignment: ba) }
+      let(:ba) { create(:distribution, :with_book, :with_subscription, delivery_time: "10:00:00") }
+      let(:feed) { create(:feed, delivery_date: Time.zone.tomorrow, distribution: ba) }
 
       it "should enqueue the job" do
         feed.schedule
@@ -55,14 +55,14 @@ RSpec.describe Feed, type: :model do
   end
 
   describe "scope: :delivered" do
-    let(:ba1) { create(:book_assignment, :with_book, delivery_time: Time.current.ago(1.minute).strftime("%T")) }
-    let(:ba2) { create(:book_assignment, book_id: ba1.book_id, delivery_time: Time.current.since(1.minute).strftime("%T")) }
+    let(:ba1) { create(:distribution, :with_book, delivery_time: Time.current.ago(1.minute).strftime("%T")) }
+    let(:ba2) { create(:distribution, book_id: ba1.book_id, delivery_time: Time.current.since(1.minute).strftime("%T")) }
 
     it "should include right records" do
-      feed1 = create(:feed, book_assignment_id: ba1.id, delivery_date: Time.zone.yesterday)  # 日付が昨日: 対象
-      feed2 = create(:feed, book_assignment_id: ba1.id, delivery_date: Time.zone.tomorrow) # 日付が明日: 対象外
-      feed3 = create(:feed, book_assignment_id: ba1.id, delivery_date: Time.zone.today) # 日付が今日で時間が過ぎてる: 対象
-      feed4 = create(:feed, book_assignment_id: ba2.id, delivery_date: Time.zone.today) # 日付が今日で時間が過ぎていない: 対象外
+      feed1 = create(:feed, distribution_id: ba1.id, delivery_date: Time.zone.yesterday)  # 日付が昨日: 対象
+      feed2 = create(:feed, distribution_id: ba1.id, delivery_date: Time.zone.tomorrow) # 日付が明日: 対象外
+      feed3 = create(:feed, distribution_id: ba1.id, delivery_date: Time.zone.today) # 日付が今日で時間が過ぎてる: 対象
+      feed4 = create(:feed, distribution_id: ba2.id, delivery_date: Time.zone.today) # 日付が今日で時間が過ぎていない: 対象外
 
       expect(Feed.delivered.length).to eq(2)
       expect(Feed.delivered.to_a).to eq([feed1, feed3])
