@@ -2,8 +2,7 @@ module SearchHelper
   def access_count_stars(star_count)
     content_tag(:span) do
       1.upto(3) do |i|
-        outline = (star_count >= i) ? 'fas' : 'far' # farがoutline
-        concat content_tag(:i, '', class: "fa-star yellow #{outline}")
+        concat content_tag(:span, star_count >= i ? '★' : '☆', class: "text-yellow-500")
       end
     end
   end

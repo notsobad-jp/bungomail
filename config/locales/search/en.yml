@@ -19,3 +19,6 @@ en:
       juvenile_books: Juvenile Books
       normal_version: Normal Books
       juvenile_version: Juvenile Books
+    books:
+      index:
+        search_offset: "Showing %{from} - %{to} of %{count} items"

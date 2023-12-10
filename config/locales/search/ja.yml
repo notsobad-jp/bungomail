@@ -19,3 +19,6 @@ ja:
       juvenile_books: 児童書
       normal_version: 通常版
       juvenile_version: 児童書版
+    books:
+      index:
+        search_offset: "%{from}〜%{to}件 / 全%{count}件"

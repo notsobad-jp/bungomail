@@ -1,6 +1,7 @@
 class BooksController < ApplicationController
   def index
-    @books = AozoraBook.where.not(words_count: 0).where.not(category_id: nil).where(canonical_book_id: nil).sorted.order(:words_count).page(params[:page]).per(50)
+    @books = AozoraBook.where.not(words_count: 0).where(rights_reserved: false).where.not(category_id: nil).where(canonical_book_id: nil).sorted.order(:words_count).page(params[:page]).per(50)
+    @meta_title = "配信する作品を探す"
     @meta_noindex = true
   end
 
