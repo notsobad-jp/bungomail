@@ -1,4 +1,6 @@
 class BooksController < ApplicationController
+  before_action :require_login, only: [:index]
+
   def index
     @keyword = params[:keyword]
     @category = params[:category]
@@ -22,8 +24,10 @@ class BooksController < ApplicationController
     )
 
     @meta_title = @book.title
-    @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
+    @meta_noindex = true
+    @breadcrumbs = [ {text: '作品検索', link: books_path}, {text: @meta_title} ]
 
+    # ブンゴウサーチから来たユーザーが見れるように、未ログインでも警告付きで画面表示する
     flash[:warning] = "カスタム配信の利用には、有料プランのアカウントでログインする必要があります." if !current_user
   end
 end
