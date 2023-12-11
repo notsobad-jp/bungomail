@@ -39,6 +39,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # 今のところプッシュ通知の更新にしか使ってない
   def update
     current_user.update!(
       webpush_endpoint: params[:endpoint],
