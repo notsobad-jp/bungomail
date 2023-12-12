@@ -19,9 +19,10 @@ class MagicTokensController < ApplicationController
   def auth
     @token = params[:token]
     @user = User.load_from_magic_login_token(params[:token])
-    return not_authenticated if @user.blank?
+    return redirect_to login_path, flash: { error: 'ログインに失敗しました。。もう一度メール送信をお試しください。' } unless @user
 
     auto_login(@user)
+    @user.clear_magic_login_token!
     flash[:success] = 'ログインしました！'
     redirect_to mypage_path
   end
