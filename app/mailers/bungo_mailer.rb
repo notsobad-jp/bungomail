@@ -16,12 +16,13 @@ class BungoMailer < ApplicationMailer
   end
 
   def magic_login_email
-    @user = params[:user]
-    @url  = URI.join(root_url, "/auth?token=#{@user.magic_login_token}")
+    user = params[:user]
+    @url  = URI.join(root_url, "/auth?token=#{user.magic_login_token}")
+    @token = user.magic_login_token
 
     xsmtp_api_params = { category: 'login' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
-    mail(to: @user.email, subject: '【ブンゴウメール】ログイン用URL')
+    mail(to: user.email, subject: '【ブンゴウメール】ログイン用URL')
   end
 
   def schedule_canceled_email
