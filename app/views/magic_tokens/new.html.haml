@@ -1,19 +1,33 @@
-.mb-4
-  %h1.text-lg.font-bold
-    ログイン
+.mb-8
+  .mb-4
+    %h1.text-lg.font-bold
+      メールでログイン
 
-.mb-4
-  = form_with(url: magic_tokens_path, local: true, class: 'flex flex-col sm:flex-row') do |f|
-    = f.email_field :email, class: "p-2 flex-1 rounded-l rounded-r sm:rounded-r-none border sm:border-r-0 mb-2 sm:mb-0 #{flash[:error] ? 'border-red-500' : ''}", placeholder: 'メールアドレス', required: true
-    = button_tag type: 'submit', class: 'bg-indigo-600 border border-indigo-600 rounded-l sm:rounded-l-none rounded-r text-white px-6 py-2' do
-      送信
+  .mb-4
+    = form_with(url: magic_tokens_path, local: true, class: 'flex flex-col sm:flex-row') do |f|
+      = f.email_field :email, class: "p-2 flex-1 rounded-l rounded-r sm:rounded-r-none border sm:border-r-0 mb-2 sm:mb-0 #{flash[:error] ? 'border-red-500' : ''}", placeholder: 'メールアドレス', required: true
+      = button_tag type: 'submit', class: 'bg-indigo-600 border border-indigo-600 rounded-l sm:rounded-l-none rounded-r text-white px-6 py-2' do
+        送信
 
-.mb-4
-  .text-xs.block 入力したアドレスにログイン用URLを送信します。
+  .mb-4
+    .text-xs.block 入力したアドレスにログイン用URLを送信します。
 
-.mb-4
-  .flex.items-center.text-sm
-    %svg(class="w-4 h-4" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
-      %path(d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z")
-    = link_to signup_path, class: 'text-link' do
-      新規登録はこちら
+  .mb-4
+    .flex.items-center.text-sm
+      %svg(class="w-4 h-4" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
+        %path(d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z")
+      = link_to signup_path, class: 'text-link' do
+        新規登録はこちら
+
+%hr.mb-8
+
+%div
+  .mb-4
+    %h3.font-bold.mb-2 ワンタイムトークンでログイン
+    %small.text-sm.text-gray-500
+      ログイン用URLからログインできない場合などは、メールに記載されているワンタイムトークンをこちらに入力してください。
+  .mb-4
+    = form_with url: auth_path, method: :get, local: true, class: 'flex flex-col items-justify sm:items-center sm:flex-row' do |f|
+      = f.text_field :token, class: "p-2 flex-1 rounded-l rounded-r sm:rounded-r-none border sm:border-r-0 mb-2 sm:mb-0", placeholder: 'ワンタイムトークン', required: true
+      = button_tag type: 'submit', class: 'bg-indigo-600 border border-indigo-600 rounded-l sm:rounded-l-none rounded-r text-white px-6 py-2' do
+        ログイン
