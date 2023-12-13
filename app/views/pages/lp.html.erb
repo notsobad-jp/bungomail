@@ -287,7 +287,13 @@
         <p class="mt-4 flex items-baseline gap-x-2">
           <span class="text-5xl font-bold tracking-tight text-gray-900">無料</span>
         </p>
-        <p class="mt-6 text-base leading-7 text-gray-600">まずはプッシュ通知でお手軽に</p>
+        <p class="mt-6 text-base leading-7 text-gray-600">まずはプッシュ通知でお手軽に。</p>
+        <%= link_to "https://notsobad-jp.notion.site/f6c990a1d8e24ce8834de7149d7d204d", target: :_blank, class: "text-link flex items-center space-x-2 mt-4" do %>
+          <span>無料プランでできること</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        <% end %>
         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10">
           <li class="flex items-end gap-x-3">
             <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -325,7 +331,8 @@
             </div>
           </li>
         </ul>
-        <%= link_to signup_path, class: "mt-8 block rounded-md py-3 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10 bg-indigo-600 text-white shadow hover:opacity-50" do %>
+
+        <%= link_to signup_path, class: "mt-8 sm:mt-10 block rounded-md py-3 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:opacity-50" do %>
           アカウント登録（無料）
         <% end %>
         <div class="text-xs text-gray-500 mt-4">
@@ -341,6 +348,12 @@
           <span class="text-base text-gray-500 text-sm">（税込385円）</span>
         </p>
         <p class="mt-6 text-base leading-7 text-gray-600">もっと読みたくなったらこちら！</p>
+        <%= link_to "https://notsobad-jp.notion.site/75a146a71aff49e590e8aef928142af7", target: :_blank, class: "text-link flex items-center space-x-2 mt-4" do %>
+          <span>有料プランでできること</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        <% end %>
         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10">
           <li class="flex items-end gap-x-3">
             <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -559,6 +572,15 @@
           </dd>
         </div>
       </dl>
+    </div>
+
+    <div class="mt-12">
+      <%= link_to "https://notsobad-jp.notion.site/notsobad-jp/167de8560b3c4860afc6f64e51f22371", target: :_blank, class: "text-link flex items-center justify-center space-x-2" do %>
+        <span>ブンゴウメール公式ガイドを見る</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        </svg>
+      <% end %>
     </div>
   </div>
 </div>
