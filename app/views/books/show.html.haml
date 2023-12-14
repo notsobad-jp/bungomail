@@ -1,3 +1,9 @@
+- if request.referer
+  = link_to :back, class: 'text-link flex items-center space-x-1 mb-4' do
+    %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
+      %path(stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5")
+    %span 一覧に戻る
+
 .mb-4
   %h1(class="mb-2 text-xl sm:text-2xl font-bold")
     = @book.title
