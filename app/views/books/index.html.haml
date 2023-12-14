@@ -1,6 +1,8 @@
 .mb-4
-  %h1.font-bold.text-xl.sm:text-2xl.mb-2
-    配信する作品を検索する
+  %h1.font-bold.text-xl.sm:text-2xl.mb-2.flex.items-center.space-x-2
+    %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
+      %path(stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z")
+    %span 配信する作品を検索する
 
 .mb-12
   = form_with url: books_path, method: :get, local: true, class: "flex flex-col sm:flex-row items-center space-x-0 sm:space-x-2 space-y-2 sm:space-y-0" do |f|
