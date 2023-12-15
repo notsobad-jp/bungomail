@@ -12,8 +12,15 @@
     <div class="hidden sm:block">
       <% if current_user %>
         <div class="flex items-center py-2 space-x-8">
-          <%= link_to "配信管理", distributions_path, class: "block text-sm text-gray-700 hover:opacity-75", role: 'menuitem', tabindex: -1 %>
-          <%= link_to "作品検索", books_path, class: "block text-sm text-gray-700 hover:opacity-75", role: 'menuitem', tabindex: -1 %>
+          <%= link_to distributions_path, class: "block text-sm text-gray-700 hover:opacity-75", role: 'menuitem', tabindex: -1 do %>
+            <span>購読済みの配信</span>
+          <% end %>
+          <%= link_to books_path, class: "block text-sm px-4 py-2.5 rounded-md bg-indigo-600 text-white hover:opacity-75 flex items-center space-x-1", role: 'menuitem', tabindex: -1 do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span>新規配信を作成する</span>
+          <% end %>
 
           <details class="group ml-3 relative">
             <!-- Profile -->
