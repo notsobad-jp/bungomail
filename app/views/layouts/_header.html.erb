@@ -48,7 +48,12 @@
             <!-- Dropdown Menu -->
             <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
               <%= link_to "アカウント設定", mypage_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
-              <%= link_to "使い方", "https://notsobad-jp.notion.site/notsobad-jp/167de8560b3c4860afc6f64e51f22371", class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1, target: :_blank %>
+              <%= link_to "https://notsobad-jp.notion.site/notsobad-jp/167de8560b3c4860afc6f64e51f22371", class: "flex items-center space-x-1 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1, target: :_blank do %>
+                <span>使い方</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+              <% end %>
               <%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
             </div>
           </details>
@@ -57,7 +62,12 @@
         <div class="flex items-center py-2 space-x-8">
           <%= link_to "ログイン", login_path, class: "block text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1 %>
           <%= link_to "アカウント登録", signup_path, class: "block rounded-md py-3 px-4 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:bg-indigo-500", role: 'menuitem', tabindex: -1 %>
-          <%= link_to "使い方", "https://notsobad-jp.notion.site/notsobad-jp/167de8560b3c4860afc6f64e51f22371", class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1, target: :_blank %>
+          <%= link_to "https://notsobad-jp.notion.site/notsobad-jp/167de8560b3c4860afc6f64e51f22371", class: "flex items-center space-x-1 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: 'menuitem', tabindex: -1, target: :_blank do %>
+            <span>使い方</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+          <% end %>
         </div>
       <% end %>
     </div>
