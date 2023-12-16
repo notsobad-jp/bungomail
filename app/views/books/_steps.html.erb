@@ -16,8 +16,6 @@
             <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2
               <% if active_step == i %>
                 border-indigo-600
-              <% elsif active_step > i %>
-                border-indigo-600 bg-indigo-600
               <% else %>
                 border-gray-300
               <% end %>
@@ -25,7 +23,7 @@
               <% if active_step == i %>
                 <span class="text-indigo-600"><%= format("%02d", i) %></span>
               <% elsif active_step > i %>
-                <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg class="h-6 w-6 text-gray-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
                 </svg>
               <% else %>
@@ -35,8 +33,6 @@
             <span class="ml-4 text-sm font-medium
               <% if active_step == i %>
                 text-indigo-600
-              <% elsif active_step > i %>
-                text-gray-900
               <% else %>
                 text-gray-500
               <% end %>
