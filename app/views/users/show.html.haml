@@ -37,14 +37,6 @@
         %li お支払履歴の確認
         %li お支払いの停止（キャンセル）
 
-.mb-12
-  %h5.font-bold.text-lg.mb-4.pb-2.border-b
-    カスタム配信
-
-  .text-gray-500
-    = link_to "配信管理", distributions_path, class: "text-link"
-    メニューに移動しました。
-
 .mb-12(data-controller="webpush" data-webpush-vapid-value="#{Rails.application.credentials.dig(:vapid, :public_key)}")
   %h5.font-bold.text-lg.mb-4.pb-2.border-b
     プッシュ通知の設定

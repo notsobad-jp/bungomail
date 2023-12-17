@@ -35,7 +35,7 @@
       = paginate @distributions
 
     - else
-      %div.text-gray-500
+      %div.text-gray-500.py-4
         データがありません。
-        = link_to "作品検索", books_path, class: "text-link"
-        ページで好きな作品を探して配信を予約してください。
+        = link_to "新規配信の作成", books_path, class: "text-link"
+        から、好きな作品を探して配信を予約してください。
