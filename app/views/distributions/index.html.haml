@@ -1,8 +1,6 @@
 .mb-8
-  %h1.text-lg.font-bold.mb-4.flex.items-center
-    %svg(class="w-6 h-6 mt-1 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor")
-      %path(stroke-linecap="round" stroke-linejoin="round" d="M12.75 19.5v-.75a7.5 7.5 0 00-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z")
-    配信管理
+  %h1.font-bold.text-xl.sm:text-2xl
+    購読済みの配信
 
 .mb-12
   %div
@@ -37,7 +35,7 @@
       = paginate @distributions
 
     - else
-      %div.text-gray-500
+      %div.text-gray-500.py-4
         データがありません。
-        = link_to "作品検索", books_path, class: "text-link"
-        ページで好きな作品を探して配信を予約してください。
+        = link_to "新規配信の作成", books_path, class: "text-link"
+        から、好きな作品を探して配信を予約してください。

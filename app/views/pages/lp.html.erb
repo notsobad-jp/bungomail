@@ -1,4 +1,4 @@
-<div style="background-image: url('/assets/images/seigaiha.png')">
+<div class="border-b border-gray-100" style="background-image: url('/assets/images/seigaiha.png')">
   <!-- Header -->
   <%= render partial: 'layouts/header' %>
 
@@ -8,6 +8,13 @@
     <% if flash.present? %>
       <div class="mx-auto max-w-7xl px-6">
         <%= render partial: 'layouts/flash', locals: { style: '' } %>
+      </div>
+    <% else %>
+      <div class="bg-orange-50 py-2.5 border-t border-b border-orange-800">
+        <div class="mx-auto max-w-7xl px-6 text-orange-900">
+            <span class="rounded px-2 py-0.5 bg-orange-700 text-white mr-2 text-xs">NEWS</span>
+            NHK「ニュースシブ5時」でブンゴウメールが紹介されました 🎉
+        </div>
       </div>
     <% end %>
 
@@ -48,27 +55,7 @@
   </div>
 </div>
 
-<!-- Banner -->
-<div class="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 py-2.5 px-6 sm:px-3.5 sm:before:flex-1">
-  <svg viewBox="0 0 577 310" aria-hidden="true" class="absolute top-1/2 left-[max(-7rem,calc(50%-52rem))] -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl">
-    <path id="558b8b01-4d09-4091-8be3-c5da192b7892" fill="url(#4b688345-001e-47fa-aa7a-d561812ecf15)" fill-opacity=".3" d="m142.787 168.697-75.331 62.132L.016 88.702l142.771 79.995 135.671-111.9c-16.495 64.083-23.088 173.257 82.496 97.291C492.935 59.13 494.936-54.366 549.339 30.385c43.523 67.8 24.892 159.548 10.136 196.946l-128.493-95.28-36.628 177.599-251.567-140.953Z" />
-    <defs>
-      <linearGradient id="4b688345-001e-47fa-aa7a-d561812ecf15" x1="614.778" x2="-42.453" y1="26.617" y2="96.115" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#9089FC" />
-        <stop offset="1" stop-color="#FF80B5" />
-      </linearGradient>
-    </defs>
-  </svg>
-  <svg viewBox="0 0 577 310" aria-hidden="true" class="absolute top-1/2 left-[max(45rem,calc(50%+8rem))] -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl">
-    <use href="#558b8b01-4d09-4091-8be3-c5da192b7892" />
-  </svg>
-  <p class="w-full text-center text-sm leading-6 text-gray-900">
-    <span class="rounded px-2 py-0.5 bg-orange-700 text-white mr-2 text-xs">NEWS</span>
-    NHK「ニュースシブ5時」でブンゴウメールが紹介されました 🎉
-  </p>
-</div>
-
-<!-- Features -->
+<!-- Overview -->
 <div class="bg-white py-24 sm:py-32">
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div class="mx-auto max-w-2xl lg:max-w-none">
@@ -300,7 +287,13 @@
         <p class="mt-4 flex items-baseline gap-x-2">
           <span class="text-5xl font-bold tracking-tight text-gray-900">無料</span>
         </p>
-        <p class="mt-6 text-base leading-7 text-gray-600">まずはプッシュ通知でお手軽に</p>
+        <p class="mt-6 text-base leading-7 text-gray-600">まずはプッシュ通知でお手軽に。</p>
+        <%= link_to "https://notsobad-jp.notion.site/f6c990a1d8e24ce8834de7149d7d204d", target: :_blank, class: "text-link flex items-center space-x-2 mt-4" do %>
+          <span>無料プランでできること</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        <% end %>
         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10">
           <li class="flex items-end gap-x-3">
             <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -338,7 +331,8 @@
             </div>
           </li>
         </ul>
-        <%= link_to signup_path, class: "mt-8 block rounded-md py-3 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10 bg-indigo-600 text-white shadow hover:opacity-50" do %>
+
+        <%= link_to signup_path, class: "mt-8 sm:mt-10 block rounded-md py-3 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-indigo-600 text-white shadow hover:opacity-50" do %>
           アカウント登録（無料）
         <% end %>
         <div class="text-xs text-gray-500 mt-4">
@@ -354,6 +348,12 @@
           <span class="text-base text-gray-500 text-sm">（税込385円）</span>
         </p>
         <p class="mt-6 text-base leading-7 text-gray-600">もっと読みたくなったらこちら！</p>
+        <%= link_to "https://notsobad-jp.notion.site/75a146a71aff49e590e8aef928142af7", target: :_blank, class: "text-link flex items-center space-x-2 mt-4" do %>
+          <span>有料プランでできること</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        <% end %>
         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10">
           <li class="flex items-end gap-x-3">
             <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -572,6 +572,15 @@
           </dd>
         </div>
       </dl>
+    </div>
+
+    <div class="mt-12">
+      <%= link_to "https://notsobad-jp.notion.site/notsobad-jp/167de8560b3c4860afc6f64e51f22371", target: :_blank, class: "text-link flex items-center justify-center space-x-2" do %>
+        <span>使い方ガイドを見る</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        </svg>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,9 +1,15 @@
 .mb-4
+  = render "header", active_step: 2
+
+%div(class="mb-12 text-sm text-gray-500")
+  %p 配信する期間や時間などを登録して、配信を予約してください。
+
+.mb-4
   %h1(class="mb-2 text-xl sm:text-2xl font-bold")
     = @book.title
   .text-gray-500.text-large
     = @book.author
-.mb-8
+.mb-12
   .border.rounded.bg-gray-50.p-2
     = @book.words_count.to_s(:delimited)
     %small.text-xs 文字
@@ -15,23 +21,23 @@
 = form_with model: @distribution, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
   = f.hidden_field :book_type, value: 'AozoraBook'
-  .mb-8
-    .mb-4
+  .mb-12
+    .mb-8
       %h5.mb-2.font-bold 配信期間
       %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")
         = f.date_field :start_date, min: Date.current.tomorrow, required: true, class: 'border border-gray-200 rounded p-2 flex-1'
-        .text-center 〜
+        %div(class="text-center rotate-90 sm:rotate-0") 〜
         = f.date_field :end_date, min: Date.current.tomorrow, max: Date.tomorrow.since(12.months), required: true, class: 'border border-gray-200 rounded p-2 flex-1'
       %small.text-xs ※配信予約は最長で12ヶ月先までです
-    .mb-4
+    .mb-8
       %h5.mb-2.font-bold 配信時間
       = f.time_field :delivery_time, class: 'border border-gray-200 rounded w-full p-2', placeholder: '07:00', min: '05:00', max: '23:00'
       %small.text-xs ※配信時間は5:00~23:00の間で指定可能です（実際の配信には数分程度の誤差があります）
-    .mb-4
-      %h5.mb-2.font-bold 配信方法
+    .mb-8
+      %h5.mb-2.font-bold 受信方法
       = select_tag "delivery_method", options_for_select(Subscription.delivery_methods, "email"), class: 'border border-gray-200 rounded w-full p-2'
       %small.text-xs
-        ※プッシュ通知で配信する際は、配信開始前に
+        ※プッシュ通知を利用する場合は、配信開始前に
         = link_to "プッシュ通知の許可設定", mypage_path, class: "text-link"
         を行ってください
 
@@ -40,3 +46,9 @@
     = f.submit '配信を予約する', class: "mb-2 rounded bg-red-600 text-white py-4 w-full #{disabled ? 'opacity-50' : 'hover:bg-red-500 cursor-pointer'}", disabled: disabled
     - if @book.rights_reserved
       .text-xs ※この作品は著作権が存続しているため、カスタム配信はご利用になれません。
+
+- if request.referer
+  = link_to :back, class: 'text-link inline-flex items-center space-x-1 mb-8' do
+    %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
+      %path(stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5")
+    %span 一覧に戻る
