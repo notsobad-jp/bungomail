@@ -41,11 +41,7 @@ class UsersController < ApplicationController
 
   # 今のところプッシュ通知の更新にしか使ってない
   def update
-    current_user.update!(
-      webpush_endpoint: params[:endpoint],
-      webpush_p256dh: params.dig(:keys, :p256dh),
-      webpush_auth: params.dig(:keys, :auth),
-    )
+    current_user.update!(fcm_device_token: params[:token])
     head :ok
   end
 

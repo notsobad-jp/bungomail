@@ -40,7 +40,7 @@
 .mb-12(data-controller="webpush" data-webpush-vapid-value="#{Rails.application.credentials.dig(:vapid, :public_key)}")
   %h5.font-bold.text-lg.mb-4.pb-2.border-b
     プッシュ通知の設定
-  - if current_user.webpush_endpoint
+  - if current_user.fcm_device_token.present?
     .mb-4
       ✅ 通知設定が完了しています。
     %div(class="mb-4 flex flex-col sm:flex-row sm:items-center space-x-0 sm:space-x-4 space-y-4 sm:space-y-0")

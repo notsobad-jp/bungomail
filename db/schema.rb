@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_10_073929) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_18_122634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -162,9 +162,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_10_073929) do
     t.string "magic_login_token"
     t.datetime "magic_login_token_expires_at", precision: nil
     t.datetime "magic_login_email_sent_at", precision: nil
-    t.string "webpush_endpoint"
-    t.string "webpush_p256dh"
-    t.string "webpush_auth"
+    t.string "fcm_device_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["magic_login_token"], name: "index_users_on_magic_login_token"
   end

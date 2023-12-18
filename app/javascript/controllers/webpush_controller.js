@@ -20,10 +20,6 @@ export default class extends Controller {
     vapid: String
   }
 
-  connect() {
-  }
-
-
   async subscribe() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
       alert("申し訳ありませんがお使いのブラウザではプッシュ通知がサポートされていないようです。。")
@@ -37,16 +33,14 @@ export default class extends Controller {
         return;
       }
 
-      getToken(messaging, {vapidKey: this.vapidValue}).then(token => {
-        console.log(token);
-      });
-
-      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-      const subscription = await serviceWorkerRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: new Uint8Array(atob(this.vapidValue.replace(/_/g, '/').replace(/-/g, '+')).split("").map((char) => char.charCodeAt(0)))
-      })
-      await this.updateSubscription(subscription.toJSON());
+      const token = await getToken(messaging, {vapidKey: this.vapidValue});
+      await this.updateSubscription({token: token});
+      // const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      // const subscription = await serviceWorkerRegistration.pushManager.subscribe({
+      //   userVisibleOnly: true,
+      //   applicationServerKey: new Uint8Array(atob(this.vapidValue.replace(/_/g, '/').replace(/-/g, '+')).split("").map((char) => char.charCodeAt(0)))
+      // })
+      // await this.updateSubscription(subscription.toJSON());
       alert("通知設定が完了しました！")
       location.reload();
     } catch (error) {
@@ -63,12 +57,7 @@ export default class extends Controller {
       await subscription.unsubscribe();
     }
 
-    const params = {
-      endpoint: null,
-      p256dh: null,
-      auth: null
-    }
-    await this.updateSubscription(params);
+    await this.updateSubscription({token: null});
     alert("通知設定を解除しました！")
     location.reload();
   }
