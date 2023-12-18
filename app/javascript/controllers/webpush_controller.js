@@ -3,24 +3,24 @@ import { patch } from '@rails/request.js'
 import { initializeApp } from "@firebase/app";
 import { getMessaging, getToken } from "@firebase/messaging";
 
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB7Xm2bc55ZXm0t9gRSYQjP9BQ0CsGAZYk",
+  authDomain: "bungomail-stg.firebaseapp.com",
+  projectId: "bungomail-stg",
+  storageBucket: "bungomail-stg.appspot.com",
+  messagingSenderId: "265749222801",
+  appId: "1:265749222801:web:d7624233427a22e60af630"
+};
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
 export default class extends Controller {
   static values = {
     vapid: String
   }
 
   connect() {
-    const firebaseConfig = {
-      apiKey: "AIzaSyB7Xm2bc55ZXm0t9gRSYQjP9BQ0CsGAZYk",
-      authDomain: "bungomail-stg.firebaseapp.com",
-      projectId: "bungomail-stg",
-      storageBucket: "bungomail-stg.appspot.com",
-      messagingSenderId: "265749222801",
-      appId: "1:265749222801:web:d7624233427a22e60af630"
-    };
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
-    const token = getToken(messaging, {vapidKey: "BOAQ7hQc-iDS9Duz6dthkufXLDnUeE8L1Sgm97DCpLkw9RsJWn24Mvv_hMN4WxKFR-w1mBvmRD_1yNVZrlrc9uE"});
-    console.log(token);
   }
 
 
@@ -36,6 +36,10 @@ export default class extends Controller {
         alert("プッシュ通知がブロックされています。ブラウザの設定でプッシュ通知を許可してください。")
         return;
       }
+
+      getToken(messaging, {vapidKey: this.vapidValue}).then(token => {
+        console.log(token);
+      });
 
       const serviceWorkerRegistration = await navigator.serviceWorker.ready;
       const subscription = await serviceWorkerRegistration.pushManager.subscribe({
