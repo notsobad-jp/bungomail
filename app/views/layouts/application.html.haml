@@ -33,7 +33,7 @@
         = render partial: 'layouts/header'
       .container.mx-auto.max-w-screen-lg.px-2(class="sm:px-0")
         .mb-32.grid.grid-cols-1(class="sm:grid-cols-4 sm:gap-12")
-          .col-span-3.border-b.pb-8.mb-8(class="sm:border-b-0 sm:pb-0 sm:mb-0")
+          .col-span-3
             = render partial: 'layouts/flash', locals: { style: '-mt-4 mb-4' }
             = yield
           .col-span-1
