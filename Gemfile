@@ -7,7 +7,7 @@ gem 'rails', '7.0.3'
 gem 'bootsnap', require: false
 gem 'dotenv-rails'
 gem 'delayed_job_active_record'
-gem 'google-api-client'
+gem 'google-auth'
 gem 'haml-rails'
 gem 'importmap-rails'
 gem 'jbuilder'
@@ -27,7 +27,6 @@ gem "tailwindcss-rails"
 gem 'trigram' # 文字列の類似度チェック
 gem 'uglifier'
 gem 'turbo-rails'
-gem 'web-push'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
