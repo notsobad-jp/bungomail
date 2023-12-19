@@ -35,12 +35,6 @@ export default class extends Controller {
 
       const token = await getToken(messaging, {vapidKey: this.vapidValue});
       await this.updateSubscription({token: token});
-      // const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-      // const subscription = await serviceWorkerRegistration.pushManager.subscribe({
-      //   userVisibleOnly: true,
-      //   applicationServerKey: new Uint8Array(atob(this.vapidValue.replace(/_/g, '/').replace(/-/g, '+')).split("").map((char) => char.charCodeAt(0)))
-      // })
-      // await this.updateSubscription(subscription.toJSON());
       alert("通知設定が完了しました！")
       location.reload();
     } catch (error) {
@@ -51,12 +45,6 @@ export default class extends Controller {
   }
 
   async unsubscribe() {
-    const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-    const subscription = await serviceWorkerRegistration.pushManager.getSubscription();
-    if(subscription) {
-      await subscription.unsubscribe();
-    }
-
     await this.updateSubscription({token: null});
     alert("通知設定を解除しました！")
     location.reload();
