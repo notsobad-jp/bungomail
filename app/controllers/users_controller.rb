@@ -69,26 +69,36 @@ class UsersController < ApplicationController
   end
 
   def webpush_test
-    payload = {
-      title: "プッシュ通知テスト",
-      body: "ブンゴウメールのプッシュ通知テスト配信です。",
-      icon: "https://bungomail.com/favicon.ico",
-      url: mypage_url,
-    }
-
-    WebPush.payload_send(
-      message: JSON.generate(payload),
-      endpoint: current_user.webpush_endpoint,
-      p256dh: current_user.webpush_p256dh,
-      auth: current_user.webpush_auth,
-      vapid: {
-        subject: "mailto:info@notsobad.jp",
-        public_key: Rails.application.credentials.dig(:vapid, :public_key),
-        private_key: Rails.application.credentials.dig(:vapid, :private_key),
-        expiration: 12 * 60 * 60,
-      },
+    authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
+      json_key_io: Rails.application.credentials.gcs,
+      scope: 'https://www.googleapis.com/auth/firebase.messaging'
     )
+    authorizer.fetch_access_token!
+
+    p "----------"
+    puts credential['access_token']
+
+    # payload = {
+    #   title: "プッシュ通知テスト",
+    #   body: "ブンゴウメールのプッシュ通知テスト配信です。",
+    #   icon: "https://bungomail.com/favicon.ico",
+    #   url: mypage_url,
+    # }
+
+    # WebPush.payload_send(
+    #   message: JSON.generate(payload),
+    #   endpoint: current_user.webpush_endpoint,
+    #   p256dh: current_user.webpush_p256dh,
+    #   auth: current_user.webpush_auth,
+    #   vapid: {
+    #     subject: "mailto:info@notsobad.jp",
+    #     public_key: Rails.application.credentials.dig(:vapid, :public_key),
+    #     private_key: Rails.application.credentials.dig(:vapid, :private_key),
+    #     expiration: 12 * 60 * 60,
+    #   },
+    # )
   rescue => e # ユーザーのwebpush設定をリセットしたりするのはJobのエラーハンドリングで対応してる
+    p e
     flash[:error] = 'プッシュ通知のテスト送信に失敗しました。ブラウザの通知許可を再度ご設定ください。'
     redirect_to mypage_path
   end

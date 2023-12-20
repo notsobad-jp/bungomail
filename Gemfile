@@ -7,7 +7,7 @@ gem 'rails', '7.0.3'
 gem 'bootsnap', require: false
 gem 'dotenv-rails'
 gem 'delayed_job_active_record'
-gem 'google-auth'
+gem 'google-api-client'
 gem 'haml-rails'
 gem 'importmap-rails'
 gem 'jbuilder'
