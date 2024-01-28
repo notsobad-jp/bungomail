@@ -9,9 +9,6 @@
 
 <% if @owner.admin? %>
   <br />=========================<br />
-  ハッシュタグ「#ブンゴウメール」をつけて感想をつぶやこう！　<br />
-  <%= link_to(nil, @feed.distribution.twitter_share_url || "https://bit.ly/3wh90Ee") %><br />
-  <br />
   ■Twitterでみんなの感想を見る：<%= link_to(nil, "https://goo.gl/rgfoDv") %><br />
   ■ブンゴウメール公式サイト：<%= link_to(nil, "https://bungomail.com") %><br />
   ■青空文庫でこの作品を読む：<%= link_to(nil, @book.aozora_file_url) %><br />
