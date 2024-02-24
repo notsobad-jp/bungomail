@@ -1,5 +1,3 @@
-require 'googleauth'
-
 class UsersController < ApplicationController
   before_action :set_stripe_key
   before_action :require_login, only: [:show, :update, :webpush_test]
@@ -71,35 +69,16 @@ class UsersController < ApplicationController
   end
 
   def webpush_test
-    gcs_credentials = StringIO.new(Rails.application.credentials.gcs.to_json)
-    authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
-      json_key_io: gcs_credentials,
-      scope: 'https://www.googleapis.com/auth/firebase.messaging'
-    )
-    authorizer.fetch_access_token!
-
-    p "----------"
-    puts credential['access_token']
-
-    # payload = {
-    #   title: "プッシュ通知テスト",
-    #   body: "ブンゴウメールのプッシュ通知テスト配信です。",
-    #   icon: "https://bungomail.com/favicon.ico",
-    #   url: mypage_url,
-    # }
-
-    # WebPush.payload_send(
-    #   message: JSON.generate(payload),
-    #   endpoint: current_user.webpush_endpoint,
-    #   p256dh: current_user.webpush_p256dh,
-    #   auth: current_user.webpush_auth,
-    #   vapid: {
-    #     subject: "mailto:info@notsobad.jp",
-    #     public_key: Rails.application.credentials.dig(:vapid, :public_key),
-    #     private_key: Rails.application.credentials.dig(:vapid, :private_key),
-    #     expiration: 12 * 60 * 60,
-    #   },
-    # )
+    body = {
+      message: {
+        token: current_user.fcm_device_token,
+        title: "プッシュ通知テスト",
+        body: "ブンゴウメールのプッシュ通知テスト配信です。",
+        icon: "https://bungomail.com/favicon.ico",
+        url: mypage_url,
+      }
+    }
+    Webpush.call(body)
   rescue => e # ユーザーのwebpush設定をリセットしたりするのはJobのエラーハンドリングで対応してる
     p e
     flash[:error] = 'プッシュ通知のテスト送信に失敗しました。ブラウザの通知許可を再度ご設定ください。'
