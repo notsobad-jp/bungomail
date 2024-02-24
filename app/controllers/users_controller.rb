@@ -71,14 +71,16 @@ class UsersController < ApplicationController
   def webpush_test
     body = {
       message: {
+        name: "プッシュ通知テスト",
         token: current_user.fcm_device_token,
         notification: {
           title: "プッシュ通知テスト",
           body: "ブンゴウメールのプッシュ通知テスト配信です。",
           image: "https://bungomail.com/favicon.ico",
         },
-        # body: "ブンゴウメールのプッシュ通知テスト配信です。",
-        # url: mypage_url,
+        data: {
+          url: mypage_url,
+        },
       }
     }
     Webpush.call(body)

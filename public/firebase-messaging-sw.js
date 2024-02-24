@@ -8,15 +8,21 @@ self.addEventListener('activate', function (e) {
 
 self.addEventListener('push', (event) => {
   const data = JSON.parse(event.data.text());
-  const title = data["title"]
-  const options = { body: data["body"], icon: data["icon"], data: data["url"] };
+  const title = data["notification"]["title"]
+  const options = {
+    body: data["notification"]["body"],
+    icon: data["notification"]["image"],
+    data: {
+      url: data["data"]["url"],
+    },
+  };
   event.waitUntil(self.registration.showNotification(title, options));
   console.log('Webpush received')
 });
 
 self.addEventListener('notificationclick', (event) => {
   console.log("Webpush clicked")
-  const url = event.notification.data
+  const url = event.notification.data.url
   event.notification.close();
   clients.openWindow(url);
 }, false);
