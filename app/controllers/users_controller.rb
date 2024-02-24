@@ -72,10 +72,13 @@ class UsersController < ApplicationController
     body = {
       message: {
         token: current_user.fcm_device_token,
-        title: "プッシュ通知テスト",
-        body: "ブンゴウメールのプッシュ通知テスト配信です。",
-        icon: "https://bungomail.com/favicon.ico",
-        url: mypage_url,
+        notification: {
+          title: "プッシュ通知テスト",
+          body: "ブンゴウメールのプッシュ通知テスト配信です。",
+          image: "https://bungomail.com/favicon.ico",
+        },
+        # body: "ブンゴウメールのプッシュ通知テスト配信です。",
+        # url: mypage_url,
       }
     }
     Webpush.call(body)

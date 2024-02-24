@@ -12,10 +12,11 @@ module Webpush
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     req = Net::HTTP::Post.new(uri.request_uri)
-    req['Authorization'] = "Bearer #{authorizer.access_token['access_token']}"
+    req['Authorization'] = "Bearer #{authorizer.access_token}"
     req['Content-Type'] = "application/json"
     req.body = body.to_json
     res = http.request(req)
+    res.value # raise error if not 2xx
   end
 
   def authorize_firebase
