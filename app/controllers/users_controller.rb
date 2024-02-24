@@ -1,3 +1,5 @@
+require 'googleauth'
+
 class UsersController < ApplicationController
   before_action :set_stripe_key
   before_action :require_login, only: [:show, :update, :webpush_test]
@@ -69,8 +71,9 @@ class UsersController < ApplicationController
   end
 
   def webpush_test
+    gcs_credentials = StringIO.new(Rails.application.credentials.gcs.to_json)
     authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
-      json_key_io: Rails.application.credentials.gcs,
+      json_key_io: gcs_credentials,
       scope: 'https://www.googleapis.com/auth/firebase.messaging'
     )
     authorizer.fetch_access_token!
