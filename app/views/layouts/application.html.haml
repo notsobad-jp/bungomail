@@ -31,12 +31,12 @@
     - else
       .mb-10.shadow(style="background-image: url('/assets/images/seigaiha.png')")
         = render partial: 'layouts/header'
-      .container.mx-auto.max-w-screen-lg.px-2(class="sm:px-0")
-        .mb-32.grid.grid-cols-1(class="sm:grid-cols-4 sm:gap-12")
+      .container.mx-auto.max-w-screen-lg.px-4(class="lg:px-0")
+        .mb-32.grid.grid-cols-1(class="lg:grid-cols-4 lg:gap-12")
           .col-span-3
             = render partial: 'layouts/flash', locals: { style: '-mt-4 mb-4' }
             = yield
-          .col-span-1
+          .col-span-1.hidden.lg:block
             = render partial: 'layouts/sidebar'
 
     = render partial: 'layouts/footer'
