@@ -18,11 +18,11 @@ exports.subscribeToTopic = onRequest((request, response) => {
   return admin.messaging().subscribeToTopic(token, topic)
     .then((res) => {
       console.log(res)
-      return response.send('Successfully unsubscribed from topic');
+      return response.send('Successfully subscribed to topic');
     })
     .catch((error) => {
       console.log(error)
-      return response.status(500).send('Error unsubscribing from topic');
+      return response.status(500).send('Error subscribing to topic');
     });
 });
 
@@ -33,10 +33,10 @@ exports.unsubscribeFromTopic = onRequest((request, response) => {
   return admin.messaging().unsubscribeFromTopic(token, topic)
     .then((res) => {
       console.log(res)
-      return response.send('Successfully subscribed to topic');
+      return response.send('Successfully unsubscribed from topic');
     })
     .catch((error) => {
       console.log(error)
-      return response.status(500).send('Error subscribing to topic');
+      return response.status(500).send('Error unsubscribing from topic');
     });
 });
