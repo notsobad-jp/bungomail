@@ -43,8 +43,10 @@ class Feed < ApplicationRecord
             body: content.truncate(100),
             image: "https://bungomail.com/favicon.ico",
           },
-          data: {
-            url: feed_url(id, host: Rails.env.production? ? "https://bungomail.com" : "http://localhost:3000"),
+          webpush: {
+            fcm_options: {
+              link: feed_url(id, host: Rails.env.production? ? "https://bungomail.com" : "http://localhost:3000"),
+            }
           },
         }
       }

@@ -96,8 +96,10 @@ class UsersController < ApplicationController
             body: "ブンゴウメールのプッシュ通知テスト配信です。",
             image: "https://bungomail.com/favicon.ico",
           },
-          data: {
-            url: mypage_url,
+          webpush: {
+            fcm_options: {
+              link: mypage_url,
+            },
           },
         }
       }
