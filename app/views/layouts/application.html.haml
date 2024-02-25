@@ -41,8 +41,8 @@
 
     = render partial: 'layouts/footer'
 
-    -# ServiceWorker
     :javascript
+      // ServiceWorker
       window.addEventListener('load', function () {
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register("/firebase-messaging-sw.js")
@@ -53,3 +53,13 @@
           });
         }
       });
+
+      // Firebase Config
+      window.firebaseConfig = {
+        apiKey: "#{Rails.application.credentials.dig(:firebase, :api_key)}",
+        authDomain: "#{Rails.application.credentials.dig(:firebase, :auth_domain)}",
+        projectId: "#{Rails.application.credentials.dig(:firebase, :project_id)}",
+        storageBucket: "#{Rails.application.credentials.dig(:firebase, :storage_bucket)}",
+        messagingSenderId: "#{Rails.application.credentials.dig(:firebase, :messaging_sender_id)}",
+        appId: "#{Rails.application.credentials.dig(:firebase, :app_id)}"
+      };
