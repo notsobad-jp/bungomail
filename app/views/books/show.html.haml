@@ -1,3 +1,14 @@
+- if current_user.blank?
+  .mb-8.px-4.py-2.rounded.bg-yellow-50.border.border-yellow-500.text-yellow-700.flex.items-center.space-x-2
+    %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mt-1")
+      %path(stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z")
+    %div
+      作品を配信するためには
+      = link_to "アカウント登録", signup_path, class: "text-link"
+      または
+      = link_to "ログイン", login_path, class: "text-link"
+      が必要です
+
 .mb-4
   = render "header", active_step: 2
 
@@ -37,15 +48,10 @@
       %h5.mb-2.font-bold 受信方法
       %div
         - if current_user.blank?
-          .px-4.py-2.rounded.bg-red-50.border.border-red-500.text-red-700.flex.items-center.space-x-2
-            %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
-              %path(stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z")
-            %div
-              配信を受け取るには
-              = link_to "アカウント登録", signup_path, class: "text-link"
-              または
-              = link_to "ログイン", login_path, class: "text-link"
-              が必要です
+          = select_tag :delivery_method,
+            options_for_select(Subscription.delivery_methods),
+            required: true,
+            class: 'border border-gray-200 rounded w-full p-2'
         - elsif current_user.basic_plan?
           - disabled = current_user.fcm_device_token.blank? && "webpush"
           = select_tag :delivery_method,
@@ -59,7 +65,7 @@
               を行ってください
         - else
           - if current_user.fcm_device_token.blank?
-            .px-4.py-2.rounded.bg-red-50.border.border-red-500.text-red-700.flex.items-center.space-x-2
+            .px-4.py-2.rounded.bg-yellow-50.border.border-yellow-500.text-yellow-700.flex.items-center.space-x-2
               %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
                 %path(stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z")
               %div
