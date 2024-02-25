@@ -1,52 +1,42 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
-const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
+const { onRequest } = require("firebase-functions/v2/https");
 const admin = require('firebase-admin');
 
-admin.initializeApp();
+if (process.env.NODE_ENV === 'production') {
+  admin.initializeApp();
+} else {
+  const serviceAccount = require('./serviceAccountKey.json');
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
 
-exports.helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
+exports.subscribeToTopic = onRequest((request, response) => {
+  const token = request.query.token;
+  const topic = request.query.topic;
 
-exports.messageTest = onRequest((request, response) => {
-  const registrationToken = '<REGISTRATION_TOKEN>';
-  const title = 'File uploaded.';
-  const body = 'File uploaded to Firebase Storage.';
-
-  const message = {
-    notification: {
-      title: title,
-      body: body
-    },
-    webpush: {
-      headers: {
-        TTL: "60"
-      },
-      notification: {
-        icon: 'https://bungomail.com/assets/images/logo_text.png',
-        click_action: 'https://bungomail.com'
-      }
-    },
-    token: registrationToken
-  };
-
-  return admin.messaging().send(message)
-    .then((response) => {
-      console.log('Successfully sent message:', response);
-      return Promise.resolve(response);
+  return admin.messaging().subscribeToTopic(token, topic)
+    .then((res) => {
+      console.log(res)
+      return response.send('Successfully unsubscribed from topic');
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
-      return Promise.reject(error);
+      console.log(error)
+      return response.status(500).send('Error unsubscribing from topic');
+    });
+});
+
+exports.unsubscribeFromTopic = onRequest((request, response) => {
+  const token = request.query.token;
+  const topic = request.query.topic;
+
+  return admin.messaging().unsubscribeFromTopic(token, topic)
+    .then((res) => {
+      console.log(res)
+      return response.send('Successfully subscribed to topic');
+    })
+    .catch((error) => {
+      console.log(error)
+      return response.status(500).send('Error subscribing to topic');
     });
 });
