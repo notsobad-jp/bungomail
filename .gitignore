@@ -37,8 +37,10 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+*.log
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
 /config/credentials/*.key
+serviceAccountKey.json
