@@ -17,7 +17,13 @@ class DistributionsController < ApplicationController
     @distribution = current_user.distributions.new(ba_params)
 
     if @distribution.save
-      current_user.subscribe(@distribution, delivery_method: params[:delivery_method])
+      sub = current_user.subscribe(@distribution, delivery_method: params[:delivery_method])
+      if sub.delivery_method == "プッシュ通知" && current_user.fcm_device_token.present?
+        Webpush.subscribeToTopic(
+          token: current_user.fcm_device_token,
+          topic: @distribution.id
+        )
+      end
       BungoMailer.with(user: current_user, distribution: @distribution).schedule_completed_email.deliver_later
       @distribution.delay.create_and_schedule_feeds
       flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
@@ -48,6 +54,12 @@ class DistributionsController < ApplicationController
   def destroy
     @distribution = authorize Distribution.find(params[:id])
     @distribution.destroy!
+    if current_user.fcm_device_token.present?
+      Webpush.unsubscribeFromTopic(
+        token: current_user.fcm_device_token,
+        topic: @distribution.id
+      )
+    end
     BungoMailer.with(user: @distribution.user, author_title: "#{@distribution.book.author}『#{@distribution.book.title}』", delivery_period: "#{@distribution.start_date} 〜 #{@distribution.end_date}").schedule_canceled_email.deliver_later
     flash[:success] = '配信を削除しました！'
     redirect_to distributions_path, status: 303

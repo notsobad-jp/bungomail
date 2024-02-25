@@ -4,7 +4,7 @@ require 'net/http'
 module Webpush
   module_function
 
-  def call(body)
+  def notify(body)
     authorizer = authorize_firebase
 
     uri = URI.parse("https://fcm.googleapis.com/v1/projects/#{authorizer.project_id}/messages:send")
@@ -17,6 +17,13 @@ module Webpush
     req.body = body.to_json
     res = http.request(req)
     res.value # raise error if not 2xx
+  end
+
+  # functions経由でtopic購読するためのラッパーメソッド
+  def subscribeToTopic(token:, topic:)
+  end
+
+  def unsubscribeFromTopic(token:, topic:)
   end
 
   def authorize_firebase

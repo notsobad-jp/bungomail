@@ -69,22 +69,8 @@ class UsersController < ApplicationController
   end
 
   def webpush_test
-    body = {
-      message: {
-        name: "プッシュ通知テスト",
-        token: current_user.fcm_device_token,
-        notification: {
-          title: "プッシュ通知テスト",
-          body: "ブンゴウメールのプッシュ通知テスト配信です。",
-          image: "https://bungomail.com/favicon.ico",
-        },
-        data: {
-          url: mypage_url,
-        },
-      }
-    }
-    Webpush.call(body)
-  rescue => e # ユーザーのwebpush設定をリセットしたりするのはJobのエラーハンドリングで対応してる
+    Webpush.notify(webpush_payload)
+  rescue => e
     p e
     flash[:error] = 'プッシュ通知のテスト送信に失敗しました。ブラウザの通知許可を再度ご設定ください。'
     redirect_to mypage_path
@@ -98,5 +84,22 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:email)
+    end
+
+    def webpush_payload
+      {
+        message: {
+          name: "プッシュ通知テスト",
+          token: current_user.fcm_device_token,
+          notification: {
+            title: "プッシュ通知テスト",
+            body: "ブンゴウメールのプッシュ通知テスト配信です。",
+            image: "https://bungomail.com/favicon.ico",
+          },
+          data: {
+            url: mypage_url,
+          },
+        }
+      }
     end
 end
