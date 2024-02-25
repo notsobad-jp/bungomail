@@ -20,10 +20,16 @@ module Webpush
   end
 
   # functions経由でtopic購読するためのラッパーメソッド
-  def subscribeToTopic(token:, topic:)
+  def subscribe_to_topic!(token:, topic:)
+    endpoint = Rails.application.credentials.dig(:function_endpoints, :subscribe)
+    res = http_get_request(endpoint, { token: token, topic: topic })
+    res.value
   end
 
-  def unsubscribeFromTopic(token:, topic:)
+  def unsubscribe_from_topic!(token:, topic:)
+    endpoint = Rails.application.credentials.dig(:function_endpoints, :unsubscribe)
+    res = http_get_request(endpoint, { token: token, topic: topic })
+    res.value
   end
 
   def authorize_firebase
@@ -36,4 +42,18 @@ module Webpush
     authorizer
   end
   private_class_method :authorize_firebase
+
+  def http_get_request(endpoint, params)
+    uri = URI.parse(endpoint)
+    uri.query = URI.encode_www_form(params)
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+    req = Net::HTTP::Get.new uri.request_uri
+    req['Content-Type'] = "application/json"
+    http.request(req)
+  end
+  private_class_method :http_get_request
 end

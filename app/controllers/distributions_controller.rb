@@ -19,7 +19,7 @@ class DistributionsController < ApplicationController
     if @distribution.save
       sub = current_user.subscribe(@distribution, delivery_method: params[:delivery_method])
       if sub.delivery_method == "プッシュ通知" && current_user.fcm_device_token.present?
-        Webpush.subscribeToTopic(
+        Webpush.subscribe_to_topic!(
           token: current_user.fcm_device_token,
           topic: @distribution.id
         )
@@ -55,7 +55,7 @@ class DistributionsController < ApplicationController
     @distribution = authorize Distribution.find(params[:id])
     @distribution.destroy!
     if current_user.fcm_device_token.present?
-      Webpush.unsubscribeFromTopic(
+      Webpush.unsubscribe_from_topic!(
         token: current_user.fcm_device_token,
         topic: @distribution.id
       )
