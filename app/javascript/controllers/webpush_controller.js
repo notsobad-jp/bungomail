@@ -3,16 +3,7 @@ import { patch } from '@rails/request.js'
 import { initializeApp } from "@firebase/app";
 import { getMessaging, getToken } from "@firebase/messaging";
 
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB7Xm2bc55ZXm0t9gRSYQjP9BQ0CsGAZYk",
-  authDomain: "bungomail-stg.firebaseapp.com",
-  projectId: "bungomail-stg",
-  storageBucket: "bungomail-stg.appspot.com",
-  messagingSenderId: "265749222801",
-  appId: "1:265749222801:web:d7624233427a22e60af630"
-};
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(window.firebaseConfig);
 const messaging = getMessaging(app);
 
 export default class extends Controller {
