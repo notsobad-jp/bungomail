@@ -1,5 +1,19 @@
 import { Controller } from "@hotwired/stimulus"
 import { patch } from '@rails/request.js'
+import { initializeApp } from "@firebase/app";
+import { getMessaging, getToken } from "@firebase/messaging";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB7Xm2bc55ZXm0t9gRSYQjP9BQ0CsGAZYk",
+  authDomain: "bungomail-stg.firebaseapp.com",
+  projectId: "bungomail-stg",
+  storageBucket: "bungomail-stg.appspot.com",
+  messagingSenderId: "265749222801",
+  appId: "1:265749222801:web:d7624233427a22e60af630"
+};
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
 export default class extends Controller {
   static values = {
@@ -19,12 +33,8 @@ export default class extends Controller {
         return;
       }
 
-      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-      const subscription = await serviceWorkerRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: new Uint8Array(atob(this.vapidValue.replace(/_/g, '/').replace(/-/g, '+')).split("").map((char) => char.charCodeAt(0)))
-      })
-      await this.updateSubscription(subscription.toJSON());
+      const token = await getToken(messaging, {vapidKey: this.vapidValue});
+      await this.updateSubscription({token: token});
       alert("通知設定が完了しました！")
       location.reload();
     } catch (error) {
@@ -35,18 +45,7 @@ export default class extends Controller {
   }
 
   async unsubscribe() {
-    const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-    const subscription = await serviceWorkerRegistration.pushManager.getSubscription();
-    if(subscription) {
-      await subscription.unsubscribe();
-    }
-
-    const params = {
-      endpoint: null,
-      p256dh: null,
-      auth: null
-    }
-    await this.updateSubscription(params);
+    await this.updateSubscription({token: null});
     alert("通知設定を解除しました！")
     location.reload();
   }

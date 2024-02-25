@@ -41,11 +41,7 @@ class UsersController < ApplicationController
 
   # 今のところプッシュ通知の更新にしか使ってない
   def update
-    current_user.update!(
-      webpush_endpoint: params[:endpoint],
-      webpush_p256dh: params.dig(:keys, :p256dh),
-      webpush_auth: params.dig(:keys, :auth),
-    )
+    current_user.update!(fcm_device_token: params[:token])
     head :ok
   end
 
@@ -73,26 +69,9 @@ class UsersController < ApplicationController
   end
 
   def webpush_test
-    payload = {
-      title: "プッシュ通知テスト",
-      body: "ブンゴウメールのプッシュ通知テスト配信です。",
-      icon: "https://bungomail.com/favicon.ico",
-      url: mypage_url,
-    }
-
-    WebPush.payload_send(
-      message: JSON.generate(payload),
-      endpoint: current_user.webpush_endpoint,
-      p256dh: current_user.webpush_p256dh,
-      auth: current_user.webpush_auth,
-      vapid: {
-        subject: "mailto:info@notsobad.jp",
-        public_key: Rails.application.credentials.dig(:vapid, :public_key),
-        private_key: Rails.application.credentials.dig(:vapid, :private_key),
-        expiration: 12 * 60 * 60,
-      },
-    )
-  rescue => e # ユーザーのwebpush設定をリセットしたりするのはJobのエラーハンドリングで対応してる
+    Webpush.notify(webpush_payload)
+  rescue => e
+    p e
     flash[:error] = 'プッシュ通知のテスト送信に失敗しました。ブラウザの通知許可を再度ご設定ください。'
     redirect_to mypage_path
   end
@@ -105,5 +84,24 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:email)
+    end
+
+    def webpush_payload
+      {
+        message: {
+          name: "プッシュ通知テスト",
+          token: current_user.fcm_device_token,
+          notification: {
+            title: "プッシュ通知テスト",
+            body: "ブンゴウメールのプッシュ通知テスト配信です。",
+            image: "https://bungomail.com/favicon.ico",
+          },
+          webpush: {
+            fcm_options: {
+              link: mypage_url,
+            },
+          },
+        }
+      }
     end
 end

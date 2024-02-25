@@ -27,7 +27,6 @@ gem "tailwindcss-rails"
 gem 'trigram' # 文字列の類似度チェック
 gem 'uglifier'
 gem 'turbo-rails'
-gem 'web-push'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
