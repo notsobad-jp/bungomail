@@ -78,7 +78,7 @@ class Distribution < ApplicationRecord
   # 同一チャネルで期間が重複するレコードが存在すればinvalid(Freeプランのみ)
   def delivery_period_should_not_overlap
     overlapping = Distribution.where.not(id: id).where(user_id: user_id).overlapping_with(start_date, end_date)
-    errors.add(:base, "購読済みの他の配信と期間が重複しています") if overlapping.present?
+    errors.add(:base, "他の配信と期間が重複しています") if overlapping.present?
   end
 
   def end_date_should_come_after_start_date
