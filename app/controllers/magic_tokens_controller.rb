@@ -11,7 +11,7 @@ class MagicTokensController < ApplicationController
     redirect_to login_path, flash: { error: 'メールアドレスが見つかりませんでした。。初めての方はアカウント登録してください。' } and return unless user
 
     user.generate_magic_login_token!
-    BungoMailer.with(user: user).magic_login_email.deliver_later
+    BungoMailer.with(user: user).magic_login_email.deliver_now
     flash[:success] = 'ログイン用URLを送信しました！メールに記載されたURLからログインしてください。'
     redirect_to login_path
   end

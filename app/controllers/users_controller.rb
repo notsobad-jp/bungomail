@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     user.save
     user.generate_magic_login_token!
 
-    BungoMailer.with(user: user).user_registered_email.deliver_later
+    BungoMailer.with(user: user).user_registered_email.deliver_now
     redirect_to(root_path, flash: { success: 'ユーザー登録が完了しました！ご登録内容の確認メールをお送りしています。もし10分以上経ってもメールが届かない場合は運営までお問い合わせください。' })
   end
 

@@ -24,7 +24,7 @@ class DistributionsController < ApplicationController
           topic: @distribution.id
         )
       end
-      BungoMailer.with(user: current_user, distribution: @distribution).schedule_completed_email.deliver_later
+      BungoMailer.with(user: current_user, distribution: @distribution).schedule_completed_email.deliver_now
       @distribution.delay.create_and_schedule_feeds
       flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
       redirect_to distribution_path(@distribution)
@@ -60,7 +60,7 @@ class DistributionsController < ApplicationController
         topic: @distribution.id
       )
     end
-    BungoMailer.with(user: @distribution.user, author_title: "#{@distribution.book.author}『#{@distribution.book.title}』", delivery_period: "#{@distribution.start_date} 〜 #{@distribution.end_date}").schedule_canceled_email.deliver_later
+    BungoMailer.with(user: @distribution.user, author_title: "#{@distribution.book.author}『#{@distribution.book.title}』", delivery_period: "#{@distribution.start_date} 〜 #{@distribution.end_date}").schedule_canceled_email.deliver_now
     flash[:success] = '配信を削除しました！'
     redirect_to distributions_path, status: 303
   end
