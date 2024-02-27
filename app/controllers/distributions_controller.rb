@@ -14,7 +14,7 @@ class DistributionsController < ApplicationController
 
   def create
     authorize Distribution
-    @distribution = current_user.distributions.new(ba_params)
+    @distribution = current_user.distributions.new(distribution_params)
 
     if @distribution.save
       sub = current_user.subscribe(@distribution, delivery_method: params[:delivery_method])
@@ -67,7 +67,7 @@ class DistributionsController < ApplicationController
 
   private
 
-  def ba_params
+  def distribution_params
     params.require(:distribution).permit(:book_id, :book_type, :start_date, :end_date, :delivery_time)
   end
 end
