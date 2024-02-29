@@ -34,17 +34,14 @@
             忙しいあなたのための読書サポートサービスです。
           </p>
           <div class="mt-10 flex items-center gap-x-6">
-            <form class="w-full lg:max-w-lg lg:col-span-5 lg:pt-2">
-              <div class="flex flex-col lg:flex-row gap-x-4 gap-y-4 lg:gap-y-0">
-                <input id="email-address" name="email" type="email" autocomplete="email" required class="min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="メールアドレス">
-                <button type="submit" class="flex-none rounded-md bg-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">アカウント登録（無料）</button>
-              </div>
+            <div class="w-full lg:max-w-lg lg:col-span-5">
+              <%= link_to "アカウント登録（無料）", signup_path, class: "block w-full max-w-lg text-center rounded-md bg-indigo-600 py-3.5 px-4 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
               <p class="mt-4 text-xs leading-6 text-gray-900">
                 登録済みの方はこちらから
                 <%= link_to "ログイン", login_path, class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
                 してください。
               </p>
-            </form>
+            </div>
           </div>
         </div>
         <div class="max-w-[500px] mx-auto">
