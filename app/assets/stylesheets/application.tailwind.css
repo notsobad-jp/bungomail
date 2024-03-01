@@ -14,3 +14,8 @@
     transform: translateX(-50%);
   }
 }
+
+details > summary.list-none::-webkit-details-marker,
+details > summary.list-none::marker {
+  display: none;
+}
