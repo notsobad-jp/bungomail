@@ -1,14 +1,12 @@
 .mb-8
-  %h1.text-lg.font-bold.mb-4.flex.items-center
-    %svg(class="w-6 h-6 mt-1 mr-2" focusable="false" viewBox="0 0 24 24" aria-hidden="true")
-      %path(d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z")
+  %h1.font-bold.text-2xl
     アカウント設定
 
-.mb-12
+.mb-16
   .mb-4.text-sm.bg-gray-100.rounded.px-4.py-2
     = current_user.email
 
-.mb-12
+.mb-16
   %h5.font-bold.text-lg.mb-4.pb-2.border-b
     現在のプラン
   %div.font-bold.mb-2.rounded.border.px-2.py-1.inline-block
@@ -21,11 +19,11 @@
       （#{current_user.trial_start_date.strftime("%Y年%-m月%-d日")}から無料トライアル）
 
 - if @customer_portal_url
-  .mb-12
+  .mb-16
     %h5.font-bold.text-lg.mb-4.pb-2.border-b
       お支払い情報の管理
     %div.mb-4
-      = link_to  @customer_portal_url, target: :_blank, class: "inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75" do
+      = link_to  @customer_portal_url, target: :_blank, class: "flex lg:inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-3 hover:opacity-75" do
         %span 支払情報管理ページを開く
         %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
           %path(stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25")
@@ -37,7 +35,7 @@
         %li お支払履歴の確認
         %li お支払いの停止（キャンセル）
 
-.mb-12(data-controller="webpush" data-webpush-vapid-value="#{Rails.application.credentials.dig(:vapid, :public_key)}")
+.mb-16(data-controller="webpush" data-webpush-vapid-value="#{Rails.application.credentials.dig(:vapid, :public_key)}")
   .flex.items-end.mb-4.pb-2.border-b.justify-between
     %h5.font-bold.text-lg
       プッシュ通知の設定
@@ -49,17 +47,17 @@
     .mb-4
       ✅ 通知設定が完了しています。
     %div(class="mb-4 flex flex-col sm:flex-row sm:items-center space-x-0 sm:space-x-4 space-y-4 sm:space-y-0")
-      %div(data-action="click->webpush#unsubscribe" class="cursor-pointer inline-flex items-center space-x-1 border border-red-700 text-red-700 rounded px-4 py-2 hover:opacity-75")
+      %div(data-action="click->webpush#unsubscribe" class="cursor-pointer inline-flex items-center space-x-1 border border-red-700 text-red-700 rounded px-4 py-3 hover:opacity-75")
         %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
           %path(stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12")
         %span 通知設定を解除する
-      = link_to webpush_test_user_path, data: { "turbo-method": :post }, remote: true, class: "inline-flex items-center space-x-1 border rounded px-4 py-2 hover:opacity-75" do
+      = link_to webpush_test_user_path, data: { "turbo-method": :post }, remote: true, class: "inline-flex items-center space-x-1 border rounded px-4 py-3 hover:opacity-75" do
         %svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4")
           %path(stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5")
         %span 通知をテストする
   - else
     %div.mb-4
-      %div(data-action="click->webpush#subscribe" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-2 hover:opacity-75")
+      %div(data-action="click->webpush#subscribe" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-3 hover:opacity-75")
         この端末を通知先として登録する
   .mb-4.text-sm.leading-7
     ※iPhoneをお使いの場合、Safariの通知許可に加えて「ホーム画面に追加」も必要です。またiOS/Safariのバージョンも16.4以上である必要があります。
