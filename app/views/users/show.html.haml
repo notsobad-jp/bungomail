@@ -5,18 +5,11 @@
 .mb-16
   .mb-4.text-sm.bg-gray-100.rounded.px-4.py-2
     = current_user.email
-
-.mb-16
-  %h5.font-bold.text-lg.mb-4.pb-2.border-b
-    現在のプラン
-  %div.font-bold.mb-2.rounded.border.px-2.py-1.inline-block
-    = current_user.plan_before_type_cast.camelize
-  - if current_user.trialing?
-    .text-sm
-      （#{current_user.trial_end_date.strftime("%Y年%-m月%-d日")}まで無料トライアル）
-  - elsif current_user.trial_scheduled?
-    .text-sm
-      （#{current_user.trial_start_date.strftime("%Y年%-m月%-d日")}から無料トライアル）
+  %dl.flex.items-center.space-x-2.ml-4
+    %dt.text-gray-500.text-sm
+      現在のプラン:
+    %dd.font-bold
+      = current_user.plan_before_type_cast.camelize
 
 - if @customer_portal_url
   .mb-16
@@ -57,7 +50,7 @@
         %span 通知をテストする
   - else
     %div.mb-4
-      %div(data-action="click->webpush#subscribe" class="cursor-pointer inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-3 hover:opacity-75")
+      %div(data-action="click->webpush#subscribe" class="cursor-pointer flex lg:inline-flex items-center space-x-1 bg-indigo-600 text-white rounded px-4 py-3 hover:opacity-75")
         この端末を通知先として登録する
   .mb-4.text-sm.leading-7
     ※iPhoneをお使いの場合、Safariの通知許可に加えて「ホーム画面に追加」も必要です。またiOS/Safariのバージョンも16.4以上である必要があります。
