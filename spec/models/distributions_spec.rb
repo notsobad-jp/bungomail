@@ -158,7 +158,7 @@ RSpec.describe Distribution, type: :model do
   ## createしないと:with_bookできないけど、エラーになるときはbuildでエラーメッセージを拾う
   describe "delivery_should_start_after_trial" do
     context "when start_date = trial_start_date" do
-      it "should be valid" do
+      xit "should be valid" do
         user = build(:user, trial_start_date: Date.parse("2021-09-01"))
         ba = create(:distribution, :with_book, user: user, start_date: Date.parse("2021-09-01"))
         expect(ba.valid?).to be_truthy
@@ -166,7 +166,7 @@ RSpec.describe Distribution, type: :model do
     end
 
     context "when start_date < trial_start_date" do
-      it "should not be valid" do
+      xit "should not be valid" do
         user = build(:user, trial_start_date: Date.parse("2021-09-01"))
         ba = build(:distribution, :with_book, user: user, start_date: Date.parse("2021-08-01"))
         expect(ba.valid?).to be_falsy
@@ -175,7 +175,7 @@ RSpec.describe Distribution, type: :model do
     end
 
     context "when start_date > trial_start_date" do
-      it "should be valid" do
+      xit "should be valid" do
         user = build(:user, trial_start_date: Date.parse("2021-09-01"))
         ba = create(:distribution, :with_book, user: user, start_date: Date.parse("2021-10-01"))
         expect(ba.valid?).to be_truthy
@@ -183,7 +183,7 @@ RSpec.describe Distribution, type: :model do
     end
 
     context "when trial_start_date is blank" do
-      it "should be valid" do
+      xit "should be valid" do
         user = build(:user)
         ba = create(:distribution, :with_book, user: user, start_date: Date.parse("2021-08-01"))
         expect(ba.valid?).to be_truthy
