@@ -31,4 +31,13 @@ namespace :temp do
     run_at = Time.zone.parse(args[:run_at])
     WebPushJob.set(wait_until: run_at).perform_later(user: user, message: feed.send("webpush_payload"))
   end
+
+
+  task cancel_stripe_subscriptions: :environment do |_task, _args|
+    subs = Stripe::Subscription.list({limit: 100})
+    subs.auto_paging_each do |sub|
+      Stripe::Subscription.cancel(sub.id)
+      p "Canceled: #{sub.id}"
+    end
+  end
 end
