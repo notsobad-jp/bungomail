@@ -4,7 +4,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
     enable_extension "pgcrypto"
     enable_extension "plpgsql"
 
-    create_table "aozora_books", force: :cascade do |t|
+    create_table "aozora_books", if_not_exists: true, force: :cascade do |t|
       t.string "title", null: false
       t.string "author", null: false
       t.bigint "author_id"
@@ -33,7 +33,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["words_count"], name: "index_aozora_books_on_words_count"
     end
 
-    create_table "delayed_jobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "delayed_jobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, if_not_exists: true, force: :cascade do |t|
       t.integer "priority", default: 0, null: false
       t.integer "attempts", default: 0, null: false
       t.text "handler", null: false
@@ -48,7 +48,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["priority", "run_at"], name: "delayed_jobs_priority"
     end
 
-    create_table "distributions", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "distributions", id: :uuid, default: -> { "public.gen_random_uuid()" }, if_not_exists: true, force: :cascade do |t|
       t.integer "book_id", null: false
       t.string "book_type", null: false
       t.date "start_date", null: false
@@ -63,7 +63,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["user_id"], name: "index_distributions_on_user_id"
     end
 
-    create_table "email_digests", primary_key: "digest", id: :string, force: :cascade do |t|
+    create_table "email_digests", primary_key: "digest", id: :string, if_not_exists: true, force: :cascade do |t|
       t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
       t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
       t.boolean "trial_ended", default: false, null: false
@@ -71,7 +71,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["canceled_at"], name: "index_email_digests_on_canceled_at"
     end
 
-    create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, if_not_exists: true, force: :cascade do |t|
       t.uuid "distribution_id", null: false
       t.uuid "delayed_job_id"
       t.string "title", null: false
@@ -84,7 +84,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["distribution_id"], name: "index_feeds_on_distribution_id"
     end
 
-    create_table "guten_books", force: :cascade do |t|
+    create_table "guten_books", if_not_exists: true, force: :cascade do |t|
       t.string "title", null: false
       t.string "author"
       t.boolean "rights_reserved", default: false
@@ -110,7 +110,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["ngsl_ratio"], name: "index_guten_books_on_ngsl_ratio"
     end
 
-    create_table "guten_books_subjects", id: false, force: :cascade do |t|
+    create_table "guten_books_subjects", id: false, if_not_exists: true, force: :cascade do |t|
       t.bigint "guten_book_id"
       t.string "subject_id"
       t.index ["guten_book_id", "subject_id"], name: "index_guten_books_subjects_on_guten_book_id_and_subject_id", unique: true
@@ -118,13 +118,13 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["subject_id"], name: "index_guten_books_subjects_on_subject_id"
     end
 
-    create_table "subjects", id: :string, force: :cascade do |t|
+    create_table "subjects", id: :string, if_not_exists: true, force: :cascade do |t|
       t.integer "books_count", default: 0
       t.datetime "created_at", precision: nil, null: false
       t.datetime "updated_at", precision: nil, null: false
     end
 
-    create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, if_not_exists: true, force: :cascade do |t|
       t.uuid "user_id", null: false
       t.uuid "distribution_id", null: false
       t.string "delivery_method", default: "email", null: false
@@ -136,7 +136,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["user_id"], name: "index_subscriptions_on_user_id"
     end
 
-    create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, if_not_exists: true, force: :cascade do |t|
       t.string "email", null: false
       t.string "crypted_password"
       t.string "salt"
@@ -154,14 +154,14 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["magic_login_token"], name: "index_users_on_magic_login_token"
     end
 
-    add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
-    add_foreign_key "distributions", "users"
-    add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
-    add_foreign_key "feeds", "distributions", on_delete: :cascade
-    add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
-    add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
-    add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
-    add_foreign_key "subscriptions", "distributions"
-    add_foreign_key "subscriptions", "users"
+    add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id", if_not_exists: true
+    add_foreign_key "distributions", "users", if_not_exists: true
+    add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify, if_not_exists: true
+    add_foreign_key "feeds", "distributions", on_delete: :cascade, if_not_exists: true
+    add_foreign_key "guten_books", "guten_books", column: "canonical_book_id", if_not_exists: true
+    add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade, if_not_exists: true
+    add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade, if_not_exists: true
+    add_foreign_key "subscriptions", "distributions", if_not_exists: true
+    add_foreign_key "subscriptions", "users", if_not_exists: true
   end
 end
