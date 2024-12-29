@@ -1,4 +1,4 @@
-class DistributionsController < ApplicationController
+class CampaignsController < ApplicationController
   before_action :require_login, only: [:index, :create, :destroy]
   after_action :verify_authorized, only: [:create, :destroy]
 
@@ -6,68 +6,68 @@ class DistributionsController < ApplicationController
     @meta_title = "配信管理"
 
     if params[:finished].present?
-      @distributions = Distribution.subscribed_by(current_user).finished.order(start_date: :desc).page(params[:page])
+      @campaigns = Campaign.subscribed_by(current_user).finished.order(start_date: :desc).page(params[:page])
     else
-      @distributions = Distribution.subscribed_by(current_user).upcoming.order(start_date: :desc).page(params[:page])
+      @campaigns = Campaign.subscribed_by(current_user).upcoming.order(start_date: :desc).page(params[:page])
     end
   end
 
   def create
-    authorize Distribution
-    @distribution = current_user.distributions.new(distribution_params)
+    authorize Campaign
+    @campaign = current_user.campaigns.new(campaign_params)
 
-    if @distribution.save
-      sub = current_user.subscribe(@distribution, delivery_method: params[:delivery_method])
+    if @campaign.save
+      sub = current_user.subscribe(@campaign, delivery_method: params[:delivery_method])
       if sub.delivery_method == "プッシュ通知" && current_user.fcm_device_token.present?
         Webpush.subscribe_to_topic!(
           token: current_user.fcm_device_token,
-          topic: @distribution.id
+          topic: @campaign.id
         )
       end
-      BungoMailer.with(user: current_user, distribution: @distribution).schedule_completed_email.deliver_now
-      @distribution.delay.create_and_schedule_feeds
+      BungoMailer.with(user: current_user, campaign: @campaign).schedule_completed_email.deliver_now
+      @campaign.delay.create_and_schedule_feeds
       flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
-      redirect_to distribution_path(@distribution)
+      redirect_to campaign_path(@campaign)
     else
-      @book = @distribution.book
+      @book = @campaign.book
       @meta_title = @book.title
       @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
 
-      flash.now[:error] = @distribution.errors.full_messages.join('. ')
+      flash.now[:error] = @campaign.errors.full_messages.join('. ')
       render template: 'books/show', status: 422
     end
   end
 
   def show
-    @distribution = Distribution.find(params[:id])
-    @feeds = Feed.delivered.where(distribution_id: @distribution.id).order(delivery_date: :desc).page(params[:page]) # FIXME
-    @subscription = current_user.subscriptions.find_by(distribution_id: @distribution.id) if current_user
-    @meta_title = @distribution.book.author_and_book_name
-    @breadcrumbs = [ {text: "配信管理", link: distributions_path}, {text: @meta_title} ] if current_user
+    @campaign = Campaign.find(params[:id])
+    @feeds = Feed.delivered.where(campaign_id: @campaign.id).order(delivery_date: :desc).page(params[:page]) # FIXME
+    @subscription = current_user.subscriptions.find_by(campaign_id: @campaign.id) if current_user
+    @meta_title = @campaign.book.author_and_book_name
+    @breadcrumbs = [ {text: "配信管理", link: campaigns_path}, {text: @meta_title} ] if current_user
 
     # 配信期間が重複している配信が存在してるかチェック
-    if current_user && current_user.id != @distribution.user_id
-      @overlapping_distributions = Distribution.subscribed_by(current_user).where.not(id: @distribution.id).overlapping_with(@distribution.end_date, @distribution.start_date)
+    if current_user && current_user.id != @campaign.user_id
+      @overlapping_campaigns = Campaign.subscribed_by(current_user).where.not(id: @campaign.id).overlapping_with(@campaign.end_date, @campaign.start_date)
     end
   end
 
   def destroy
-    @distribution = authorize Distribution.find(params[:id])
-    @distribution.destroy!
+    @campaign = authorize Campaign.find(params[:id])
+    @campaign.destroy!
     if current_user.fcm_device_token.present?
       Webpush.unsubscribe_from_topic!(
         token: current_user.fcm_device_token,
-        topic: @distribution.id
+        topic: @campaign.id
       )
     end
-    BungoMailer.with(user: @distribution.user, author_title: "#{@distribution.book.author}『#{@distribution.book.title}』", delivery_period: "#{@distribution.start_date} 〜 #{@distribution.end_date}").schedule_canceled_email.deliver_now
+    BungoMailer.with(user: @campaign.user, author_title: "#{@campaign.book.author}『#{@campaign.book.title}』", delivery_period: "#{@campaign.start_date} 〜 #{@campaign.end_date}").schedule_canceled_email.deliver_now
     flash[:success] = '配信を削除しました！'
-    redirect_to distributions_path, status: 303
+    redirect_to campaigns_path, status: 303
   end
 
   private
 
-  def distribution_params
-    params.require(:distribution).permit(:book_id, :book_type, :start_date, :end_date, :delivery_time)
+  def campaign_params
+    params.require(:campaign).permit(:book_id, :book_type, :start_date, :end_date, :delivery_time)
   end
 end

@@ -19,8 +19,8 @@ namespace :cron do
       digests = new_subs.map{|user| Digest::SHA256.hexdigest(user.email) }
       EmailDigest.where(digest: digests).update_all(trial_ended: true, updated_at: Time.current)
 
-      # 有料じゃないユーザーのdistributionsは全部削除
-      Distribution.by_unpaid_users.upcoming.destroy_all
+      # 有料じゃないユーザーのcampaignsは全部削除
+      Campaign.by_unpaid_users.upcoming.destroy_all
     end
   end
 

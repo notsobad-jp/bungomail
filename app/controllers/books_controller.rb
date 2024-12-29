@@ -15,7 +15,7 @@ class BooksController < ApplicationController
 
   def show
     @book = AozoraBook.find(params[:id])
-    @distribution = Distribution.new(
+    @campaign = Campaign.new(
       book_id: params[:id],
       book_type: 'AozoraBook',
       start_date: params[:start_date],

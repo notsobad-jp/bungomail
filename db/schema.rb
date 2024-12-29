@@ -60,7 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "distributions", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "campaigns", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.integer "book_id", null: false
     t.string "book_type", null: false
     t.date "start_date", null: false
@@ -69,10 +69,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.date "end_date", null: false
     t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
     t.uuid "user_id", null: false
-    t.index ["book_id", "book_type"], name: "index_distributions_on_book_id_and_book_type"
-    t.index ["end_date"], name: "index_distributions_on_end_date"
-    t.index ["start_date"], name: "index_distributions_on_start_date"
-    t.index ["user_id"], name: "index_distributions_on_user_id"
+    t.index ["book_id", "book_type"], name: "index_campaigns_on_book_id_and_book_type"
+    t.index ["end_date"], name: "index_campaigns_on_end_date"
+    t.index ["start_date"], name: "index_campaigns_on_start_date"
+    t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
   create_table "email_digests", primary_key: "digest", id: :string, force: :cascade do |t|
@@ -84,7 +84,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
   end
 
   create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "distribution_id", null: false
+    t.uuid "campaign_id", null: false
     t.uuid "delayed_job_id"
     t.string "title", null: false
     t.text "content", null: false
@@ -93,7 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.text "comment"
     t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
-    t.index ["distribution_id"], name: "index_feeds_on_distribution_id"
+    t.index ["campaign_id"], name: "index_feeds_on_campaign_id"
   end
 
   create_table "guten_books", force: :cascade do |t|
@@ -138,13 +138,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
-    t.uuid "distribution_id", null: false
+    t.uuid "campaign_id", null: false
     t.string "delivery_method", default: "email", null: false
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["delivery_method"], name: "index_subscriptions_on_delivery_method"
-    t.index ["distribution_id"], name: "index_subscriptions_on_distribution_id"
-    t.index ["user_id", "distribution_id"], name: "index_subscriptions_on_user_id_and_distribution_id", unique: true
+    t.index ["campaign_id"], name: "index_subscriptions_on_campaign_id"
+    t.index ["user_id", "campaign_id"], name: "index_subscriptions_on_user_id_and_campaign_id", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
@@ -167,12 +167,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
   end
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
-  add_foreign_key "distributions", "users"
+  add_foreign_key "campaigns", "users"
   add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
-  add_foreign_key "feeds", "distributions", on_delete: :cascade
+  add_foreign_key "feeds", "campaigns", on_delete: :cascade
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
-  add_foreign_key "subscriptions", "distributions"
+  add_foreign_key "subscriptions", "campaigns"
   add_foreign_key "subscriptions", "users"
 end

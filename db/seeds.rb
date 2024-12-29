@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 User.insert({
-  id: "37f4e418-227e-485d-ab41-c50f887b9956",
+  id: "1418479c-d5a7-4d29-a174-c5133ca484b6",
   email: "info@notsobad.jp",
   created_at: Time.zone.parse("2018/4/1"),
   updated_at: Time.zone.parse("2018/4/1"),

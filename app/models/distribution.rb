@@ -1,4 +1,4 @@
-class Distribution < ApplicationRecord
+class Campaign < ApplicationRecord
   belongs_to :user
   belongs_to :book, polymorphic: true
   has_many :feeds, dependent: :destroy
@@ -38,7 +38,7 @@ class Distribution < ApplicationRecord
         title: title,
         content: content,
         delivery_date: delivery_date,
-        distribution_id: self.id
+        campaign_id: self.id
       }
       delivery_date += 1.day
     end
@@ -77,7 +77,7 @@ class Distribution < ApplicationRecord
 
   # 同一チャネルで期間が重複するレコードが存在すればinvalid(Freeプランのみ)
   def delivery_period_should_not_overlap
-    overlapping = Distribution.where.not(id: id).where(user_id: user_id).overlapping_with(start_date, end_date)
+    overlapping = Campaign.where.not(id: id).where(user_id: user_id).overlapping_with(start_date, end_date)
     errors.add(:base, "他の配信と期間が重複しています") if overlapping.present?
   end
 

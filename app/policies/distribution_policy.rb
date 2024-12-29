@@ -1,2 +1,2 @@
-class DistributionPolicy < ApplicationPolicy
+class CampaignPolicy < ApplicationPolicy
 end
