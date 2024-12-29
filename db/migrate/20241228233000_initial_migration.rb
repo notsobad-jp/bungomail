@@ -33,7 +33,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["words_count"], name: "index_aozora_books_on_words_count"
     end
 
-    create_table "delayed_jobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "delayed_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
       t.integer "priority", default: 0, null: false
       t.integer "attempts", default: 0, null: false
       t.text "handler", null: false
@@ -48,7 +48,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["priority", "run_at"], name: "delayed_jobs_priority"
     end
 
-    create_table "campaigns", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "campaigns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
       t.integer "book_id", null: false
       t.string "book_type", null: false
       t.date "start_date", null: false
@@ -71,7 +71,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["canceled_at"], name: "index_email_digests_on_canceled_at"
     end
 
-    create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
       t.uuid "campaign_id", null: false
       t.uuid "delayed_job_id"
       t.string "title", null: false
@@ -136,7 +136,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
       t.index ["user_id"], name: "index_subscriptions_on_user_id"
     end
 
-    create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
       t.string "email", null: false
       t.string "crypted_password"
       t.string "salt"

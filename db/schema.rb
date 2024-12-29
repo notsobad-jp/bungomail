@@ -45,22 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.index ["words_count"], name: "index_aozora_books_on_words_count"
   end
 
-  create_table "delayed_jobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler", null: false
-    t.text "last_error"
-    t.datetime "run_at", precision: nil
-    t.datetime "locked_at", precision: nil
-    t.datetime "failed_at", precision: nil
-    t.string "locked_by"
-    t.string "queue"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
-  end
-
-  create_table "campaigns", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "campaigns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "book_id", null: false
     t.string "book_type", null: false
     t.date "start_date", null: false
@@ -75,6 +60,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
+  create_table "delayed_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
   create_table "email_digests", primary_key: "digest", id: :string, force: :cascade do |t|
     t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
@@ -83,7 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.index ["canceled_at"], name: "index_email_digests_on_canceled_at"
   end
 
-  create_table "feeds", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "campaign_id", null: false
     t.uuid "delayed_job_id"
     t.string "title", null: false
@@ -92,8 +92,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.text "comment"
-    t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
     t.index ["campaign_id"], name: "index_feeds_on_campaign_id"
+    t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
   end
 
   create_table "guten_books", force: :cascade do |t|
@@ -142,13 +142,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.string "delivery_method", default: "email", null: false
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.index ["delivery_method"], name: "index_subscriptions_on_delivery_method"
     t.index ["campaign_id"], name: "index_subscriptions_on_campaign_id"
+    t.index ["delivery_method"], name: "index_subscriptions_on_delivery_method"
     t.index ["user_id", "campaign_id"], name: "index_subscriptions_on_user_id_and_campaign_id", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
-  create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "crypted_password"
     t.string "salt"
@@ -168,8 +168,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
 
   add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
   add_foreign_key "campaigns", "users"
-  add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
   add_foreign_key "feeds", "campaigns", on_delete: :cascade
+  add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
   add_foreign_key "guten_books", "guten_books", column: "canonical_book_id"
   add_foreign_key "guten_books_subjects", "guten_books", on_delete: :cascade
   add_foreign_key "guten_books_subjects", "subjects", on_delete: :cascade
