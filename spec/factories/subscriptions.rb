@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :subscription do
     association :user
-    association :distribution
+    association :campaign
     delivery_method { "email" }
   end
 end

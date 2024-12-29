@@ -2,7 +2,7 @@ require 'open-uri'
 
 class AozoraBook < ApplicationRecord
   has_many :campaign_group, dependent: :destroy
-  has_many :distributions, as: :book, dependent: :restrict_with_exception
+  has_many :campaigns, as: :book, dependent: :restrict_with_exception
   has_many :variants, -> { order("character_type") }, class_name: 'AozoraBook', foreign_key: :canonical_book_id
   belongs_to :canonical, class_name: 'AozoraBook', foreign_key: :canonical_book_id, required: false
   self.primary_key = :id

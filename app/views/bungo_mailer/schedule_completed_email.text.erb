@@ -1,13 +1,13 @@
 以下の内容でカスタム配信の予約を完了しました。
 
 ▼配信作品:
-<%= @distribution.book.author %>『<%= @distribution.book.title %>』
+<%= @campaign.book.author %>『<%= @campaign.book.title %>』
 
 ▼配信期間:
-<%= @distribution.start_date %> 〜 <%= @distribution.end_date %>
+<%= @campaign.start_date %> 〜 <%= @campaign.end_date %>
 
 ▼配信時間:
-<%= @distribution.delivery_time.strftime("%H:%M") %>
+<%= @campaign.delivery_time.strftime("%H:%M") %>
 
 
 配信停止をご希望の場合は、、マイページからいつでもこの配信をキャンセルすることができます。

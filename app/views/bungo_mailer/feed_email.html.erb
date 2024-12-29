@@ -1,4 +1,4 @@
-（<%= "#{@feed.index}/#{@feed.distribution.count}。#{ @word_count.to_s(:delimited) }字。目安の読了時間：#{ @word_count.quo(500).ceil }分" %>）
+（<%= "#{@feed.index}/#{@feed.campaign.count}。#{ @word_count.to_s(:delimited) }字。目安の読了時間：#{ @word_count.quo(500).ceil }分" %>）
 
 <%= simple_format @feed.content.gsub(/(\r\n|\r|\n)/, "<br />") %>
 

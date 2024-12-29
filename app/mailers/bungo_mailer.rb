@@ -1,11 +1,11 @@
 class BungoMailer < ApplicationMailer
   def feed_email
     @feed = params[:feed]
-    send_to = params[:send_to] || @feed.distribution.send_to
+    send_to = params[:send_to] || @feed.campaign.send_to
     return if send_to.blank?
 
-    @book = @feed.distribution.book
-    @owner = @feed.distribution.user
+    @book = @feed.campaign.book
+    @owner = @feed.campaign.user
     @word_count = @feed.content.gsub(" ", "").length
     sender_name = envelope_display_name("#{@book.author_name}（ブンゴウメール）")
 
@@ -36,7 +36,7 @@ class BungoMailer < ApplicationMailer
 
   def schedule_completed_email
     @user = params[:user]
-    @distribution = params[:distribution]
+    @campaign = params[:campaign]
     xsmtp_api_params = { category: 'schedule_completed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
     mail(to: @user.email, subject: "【ブンゴウメール】配信予約が完了しました")

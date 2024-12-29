@@ -1,2 +1,0 @@
-class DistributionPolicy < ApplicationPolicy
-end

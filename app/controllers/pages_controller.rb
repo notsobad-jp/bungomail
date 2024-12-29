@@ -17,10 +17,10 @@ class PagesController < ApplicationController
     @meta_image = "https://bungomail.com/assets/images/campaigns/dogramagra.png"
   end
 
-  def past_deliveries
+  def past_campaigns
     year = params[:year] || Time.current.year
     start = Time.current.change(year: year).beginning_of_year
-    @distributions = Distribution.includes(:book).where(user_id: User.find_by(email: 'info@notsobad.jp'), start_date: start..start.end_of_year).where("start_date < ?", Time.zone.today).order(:start_date)
+    @campaigns = Campaign.includes(:book).where(user_id: User.find_by(email: 'info@notsobad.jp'), start_date: start..start.end_of_year).where("start_date < ?", Time.zone.today).order(:start_date)
     @meta_title = "過去配信作品（#{year}）"
   end
 
