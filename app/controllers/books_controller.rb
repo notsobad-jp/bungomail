@@ -2,10 +2,12 @@ class BooksController < ApplicationController
   before_action :require_login, only: [:index]
 
   def index
-    @keyword = params[:keyword]
-    @category = params[:category]
-    # @books = Book.where(keyword: @keyword, category: @category).page(params[:page]).dig("books")
-    @books = Book.page
+    @keyword = params[:keyword].presence
+    @category = params[:category]&.to_sym
+    @page = params[:page] ? params[:page].to_i : 1
+
+    res = Book.where(keyword: @keyword, category: @category, page: @page)
+    @books, @has_next, @total_count = res.values_at("books", "hasNext", "totalCount")
 
     @meta_title = "作品検索"
     @meta_noindex = true

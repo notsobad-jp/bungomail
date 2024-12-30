@@ -88,36 +88,32 @@ class Book
   end
 
   class << self
-    def where(keyword: nil, category: :all)
-      @current_params = {}
-      @current_params[:q] = keyword if keyword.present?
+    def where(keyword: nil, category: :all, page: 1)
+      params = {}
+      params[:q] = keyword if keyword.present?
       if category_config = CATEGORIES[category]
-        @current_params["words_count[gte]"] = category_config[:range_from]
-        @current_params["words_count[lte]"] = category_config[:range_to]
+        params["words_count[gte]"] = category_config[:range_from]
+        params["words_count[lte]"] = category_config[:range_to]
       end
 
-      self
-    end
+      offset = (page - 1) * PER_PAGE
 
-    def page(number = 1)
-      offset = (number.to_i - 1) * PER_PAGE
-
-      params = @current_params || {}
       params.merge!(
         sort: "access_count",
         limit: PER_PAGE,
         offset: offset
       )
+
       res = self.call(
         path: "/v1/books",
         params: params,
       )
 
-      res.dig("books").map do |record|
+      res["books"] = res["books"].map do |record|
         Book.new(record)
       end
-    ensure
-      @current_params = nil
+
+      res
     end
 
     def find(id)

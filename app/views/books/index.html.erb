@@ -8,9 +8,9 @@
 
 <div class="mb-8">
   <%= form_with url: books_path, method: :get, local: true, class: "flex flex-col sm:flex-row items-center space-x-0 sm:space-x-2 space-y-2 sm:space-y-0" do |f| %>
-    <%= f.text_field :keyword, value: @keyword, class: 'w-full border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500', placeholder: "作品名または著者名" %>
-    <%= f.select :category, Book::CATEGORIES.map{|m| [m[1][:name], m[0]] }, { selected: @category }, class: 'w-full sm:w-auto border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500' %>
-    <%= f.submit "検索", class: 'flex-1 rounded block w-full py-3 px-4 bg-blue-600 text-white text-sm hover:opacity-75' %>
+  <%= f.text_field :keyword, value: @keyword, class: 'w-full border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500', placeholder: "作品名または著者名" %>
+  <%= f.select :category, Book::CATEGORIES.map{|m| [m[1][:name], m[0]] }, { selected: @category }, class: 'w-full sm:w-auto border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500' %>
+  <%= f.submit "検索", class: 'flex-1 rounded block w-full py-3 px-4 bg-blue-600 text-white text-sm hover:opacity-75' %>
   <% end %>
 </div>
 <div class="flex text-xs font-bold bg-gray-50 px-2 sm px-4 py-4 rounded-t border-t border-r border-l border-gray-100">
@@ -25,25 +25,38 @@
 </div>
 <div class="border-r border-l border-t border-gray-100 rounded-b mb-4">
   <% if @books.blank? %>
-    <div class="border-b border-gray-100 text-sm py-3">
-      <%= t 'no_results', scope: [:search, :books, :index] %>
-    </div>
+  <div class="border-b border-gray-100 text-sm py-3">
+    <%= t 'no_results', scope: [:search, :books, :index] %>
+  </div>
   <% end %>
   <%= render partial: 'row', collection: @books, as: :book, locals: { category: @category } %>
 </div>
-<div class="flex justify-between items-end mb-4">
+<div class="flex justify-between items-center mb-4">
   <div class="text-xs">
-    <%
-=begin%>
- <%= t(:search_offset, scope: [:search, :books, :index], from: @books.offset_value + 1, to: @books.offset_value + @books.length, count: @books.total_count.to_formatted_s(:delimited)) %>
-<%
-=end%>
+    <%= t(:search_offset,
+      scope: [:search, :books, :index],
+      from: (@page - 1) * Book::PER_PAGE + 1,
+      to: (@page - 1) * Book::PER_PAGE + @books.length,
+      count: @total_count.to_formatted_s(:delimited))
+    %>
   </div>
-</div>
-<div class="flex justify-center mb-8">
-  <%
-=begin%>
- <%= paginate @books, window: 2 %>
-<%
-=end%>
+
+  <div class="flex items-center space-x-4">
+    <% if @page > 1 %>
+      <%= link_to url_for(params.permit(:keyword, :category).merge(page: @page - 1)), class: "border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500 flex items-center space-x-2" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+        <span>Prev</span>
+      <% end %>
+    <% end %>
+    <% if @has_next %>
+      <%= link_to url_for(params.permit(:keyword, :category).merge(page: @page + 1)), class: "border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-blue-500 flex items-center space-x-2" do %>
+        <span>Next</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      <% end %>
+    <% end %>
+  </div>
 </div>
