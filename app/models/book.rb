@@ -61,7 +61,9 @@ class Book
 
   attribute :id, :integer
   attribute :title, :string
+  attribute :titleKana, :string
   attribute :subTitle, :string
+  attribute :subTitleKana, :string
   attribute :characterType, :string
   attribute :rightsReserved, :boolean, default: false
   attribute :accessCount, :integer, default: 0
@@ -69,6 +71,10 @@ class Book
   attribute :beginning, :string
   attribute :juvenile, :boolean, default: false
   attribute :author
+  attribute :publishedDate, :date
+  attribute :firstAppearance, :string
+  attribute :source, :string
+  attribute :variants
 
 
   def access_rating
@@ -85,6 +91,15 @@ class Book
       end
     end
     nil
+  end
+
+  def recommended_duration
+    if wordsCount < 25000
+      days = [wordsCount.fdiv(750).ceil, 30].min
+      "#{days}日"
+    else
+      "#{wordsCount.fdiv(22500).ceil}ヶ月"
+    end
   end
 
   class << self
