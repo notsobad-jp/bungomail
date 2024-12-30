@@ -1,5 +1,15 @@
 class SubscriptionsController < ApplicationController
-  before_action :require_login, only: [:create, :destroy]
+  before_action :require_login, only: [:index, :create, :destroy]
+
+  def index
+    @meta_title = "配信管理"
+
+    if params[:finished].present?
+      @campaigns = Campaign.subscribed_by(current_user).finished.order(start_date: :desc).page(params[:page])
+    else
+      @campaigns = Campaign.subscribed_by(current_user).upcoming.order(start_date: :desc).page(params[:page])
+    end
+  end
 
   def create
     subscription = current_user.subscriptions.new(subscription_params)
