@@ -32,7 +32,6 @@ class PagesController < ApplicationController
       privacy: 'プライバシーポリシー',
       tokushoho: '特定商取引法に基づく表記',
       unsubscribe: '退会',
-      custom_delivery: 'カスタム配信',
     }
   end
 end

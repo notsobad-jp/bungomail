@@ -3,13 +3,6 @@ class CampaignsController < ApplicationController
   after_action :verify_authorized, only: [:create, :destroy]
 
   def index
-    @meta_title = "配信管理"
-
-    if params[:finished].present?
-      @campaigns = Campaign.subscribed_by(current_user).finished.order(start_date: :desc).page(params[:page])
-    else
-      @campaigns = Campaign.subscribed_by(current_user).upcoming.order(start_date: :desc).page(params[:page])
-    end
   end
 
   def create
@@ -31,7 +24,6 @@ class CampaignsController < ApplicationController
     else
       @book = @campaign.book
       @meta_title = @book.title
-      @breadcrumbs = [ {text: 'カスタム配信', link: page_path(:custom_delivery)}, {text: @meta_title} ]
 
       flash.now[:error] = @campaign.errors.full_messages.join('. ')
       render template: 'books/show', status: 422

@@ -8,11 +8,11 @@
       %div{class: "border-b border-gray-200"}
         %nav{class: "-mb-px flex space-x-8", 'aria-label': "Tabs"}
           - if params[:finished].present?
-            = link_to "配信中/配信予定", campaigns_path, class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
+            = link_to "配信中/配信予定", subscriptions_path, class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
             %a{href: "#", class: "border-indigo-500 text-indigo-600 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium", 'aria-current': "page"} 配信終了
           - else
             %a{href: "#", class: "border-indigo-500 text-indigo-600 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium", 'aria-current': "page"} 配信中/配信予定
-            = link_to "配信終了", campaigns_path(finished: true), class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
+            = link_to "配信終了", subscriptions_path(finished: true), class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
 
   .mt-4
     - if @campaigns.present?

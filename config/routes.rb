@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'campaigns/dogramagra' => "pages#dogramagra"
+
   resources :books, only: [:index, :show]
   resources :campaigns, shallow: true do
     resources :feeds
@@ -15,7 +17,6 @@ Rails.application.routes.draw do
   get 'mypage' => 'users#show'
   get 'signup' => 'users#new'
 
-  get 'campaigns/dogramagra' => "pages#dogramagra"
   get 'past_campaigns' => "pages#past_campaigns"
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
