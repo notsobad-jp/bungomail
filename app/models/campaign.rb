@@ -20,6 +20,10 @@ class Campaign < ApplicationRecord
   enum patterns: { seigaiha: "seigaiha", asanoha: "asanoha", sayagata: "sayagata" }
 
 
+  def author_and_book_name
+    "#{author_name}『#{title}』"
+  end
+
   def count
     (end_date - start_date).to_i + 1
   end
