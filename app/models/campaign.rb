@@ -16,6 +16,13 @@ class Campaign < ApplicationRecord
   validate :end_date_should_not_be_too_far # 12ヶ月以上先の予約は禁止
   validate :delivery_period_should_not_overlap, if: -> { user.free_plan? } # 無料ユーザーで期間が重複するレコードが存在すればinvalid
 
+  enum colors: { red: "red", fuchsia: "fuchsia", sky: "sky", teal: "teal", yellow: "yellow", slate: "slate" }
+  enum patterns: { seigaiha: "seigaiha", asanoha: "asanoha", sayagata: "sayagata" }
+
+
+  def author_and_book_name
+    "#{author_name}『#{title}』"
+  end
 
   def count
     (end_date - start_date).to_i + 1

@@ -15,19 +15,8 @@
 %div(class="mb-12 text-sm text-gray-500")
   %p 配信する期間や時間などを登録して、配信を予約してください。
 
-.mb-4
-  %h1(class="mb-2 text-xl sm:text-2xl font-bold")
-    = @book.title
-  .text-gray-500.text-large
-    = @book.author_name
 .mb-12
-  .border.rounded.bg-gray-50.p-2
-    = @book.wordsCount.to_s(:delimited)
-    %small.text-xs 文字
-    .inline
-      .inline.text-sm （配信期間の目安:
-      .inline.text-red-600= @book.recommended_duration
-      .inline.text-sm ）
+  = render "campaigns/banner", campaign: @campaign
 
 = form_with model: @campaign, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
@@ -38,7 +27,14 @@
 
   .mb-12
     .mb-8
-      %h5.mb-2.font-bold 配信期間
+      %h5.mb-4.font-bold 配信期間
+      .border.rounded.bg-gray-50.p-2.mb-4
+        = @book.wordsCount.to_fs(:delimited)
+        %small.text-xs 文字
+        .inline
+          .inline.text-sm （配信期間の目安:
+          .inline.text-red-600= @book.recommended_duration
+          .inline.text-sm ）
       %div(class="flex sm:items-center flex-col sm:flex-row sm:space-x-2")
         = f.date_field :start_date, min: Date.current.tomorrow, required: true, class: 'border border-gray-200 rounded p-2 flex-1'
         %div(class="text-center rotate-90 sm:rotate-0") 〜

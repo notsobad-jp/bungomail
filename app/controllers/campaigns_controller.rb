@@ -34,7 +34,7 @@ class CampaignsController < ApplicationController
     @campaign = Campaign.find(params[:id])
     @feeds = Feed.delivered.where(campaign_id: @campaign.id).order(delivery_date: :desc).page(params[:page]) # FIXME
     @subscription = current_user.subscriptions.find_by(campaign_id: @campaign.id) if current_user
-    @meta_title = @campaign.book.author_and_book_name
+    @meta_title = @campaign.author_and_book_name
     @breadcrumbs = [ {text: "配信管理", link: campaigns_path}, {text: @meta_title} ] if current_user
 
     # 配信期間が重複している配信が存在してるかチェック
@@ -69,6 +69,8 @@ class CampaignsController < ApplicationController
       :start_date,
       :end_date,
       :delivery_time,
+      :color,
+      :pattern,
     )
   end
 end
