@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_02_054454) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_02_103622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -53,15 +53,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_02_054454) do
 
   create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "campaign_id", null: false
-    t.uuid "delayed_job_id"
     t.string "title", null: false
     t.text "content", null: false
     t.date "delivery_date", null: false
     t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.text "comment"
     t.index ["campaign_id"], name: "index_feeds_on_campaign_id"
-    t.index ["delayed_job_id"], name: "index_feeds_on_delayed_job_id"
   end
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -96,7 +93,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_02_054454) do
 
   add_foreign_key "campaigns", "users"
   add_foreign_key "feeds", "campaigns", on_delete: :cascade
-  add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify
   add_foreign_key "subscriptions", "campaigns"
   add_foreign_key "subscriptions", "users"
 end
