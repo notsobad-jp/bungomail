@@ -9,6 +9,9 @@ module.exports = {
     'config/locales/**/*.yml'
   ],
   theme: {
+    fontFamily: {
+      mincho: ['游ゴシック体', 'Yu Gothic', 'YuGothic', 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo', 'Osaka', 'ＭＳ Ｐゴシック', 'MS PGothic', 'sans-serif'],
+    },
     extend: {
       fontFamily: {
         sans: ['Noto Sans JP', 'ui-sans-serif', 'system-ui', 'Inter var', ...defaultTheme.fontFamily.sans],

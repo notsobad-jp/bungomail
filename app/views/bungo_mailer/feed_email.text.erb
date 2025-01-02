@@ -1,4 +1,4 @@
-（<%= @word_count.to_s(:delimited) %>字。目安の読了時間：<%= @word_count.quo(500).ceil %>分）
+（<%= @word_count.to_fs(:delimited) %>字。目安の読了時間：<%= @word_count.quo(500).ceil %>分）
 
 <%= @feed.content %>
 

@@ -37,7 +37,7 @@
       scope: [:search, :books, :index],
       from: (@page - 1) * Book::PER_PAGE + 1,
       to: (@page - 1) * Book::PER_PAGE + @books.length,
-      count: @total_count.to_formatted_s(:delimited))
+      count: @total_count.to_fs(:delimited))
     %>
   </div>
 
