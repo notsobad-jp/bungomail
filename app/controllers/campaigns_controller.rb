@@ -64,7 +64,7 @@ class CampaignsController < ApplicationController
       :book_id,
       :book_type,
       :title,
-      :file_url,
+      :file_id,
       :author_name,
       :start_date,
       :end_date,

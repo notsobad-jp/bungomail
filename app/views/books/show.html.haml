@@ -19,7 +19,7 @@
   %h1(class="mb-2 text-xl sm:text-2xl font-bold")
     = @book.title
   .text-gray-500.text-large
-    = @book.author["fullName"]
+    = @book.author_name
 .mb-12
   .border.rounded.bg-gray-50.p-2
     = @book.wordsCount.to_s(:delimited)
@@ -33,8 +33,8 @@
   = f.hidden_field :book_id, value: @book.id
   = f.hidden_field :book_type, value: 'AozoraBook'
   = f.hidden_field :title, value: @book.title
-  = f.hidden_field :file_url, value: @book.fileUrl
-  = f.hidden_field :author_name, value: @book.author["fullName"]
+  = f.hidden_field :file_id, value: @book.fileId
+  = f.hidden_field :author_name, value: @book.author_name
 
   .mb-12
     .mb-8

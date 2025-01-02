@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_02_004153) do
     t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
     t.uuid "user_id", null: false
     t.string "title"
-    t.string "file_url"
+    t.integer "file_id"
     t.string "author_name"
     t.index ["book_id", "book_type"], name: "index_campaigns_on_book_id_and_book_type"
     t.index ["end_date"], name: "index_campaigns_on_end_date"

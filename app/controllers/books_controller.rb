@@ -18,6 +18,9 @@ class BooksController < ApplicationController
     @campaign = Campaign.new(
       book_id: params[:id],
       book_type: 'AozoraBook',
+      title: @book.title,
+      file_id: @book.fileId,
+      author_name: @book.author_name,
       start_date: params[:start_date],
       end_date: params[:end_date],
       delivery_time: params[:delivery_time] || '07:00',

@@ -82,6 +82,14 @@ class Book
     ACCESS_RATINGS.find{|k,v| self.accessCount >= k }.dig(1, :rating)
   end
 
+  def author_name
+    author["fullName"]
+  end
+
+  def author_id
+    author["id"]
+  end
+
   def category
     return nil if wordsCount.nil?
 
@@ -102,6 +110,26 @@ class Book
       "#{wordsCount.fdiv(22500).ceil}ヶ月"
     end
   end
+
+  def aozora_card_url
+    "https://www.aozora.gr.jp/cards/#{format('%06d', author_id)}/card#{id}.html"
+  end
+
+  def aozora_file_path
+    file_path = fileId ? "#{id}_#{fileId}" : id
+    "tmp/aozorabunko/cards/#{format('%06d', author_id)}/files/#{file_path}.html"
+  end
+
+  def aozora_file_url
+    file_path = fileId ? "#{id}_#{fileId}" : id
+    "https://www.aozora.gr.jp/cards/#{format('%06d', author_id)}/files/#{file_path}.html"
+  end
+
+  def aozora_raw_file_url
+    file_path = fileId ? "#{id}_#{fileId}" : id
+    "https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/#{format('%06d', author_id)}/files/#{file_path}.html"
+  end
+
 
   class << self
     def where(keyword: nil, category: :all, page: 1)
