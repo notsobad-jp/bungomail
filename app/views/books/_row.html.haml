@@ -3,16 +3,16 @@
     %div(class="w-1/3")
       = link_to book_path(book.id), class: 'text-link'  do
         = book.title.truncate(75)
-        - if book.sub_title.present?
-          %small.ml-1= book.sub_title
-        - if book.rights_reserved?
+        - if book.subTitle.present?
+          %small.ml-1= book.subTitle
+        - if book.rightsReserved
           %small
             %i.far.fa-copyright
     %div(class="w-1/3")
-      = book.author_name
+      = book.author["fullName"]
     %div.text-xs(class="w-1/2")
       .flex.justify-between
         = category_label(book.category)
-        .text-yellow-300= access_count_stars(book.access_rating(:stars))
+        .text-yellow-300= access_count_stars(book.access_rating)
   .truncate.text-xs.text-gray-400
     = book.beginning

@@ -19,10 +19,10 @@
   %h1(class="mb-2 text-xl sm:text-2xl font-bold")
     = @book.title
   .text-gray-500.text-large
-    = @book.author
+    = @book.author_name
 .mb-12
   .border.rounded.bg-gray-50.p-2
-    = @book.words_count.to_s(:delimited)
+    = @book.wordsCount.to_s(:delimited)
     %small.text-xs 文字
     .inline
       .inline.text-sm （配信期間の目安:
@@ -32,6 +32,10 @@
 = form_with model: @campaign, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
   = f.hidden_field :book_type, value: 'AozoraBook'
+  = f.hidden_field :title, value: @book.title
+  = f.hidden_field :file_id, value: @book.fileId
+  = f.hidden_field :author_name, value: @book.author_name
+
   .mb-12
     .mb-8
       %h5.mb-2.font-bold 配信期間
@@ -67,9 +71,9 @@
               required: true,
               class: 'border border-gray-200 rounded w-full p-2'
   .mb-4
-    - disabled = !current_user || @book.rights_reserved || current_user.fcm_device_token.blank?
+    - disabled = !current_user || @book.rightsReserved || current_user.fcm_device_token.blank?
     = f.submit '配信を予約する', class: "mb-2 rounded bg-red-600 text-white py-4 w-full #{disabled ? 'opacity-50' : 'hover:bg-red-500 cursor-pointer'}", disabled: disabled
-    - if @book.rights_reserved
+    - if @book.rightsReserved
       .text-xs ※この作品は著作権が存続しているため、カスタム配信はご利用になれません。
 
 - if request.referer

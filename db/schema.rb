@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_02_004153) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -54,6 +54,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.date "end_date", null: false
     t.time "delivery_time", default: "2000-01-01 07:00:00", null: false
     t.uuid "user_id", null: false
+    t.string "title"
+    t.integer "file_id"
+    t.string "author_name"
     t.index ["book_id", "book_type"], name: "index_campaigns_on_book_id_and_book_type"
     t.index ["end_date"], name: "index_campaigns_on_end_date"
     t.index ["start_date"], name: "index_campaigns_on_start_date"
@@ -166,7 +169,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_28_233000) do
     t.index ["magic_login_token"], name: "index_users_on_magic_login_token"
   end
 
-  add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id"
+  add_foreign_key "aozora_books", "aozora_books", column: "canonical_book_id", deferrable: :deferred
   add_foreign_key "campaigns", "users"
   add_foreign_key "feeds", "campaigns", on_delete: :cascade
   add_foreign_key "feeds", "delayed_jobs", on_delete: :nullify

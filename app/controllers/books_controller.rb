@@ -2,22 +2,25 @@ class BooksController < ApplicationController
   before_action :require_login, only: [:index]
 
   def index
-    @keyword = params[:keyword]
-    @category = params[:category]
-    query = AozoraBook.where.not(words_count: 0).where(rights_reserved: false).where.not(category_id: nil).where(canonical_book_id: nil)
-    query = query.where("REPLACE(author, ' ', '') LIKE ? OR REPLACE(title, ' ', '') LIKE ?", "%#{@keyword}%", "%#{@keyword}%") if @keyword
-    query = query.where(category_id: @category) if @category && @category != 'all'
-    @books = query.sorted.order(:words_count).page(params[:page]).per(50)
+    @keyword = params[:keyword].presence
+    @category = params[:category]&.to_sym
+    @page = params[:page] ? params[:page].to_i : 1
+
+    res = Book.where(keyword: @keyword, category: @category, page: @page)
+    @books, @has_next, @total_count = res.values_at("books", "hasNext", "totalCount")
 
     @meta_title = "作品検索"
     @meta_noindex = true
   end
 
   def show
-    @book = AozoraBook.find(params[:id])
+    @book = Book.find(params[:id])
     @campaign = Campaign.new(
       book_id: params[:id],
       book_type: 'AozoraBook',
+      title: @book.title,
+      file_id: @book.fileId,
+      author_name: @book.author_name,
       start_date: params[:start_date],
       end_date: params[:end_date],
       delivery_time: params[:delivery_time] || '07:00',
