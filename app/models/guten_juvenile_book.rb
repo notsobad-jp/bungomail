@@ -1,2 +1,0 @@
-class GutenJuvenileBook < GutenBook
-end
