@@ -32,6 +32,9 @@
 = form_with model: @campaign, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
   = f.hidden_field :book_type, value: 'AozoraBook'
+  = f.hidden_field :book_title, value: @book.title
+  = f.hidden_field :author_name, value: @book.author["fullName"]
+
   .mb-12
     .mb-8
       %h5.mb-2.font-bold 配信期間

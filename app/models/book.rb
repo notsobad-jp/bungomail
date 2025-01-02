@@ -75,6 +75,7 @@ class Book
   attribute :firstAppearance, :string
   attribute :source, :string
   attribute :variants
+  attribute :fileId, :integer
 
 
   def access_rating
