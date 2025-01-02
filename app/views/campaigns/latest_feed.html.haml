@@ -1,0 +1,14 @@
+%h1.font-bold.text-lg.mb-2
+  = @campaign.author_and_book_name
+
+.mb-4.text-sm.flex.items-center.space-x-4
+  %div
+    = "##{@feed.index}（全#{@campaign.count}回）"
+
+  %div
+    = @feed.delivery_date.strftime("%Y年%m月%d日")
+    = @campaign.delivery_time.strftime("%H:%M")
+
+
+.mb-12.text-gray-700
+  = @feed.content
