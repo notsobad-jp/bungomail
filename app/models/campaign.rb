@@ -16,8 +16,20 @@ class Campaign < ApplicationRecord
   validate :end_date_should_not_be_too_far # 12ヶ月以上先の予約は禁止
   validate :delivery_period_should_not_overlap, if: -> { user.free_plan? } # 無料ユーザーで期間が重複するレコードが存在すればinvalid
 
-  enum colors: { red: "red", fuchsia: "fuchsia", sky: "sky", teal: "teal", yellow: "yellow", slate: "slate" }
-  enum patterns: { seigaiha: "seigaiha", asanoha: "asanoha", sayagata: "sayagata" }
+  enum colors: {
+    red: "red", # bg-red-700
+    fuchsia: "fuchsia", # bg-fuchsia-700
+    sky: "sky", # bg-sky-700
+    teal: "teal", # bg-teal-700
+    yellow: "yellow", # bg-yellow-700
+    slate: "slate", # bg-slate-700
+  }
+
+  enum patterns: {
+    seigaiha: "seigaiha",
+    asanoha: "asanoha",
+    sayagata: "sayagata",
+  }
 
 
   def author_and_book_name
