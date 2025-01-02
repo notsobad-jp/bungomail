@@ -41,9 +41,9 @@ class Campaign < ApplicationRecord
   end
 
   def create_and_subscribe
-    Campaign.transaction do
-      save
-      user.subscribe(self, delivery_method: :delivery_method)
+    ActiveRecord::Base.transaction do
+      save!
+      user.subscribe(self, delivery_method: "webpush")
       delay.create_and_schedule_feeds
     end
   end

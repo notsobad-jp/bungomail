@@ -6,16 +6,19 @@ class CampaignsController < ApplicationController
   end
 
   def create
-    campaign = current_user.campaigns.new(campaign_params)
-    if campaign.create_and_subscribe
-      BungoMailer.with(user: current_user, campaign: campaign).schedule_completed_email.deliver_now
+    authorize Campaign
+    @campaign = current_user.campaigns.new(campaign_params)
+
+    begin
+      @campaign.create_and_subscribe
+      BungoMailer.with(user: current_user, campaign: @campaign).schedule_completed_email.deliver_now
       flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
-      redirect_to campaign_path(campaign)
-    else
-      @book = campaign.book
+      redirect_to campaign_path(@campaign)
+    rescue
+      @book = Book.find(@campaign.book_id)
       @meta_title = @book.title
 
-      flash.now[:error] = campaign.errors.full_messages.join('. ')
+      flash.now[:error] = @campaign.errors.full_messages.join('. ')
       render template: 'books/show', status: 422
     end
   end
