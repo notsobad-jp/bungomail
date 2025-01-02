@@ -1,10 +1,10 @@
 class Campaign < ApplicationRecord
   belongs_to :user
+  has_many :feeds, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-  has_many :delayed_jobs, foreign_key: :queue, dependent: :destroy
+  has_many :delayed_jobs, through: :feeds
 
-  serialize :latest_feed, JSON
-
+  scope :by_unpaid_users, -> { joins(:user).where(users: { plan: 'free' }) }
   scope :upcoming, -> { where("? <= end_date", Date.current) }
   scope :finished, -> { where("? > end_date", Date.current) }
   scope :subscribed_by, -> (user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }
@@ -16,20 +16,8 @@ class Campaign < ApplicationRecord
   validate :end_date_should_not_be_too_far # 12ヶ月以上先の予約は禁止
   validate :delivery_period_should_not_overlap, if: -> { user.free_plan? } # 無料ユーザーで期間が重複するレコードが存在すればinvalid
 
-  enum color: {
-    red: "red", # bg-red-700
-    fuchsia: "fuchsia", # bg-fuchsia-700
-    sky: "sky", # bg-sky-700
-    teal: "teal", # bg-teal-700
-    yellow: "yellow", # bg-yellow-700
-    slate: "slate", # bg-slate-700
-  }
-
-  enum pattern: {
-    seigaiha: "seigaiha",
-    asanoha: "asanoha",
-    sayagata: "sayagata",
-  }
+  enum colors: { red: "red", fuchsia: "fuchsia", sky: "sky", teal: "teal", yellow: "yellow", slate: "slate" }
+  enum patterns: { seigaiha: "seigaiha", asanoha: "asanoha", sayagata: "sayagata" }
 
 
   def author_and_book_name
@@ -41,26 +29,27 @@ class Campaign < ApplicationRecord
   end
 
   def create_and_schedule_feeds
-    feeds = create_feeds
-    feeds.map(&:schedule)
+    feed_ids = create_feeds
+    Feed.find(feed_ids).map(&:schedule)
   end
 
   def create_feeds
     feeds = []
-    book = Book.find(self.book_id)
-    contents = book.contents(count: count)
+    contents = self.book.contents(count: count)
     delivery_date = self.start_date
 
     contents.each.with_index(1) do |content, index|
-      feeds << Feed.new(
-        campaign: self,
+      title = self.book.title
+      feeds << {
+        title: title,
         content: content,
         delivery_date: delivery_date,
-      )
+        campaign_id: self.id
+      }
       delivery_date += 1.day
     end
-
-    feeds
+    res = Feed.insert_all feeds
+    res.rows.flatten  # 作成したfeedのid一覧を配列で返す
   end
 
   # メール配信対象

@@ -1,10 +1,9 @@
-.mb-2.rounded.text-center.text-white.py-10.px-12.bg-blend-multiply(class="bg-#{campaign.color}-700" style="background-image: url('/assets/images/#{campaign.pattern}.png')")
+.mb-2.rounded.text-center.text-white.py-10.px-12.bg-blend-multiply(class="bg-#{campaign.color}-700 bg-[url('/assets/images/#{campaign.pattern}.png')]")
   %h1(class="mb-2 sm:mb-4 text-2xl sm:text-4xl font-bold font-mincho")
     = campaign.title
   .text-large.font-mincho
     = campaign.author_name
 
-  - if campaign.persisted?
-    .mt-4.text-sm
-      = campaign.start_date
-      = " 〜 #{campaign.end_date}" if campaign.end_date != campaign.start_date
+  .mt-4.text-sm
+    = campaign.start_date
+    = " 〜 #{campaign.end_date}" if campaign.end_date != campaign.start_date

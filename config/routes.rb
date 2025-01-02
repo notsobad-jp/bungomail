@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   get 'campaigns/dogramagra' => "pages#dogramagra"
 
   resources :books, only: [:index, :show]
-  resources :campaigns do
-    get 'latest_feed', on: :member
+  resources :campaigns, shallow: true do
+    resources :feeds
   end
   resources :magic_tokens
   resources :subscriptions

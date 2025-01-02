@@ -5,7 +5,6 @@ module.exports = {
     './public/*.html',
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
-    './app/models/**/*.rb',
     './app/views/**/*.{erb,haml,html,slim}',
     'config/locales/**/*.yml'
   ],
