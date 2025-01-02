@@ -48,7 +48,7 @@
       %h5.mb-2.font-bold 受信方法
       %div
         - if current_user.blank?
-          = select_tag :delivery_method,
+          = f.select :delivery_method,
             options_for_select(Subscription.delivery_methods),
             required: true,
             class: 'border border-gray-200 rounded w-full p-2'
@@ -62,7 +62,7 @@
                 = link_to "プッシュ通知の設定", mypage_path, class: "text-link"
                 が必要です
           - else
-            = select_tag :delivery_method,
+            = f.select :delivery_method,
               options_for_select(Subscription.delivery_methods, selected: "webpush", disabled: ["email"]),
               required: true,
               class: 'border border-gray-200 rounded w-full p-2'

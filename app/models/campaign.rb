@@ -15,6 +15,8 @@ class Campaign < ApplicationRecord
   validate :end_date_should_not_be_too_far # 12ヶ月以上先の予約は禁止
   validate :delivery_period_should_not_overlap, if: -> { user.free_plan? } # 無料ユーザーで期間が重複するレコードが存在すればinvalid
 
+  attr_accessor :delivery_method
+
   enum color: {
     red: "red", # bg-red-700
     fuchsia: "fuchsia", # bg-fuchsia-700
@@ -30,13 +32,20 @@ class Campaign < ApplicationRecord
     sayagata: "sayagata",
   }
 
-
   def author_and_book_name
     "#{author_name}『#{title}』"
   end
 
   def count
     (end_date - start_date).to_i + 1
+  end
+
+  def create_and_subscribe
+    Campaign.transaction do
+      save
+      user.subscribe(self, delivery_method: :delivery_method)
+      delay.create_and_schedule_feeds
+    end
   end
 
   def create_and_schedule_feeds
