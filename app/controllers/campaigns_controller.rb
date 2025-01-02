@@ -69,6 +69,8 @@ class CampaignsController < ApplicationController
       :start_date,
       :end_date,
       :delivery_time,
+      :color,
+      :pattern,
     )
   end
 end

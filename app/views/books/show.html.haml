@@ -15,11 +15,8 @@
 %div(class="mb-12 text-sm text-gray-500")
   %p 配信する期間や時間などを登録して、配信を予約してください。
 
-.mb-12.text-center.bg-red-700.text-white.py-10.px-12.bg-blend-multiply(class="bg-[url('/assets/images/seigaiha.png')]")
-  %h1(class="mb-4 text-2xl sm:text-4xl font-bold font-mincho")
-    = @book.title
-  .text-large.font-mincho
-    = @book.author_name
+.mb-12
+  = render "campaigns/banner", campaign: @campaign
 
 = form_with model: @campaign, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
