@@ -1,9 +1,8 @@
 class Campaign < ApplicationRecord
   belongs_to :user
+  has_many :feeds, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :delayed_jobs, foreign_key: :queue, dependent: :destroy
-
-  serialize :latest_feed, JSON
 
   scope :upcoming, -> { where("? <= end_date", Date.current) }
   scope :finished, -> { where("? > end_date", Date.current) }
@@ -41,26 +40,28 @@ class Campaign < ApplicationRecord
   end
 
   def create_and_schedule_feeds
-    feeds = create_feeds
-    feeds.map(&:schedule)
+    feed_ids = create_feeds
+    Feed.find(feed_ids).map(&:schedule)
   end
 
   def create_feeds
-    feeds = []
     book = Book.find(self.book_id)
     contents = book.contents(count: count)
     delivery_date = self.start_date
 
+    feeds = []
     contents.each.with_index(1) do |content, index|
-      feeds << Feed.new(
-        campaign: self,
+      title = book.title
+      feeds << {
+        title: title,
         content: content,
         delivery_date: delivery_date,
-      )
+        campaign_id: self.id
+      }
       delivery_date += 1.day
     end
-
-    feeds
+    res = Feed.insert_all feeds
+    res.rows.flatten  # 作成したfeedのid一覧を配列で返す
   end
 
   # メール配信対象

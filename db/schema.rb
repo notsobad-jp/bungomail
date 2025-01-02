@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_02_090503) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_02_103622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -30,7 +30,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_02_090503) do
     t.string "author_name"
     t.string "color"
     t.string "pattern"
-    t.text "latest_feed"
     t.index ["book_id", "book_type"], name: "index_campaigns_on_book_id_and_book_type"
     t.index ["end_date"], name: "index_campaigns_on_end_date"
     t.index ["start_date"], name: "index_campaigns_on_start_date"
@@ -50,6 +49,16 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_02_090503) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "feeds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "campaign_id", null: false
+    t.string "title", null: false
+    t.text "content", null: false
+    t.date "delivery_date", null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["campaign_id"], name: "index_feeds_on_campaign_id"
   end
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -83,6 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_02_090503) do
   end
 
   add_foreign_key "campaigns", "users"
+  add_foreign_key "feeds", "campaigns", on_delete: :cascade
   add_foreign_key "subscriptions", "campaigns"
   add_foreign_key "subscriptions", "users"
 end

@@ -1,16 +1,14 @@
-class Feed
-  include ActiveModel::Model
-  include ActiveModel::Attributes
+class Feed < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  attribute :content, :string
-  attribute :delivery_date, :date
-  attribute :campaign
+  belongs_to :campaign
+
+  # 配信日が昨日以前のもの or 配信日が今日ですでに配信時刻を過ぎているもの
+  scope :delivered, -> { Feed.joins(:campaign).where("delivery_date < ?", Time.zone.today).or(Feed.joins(:campaign).where(delivery_date: Time.zone.today).where("campaigns.delivery_time < ?", Time.current.strftime("%T"))) }
 
   def deliver
     BungoMailer.with(feed: self).feed_email.deliver_now
     Webpush.notify(webpush_payload)
-    campaign.update(latest_feed: { content:, delivery_date: })
   end
 
   def index
@@ -32,8 +30,8 @@ class Feed
     def webpush_payload
       {
         message: {
-          name: "#{campaign.id}-#{index}",
-          topic: campaign.id,
+          name: id,
+          topic: campaign_id,
           notification: {
             title: campaign.author_and_book_name,
             body: content.truncate(100),
@@ -41,7 +39,7 @@ class Feed
           },
           webpush: {
             fcm_options: {
-              link: latest_feed_url(campaign.id, host: Rails.env.production? ? "https://bungomail.com" : "http://localhost:3000"),
+              link: feed_url(id, host: Rails.env.production? ? "https://bungomail.com" : "http://localhost:3000"),
             }
           },
         }

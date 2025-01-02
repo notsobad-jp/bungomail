@@ -14,31 +14,28 @@
   <% end %>
 </div>
 <div class="flex text-xs font-bold bg-gray-50 px-2 sm px-4 py-4 rounded-t border-t border-r border-l border-gray-100">
-  <div class="w-1/3"><%= t :title, scope: [:search, :defaults] %></div>
-  <div class="w-1/3"><%= t :author, scope: [:search, :defaults] %></div>
+  <div class="w-1/3">作品名</div>
+  <div class="w-1/3">著者名</div>
   <div class="w-1/2 flex justify-between">
-    <%= t :minutes_to_read, scope: [:search, :defaults] %>
+    読了時間
     <div class="block">
-      <%= t :popularity, scope: [:search, :defaults] %>
+      人気
     </div>
   </div>
 </div>
 <div class="border-r border-l border-t border-gray-100 rounded-b mb-4">
   <% if @books.blank? %>
   <div class="border-b border-gray-100 text-sm py-3">
-    <%= t 'no_results', scope: [:search, :books, :index] %>
+    (作品がありません)
   </div>
   <% end %>
   <%= render partial: 'row', collection: @books, as: :book, locals: { category: @category } %>
 </div>
 <div class="flex justify-between items-center mb-4">
   <div class="text-xs">
-    <%= t(:search_offset,
-      scope: [:search, :books, :index],
-      from: (@page - 1) * Book::PER_PAGE + 1,
-      to: (@page - 1) * Book::PER_PAGE + @books.length,
-      count: @total_count.to_fs(:delimited))
-    %>
+    <% from = (@page - 1) * Book::PER_PAGE + 1 %>
+    <% to = (@page - 1) * Book::PER_PAGE + @books.length %>
+    <%= "#{from}〜#{to}件 / 全#{ @total_count.to_fs(:delimited) }件" %>
   </div>
 
   <div class="flex items-center space-x-4">

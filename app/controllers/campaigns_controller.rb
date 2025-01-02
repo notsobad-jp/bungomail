@@ -32,6 +32,7 @@ class CampaignsController < ApplicationController
 
   def show
     @campaign = Campaign.find(params[:id])
+    @feeds = Feed.delivered.where(campaign_id: @campaign.id).order(delivery_date: :desc).page(params[:page]) # FIXME
     @subscription = current_user.subscriptions.find_by(campaign_id: @campaign.id) if current_user
     @meta_title = @campaign.author_and_book_name
 
@@ -50,18 +51,9 @@ class CampaignsController < ApplicationController
         topic: @campaign.id
       )
     end
-    BungoMailer.with(user: @campaign.user, author_title: campaign.author_and_book_name, delivery_period: "#{@campaign.start_date} 〜 #{@campaign.end_date}").schedule_canceled_email.deliver_now
+    BungoMailer.with(user: @campaign.user, author_title: @campaign.author_and_book_name, delivery_period: "#{@campaign.start_date} 〜 #{@campaign.end_date}").schedule_canceled_email.deliver_now
     flash[:success] = '配信を削除しました！'
-    redirect_to subscriptions_path, status: 303
-  end
-
-  def latest_feed
-    @campaign = Campaign.find(params[:id])
-    @feed = Feed.new(@campaign.latest_feed.merge(campaign: @campaign))
-    @word_count = @feed.content.gsub(" ", "").length
-
-    @meta_title = "#{@campaign.author_and_book_name}(#{@feed.index}/#{@campaign.count}"
-    @no_index = true
+    redirect_to campaigns_path, status: 303
   end
 
   private
