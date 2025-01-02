@@ -2,6 +2,8 @@ class Campaign < ApplicationRecord
   belongs_to :user
   has_many :subscriptions, dependent: :destroy
 
+  serialize :latest_feed, JSON
+
   scope :upcoming, -> { where("? <= end_date", Date.current) }
   scope :finished, -> { where("? > end_date", Date.current) }
   scope :subscribed_by, -> (user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }

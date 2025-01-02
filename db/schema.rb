@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_02_054454) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_02_081824) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gist"
   enable_extension "pgcrypto"
@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_02_054454) do
     t.string "author_name"
     t.string "color"
     t.string "pattern"
+    t.text "latest_feed"
     t.index ["book_id", "book_type"], name: "index_campaigns_on_book_id_and_book_type"
     t.index ["end_date"], name: "index_campaigns_on_end_date"
     t.index ["start_date"], name: "index_campaigns_on_start_date"

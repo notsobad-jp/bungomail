@@ -3,7 +3,6 @@ class Feed
   include ActiveModel::Attributes
   include Rails.application.routes.url_helpers
 
-  attribute :id, :string
   attribute :content, :string
   attribute :delivery_date, :date
   attribute :campaign
@@ -11,6 +10,7 @@ class Feed
   def deliver
     BungoMailer.with(feed: self).feed_email.deliver_now
     Webpush.notify(webpush_payload)
+    campaign.update(latest_feed: { content:, delivery_date: })
   end
 
   def index
@@ -32,8 +32,8 @@ class Feed
     def webpush_payload
       {
         message: {
-          name: id,
-          topic: campaign_id,
+          name: "#{campaign.id}-#{index}",
+          topic: campaign.id,
           notification: {
             title: campaign.author_and_book_name,
             body: content.truncate(100),
