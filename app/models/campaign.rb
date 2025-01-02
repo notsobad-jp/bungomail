@@ -1,6 +1,7 @@
 class Campaign < ApplicationRecord
   belongs_to :user
   has_many :subscriptions, dependent: :destroy
+  has_many :delayed_jobs, foreign_key: :queue, dependent: :destroy
 
   serialize :latest_feed, JSON
 
