@@ -52,9 +52,9 @@ class CampaignsController < ApplicationController
         topic: @campaign.id
       )
     end
-    BungoMailer.with(user: @campaign.user, author_title: "#{@campaign.book.author}『#{@campaign.book.title}』", delivery_period: "#{@campaign.start_date} 〜 #{@campaign.end_date}").schedule_canceled_email.deliver_now
+    BungoMailer.with(user: @campaign.user, author_title: campaign.author_and_book_name, delivery_period: "#{@campaign.start_date} 〜 #{@campaign.end_date}").schedule_canceled_email.deliver_now
     flash[:success] = '配信を削除しました！'
-    redirect_to campaigns_path, status: 303
+    redirect_to subscriptions_path, status: 303
   end
 
   private
