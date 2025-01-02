@@ -15,10 +15,6 @@ namespace :cron do
       new_subs.update_all(plan: :basic, updated_at: Time.current)
       p "Subscribing users: #{new_subs.map(&:email)}"
 
-      # 月初時点で有料の人はトライアル体験済みにする
-      digests = new_subs.map{|user| Digest::SHA256.hexdigest(user.email) }
-      EmailDigest.where(digest: digests).update_all(trial_ended: true, updated_at: Time.current)
-
       # 有料じゃないユーザーのcampaignsは全部削除
       Campaign.by_unpaid_users.upcoming.destroy_all
     end
