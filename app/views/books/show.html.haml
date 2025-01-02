@@ -32,7 +32,8 @@
 = form_with model: @campaign, local: true do |f|
   = f.hidden_field :book_id, value: @book.id
   = f.hidden_field :book_type, value: 'AozoraBook'
-  = f.hidden_field :book_title, value: @book.title
+  = f.hidden_field :title, value: @book.title
+  = f.hidden_field :file_url, value: @book.fileUrl
   = f.hidden_field :author_name, value: @book.author["fullName"]
 
   .mb-12

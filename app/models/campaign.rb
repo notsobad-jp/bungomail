@@ -1,6 +1,5 @@
 class Campaign < ApplicationRecord
   belongs_to :user
-  belongs_to :book, polymorphic: true
   has_many :feeds, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :delayed_jobs, through: :feeds

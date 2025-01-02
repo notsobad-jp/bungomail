@@ -60,6 +60,15 @@ class CampaignsController < ApplicationController
   private
 
   def campaign_params
-    params.require(:campaign).permit(:book_id, :book_type, :title, :author, :start_date, :end_date, :delivery_time)
+    params.require(:campaign).permit(
+      :book_id,
+      :book_type,
+      :title,
+      :file_url,
+      :author_name,
+      :start_date,
+      :end_date,
+      :delivery_time,
+    )
   end
 end
