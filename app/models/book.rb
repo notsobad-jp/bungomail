@@ -226,17 +226,6 @@ class Book
     end
   end
 
-  def text
-    content = OpenURI.open_uri(aozora_raw_file_url, 'r:CP932')&.read
-    content&.encode('UTF-8', 'CP932', invalid: :replace, undef: :replace)
-  rescue OpenURI::HTTPError => e
-    Rails.logger.error "Failed to fetch text for book #{id}: #{e.message}"
-    nil
-  rescue Encoding::InvalidByteSequenceError => e
-    Rails.logger.error "Encoding error for book #{id}: #{e.message}"
-    nil
-  end
-
 
   class << self
     def where(keyword: nil, category: :all, page: 1)
