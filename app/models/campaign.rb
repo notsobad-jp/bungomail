@@ -17,7 +17,7 @@ class Campaign < ApplicationRecord
 
   attr_accessor :delivery_method
 
-  enum color: {
+  enum :color, {
     red: "red", # bg-red-700
     fuchsia: "fuchsia", # bg-fuchsia-700
     sky: "sky", # bg-sky-700
@@ -26,7 +26,7 @@ class Campaign < ApplicationRecord
     slate: "slate", # bg-slate-700
   }
 
-  enum pattern: {
+  enum :pattern, {
     seigaiha: "seigaiha",
     asanoha: "asanoha",
     sayagata: "sayagata",
