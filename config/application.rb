@@ -16,17 +16,6 @@ module BungoMail
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # 表示時のタイムゾーンをJSTに設定
-    config.time_zone = 'Tokyo'
-
-    # DB保存時のタイムゾーンをJSTに設定
-    config.active_record.default_timezone = :local
-
-    # ActiveJob設定
-    config.active_job.queue_adapter = :delayed_job
-
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
-
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
