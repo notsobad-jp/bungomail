@@ -26,7 +26,7 @@ class User < ApplicationRecord
   end
 
   def subscribe(campaign, delivery_method: "email")
-    subscriptions.create!(campaign: campaign, delivery_method: delivery_method)
+    subscriptions.create(campaign: campaign, delivery_method: delivery_method)
   end
 
   def trialing?
