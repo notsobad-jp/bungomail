@@ -11,25 +11,18 @@ module BungoMail
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    # 表示時のタイムゾーンをJSTに設定
-    config.time_zone = 'Tokyo'
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
-    # DB保存時のタイムゾーンをJSTに設定
-    config.active_record.default_timezone = :local
-
-    # ActiveJob設定
-    config.active_job.queue_adapter = :delayed_job
-
-    # i18n設定
-    I18n.enforce_available_locales = false
-    config.i18n.default_locale = :ja
-    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
-
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.
     config.generators.system_tests = nil
