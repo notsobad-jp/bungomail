@@ -17,23 +17,6 @@ class User < ApplicationRecord
     self.password = SecureRandom.hex(10)
   end
 
-  # 新規作成時（未activation）: EmailDigest作成
-  after_create do
-    EmailDigest.find_or_create_by!(digest: digest) # 退会済みユーザーの場合はEmailDigestが存在する
-  end
-
-  # Email変更後にEmailDigestも変更
-  after_update do
-    if saved_change_to_email?
-      ed = EmailDigest.find_by(digest: Digest::SHA256.hexdigest(email_before_last_save))
-      ed.update(digest: digest)
-    end
-  end
-
-  after_destroy do
-    EmailDigest.find_by(digest: digest).update(canceled_at: Time.current)
-  end
-
   def admin?
     email == "info@notsobad.jp"
   end
@@ -43,7 +26,7 @@ class User < ApplicationRecord
   end
 
   def subscribe(campaign, delivery_method: "email")
-    subscriptions.create!(campaign: campaign, delivery_method: delivery_method)
+    subscriptions.create(campaign: campaign, delivery_method: delivery_method)
   end
 
   def trialing?

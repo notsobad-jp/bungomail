@@ -24,6 +24,8 @@
   = f.hidden_field :title, value: @book.title
   = f.hidden_field :file_id, value: @book.fileId
   = f.hidden_field :author_name, value: @book.author_name
+  = f.hidden_field :color, value: @campaign.color
+  = f.hidden_field :pattern, value: @campaign.pattern
 
   .mb-12
     .mb-8
@@ -42,13 +44,13 @@
       %small.text-xs ※配信予約は最長で12ヶ月先までです
     .mb-8
       %h5.mb-2.font-bold 配信時間
-      = f.time_field :delivery_time, class: 'border border-gray-200 rounded w-full p-2', placeholder: '07:00', min: '05:00', max: '23:00'
+      = f.time_field :delivery_time, class: 'border border-gray-200 rounded w-full p-2', placeholder: '07:00', min: '05:00', max: '23:00', step: 1800
       %small.text-xs ※配信時間は5:00~23:00の間で指定可能です（実際の配信には数分程度の誤差があります）
     .mb-8
       %h5.mb-2.font-bold 受信方法
       %div
         - if current_user.blank?
-          = select_tag :delivery_method,
+          = f.select :delivery_method,
             options_for_select(Subscription.delivery_methods),
             required: true,
             class: 'border border-gray-200 rounded w-full p-2'
@@ -62,7 +64,7 @@
                 = link_to "プッシュ通知の設定", mypage_path, class: "text-link"
                 が必要です
           - else
-            = select_tag :delivery_method,
+            = f.select :delivery_method,
               options_for_select(Subscription.delivery_methods, selected: "webpush", disabled: ["email"]),
               required: true,
               class: 'border border-gray-200 rounded w-full p-2'
