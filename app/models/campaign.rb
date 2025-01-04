@@ -55,7 +55,6 @@ class Campaign < ApplicationRecord
 
     feeds = contents.map.with_index do |content, index|
       {
-        title: title,
         content: content,
         delivery_date: start_date + index,
         campaign_id: self.id
