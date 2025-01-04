@@ -10,7 +10,7 @@ class CampaignsController < ApplicationController
     @campaign = current_user.campaigns.new(campaign_params)
 
     begin
-      @campaign.create_and_subscribe
+      @campaign.create_and_subscribe_and_schedule_feeds
       BungoMailer.with(user: current_user, campaign: @campaign).schedule_completed_email.deliver_now
       flash[:success] = '配信予約が完了しました！予約内容をメールでお送りしていますのでご確認ください。'
       redirect_to campaign_path(@campaign)
