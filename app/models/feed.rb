@@ -15,12 +15,6 @@ class Feed < ApplicationRecord
     (delivery_date - campaign.start_date).to_i + 1
   end
 
-  def schedule
-    return if send_at < Time.current
-
-    delay(run_at: send_at, queue: campaign.id).deliver
-  end
-
   def send_at
     Time.zone.parse("#{delivery_date.to_s} #{campaign.delivery_time}")
   end

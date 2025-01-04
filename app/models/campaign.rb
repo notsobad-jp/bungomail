@@ -66,11 +66,12 @@ class Campaign < ApplicationRecord
 
   def schedule_feeds
     jobs = feeds.map do |feed|
+      next if feed.send_at < Time.current
       FeedDeliveryJob.new(feed_id: id).set(
         run_at: feed.send_at,
         queue: id,
       )
-    end
+    end.compact
     ActiveJob.perform_all_later(jobs)
   end
 
