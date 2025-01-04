@@ -40,12 +40,17 @@ class Campaign < ApplicationRecord
     (end_date - start_date).to_i + 1
   end
 
-  def create_and_subscribe
+  def create_and_subscribe_and_schedule_feeds
     ActiveRecord::Base.transaction do
       save!
       user.subscribe(self, delivery_method: "webpush") # FIXME: pass delivery_method
       schedule_feeds
     end
+  end
+
+  def deliver(index:, content:)
+    BungoMailer.with(campaign: self, index:, content:).feed_email.deliver_now
+    Webpush.notify(webpush_payload(index:, content:))
   end
 
   def schedule_feeds
@@ -110,5 +115,25 @@ class Campaign < ApplicationRecord
 
     def send_at(delivery_date)
       Time.zone.parse("#{delivery_date.to_s} #{delivery_time}")
+    end
+
+    def webpush_payload(index:, content:)
+      {
+        message: {
+          name: "#{id}-#{index}",
+          topic: id,
+          notification: {
+            title: author_and_book_name,
+            body: content.truncate(100),
+            image: "https://bungomail.com/favicon.ico",
+          },
+          webpush: {
+            fcm_options: {
+              # FIXME: latest_feed_urlにする
+              link: feed_url(id, host: Rails.env.production? ? "https://bungomail.com" : "http://localhost:3000"),
+            }
+          },
+        }
+      }
     end
 end

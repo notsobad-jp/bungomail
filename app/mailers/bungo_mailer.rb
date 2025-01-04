@@ -1,18 +1,18 @@
 class BungoMailer < ApplicationMailer
   def feed_email
-    @feed = params[:feed]
-    send_to = params[:send_to] || @feed.campaign.send_to
+    @campaign = params[:campaign]
+    @content = params[:content]
+    @index = params[:index]
+    send_to = params[:send_to] || @campaign.send_to
     return if send_to.blank?
 
-    @book = @feed.campaign.book
-    @owner = @feed.campaign.user
-    @word_count = @feed.content.gsub(" ", "").length
-    sender_name = envelope_display_name("#{@book.author_name}（ブンゴウメール）")
+    @word_count = @content.gsub(" ", "").length
+    sender_name = envelope_display_name("#{@campaign.author_name}（ブンゴウメール）")
 
     xsmtp_api_params = { to: send_to, category: 'feed' }
     headers['X-SMTPAPI'] = JSON.generate(xsmtp_api_params)
 
-    mail(from: "#{sender_name} <bungomail@notsobad.jp>", subject: @feed.title)
+    mail(from: "#{sender_name} <bungomail@notsobad.jp>", subject: @campaign.title)
   end
 
   def magic_login_email
