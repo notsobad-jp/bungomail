@@ -43,34 +43,26 @@ class Campaign < ApplicationRecord
   def create_and_subscribe
     ActiveRecord::Base.transaction do
       save!
-      user.subscribe(self, delivery_method: "webpush")
-      delay.create_and_schedule_feeds
+      user.subscribe(self, delivery_method: "webpush") # FIXME: pass delivery_method
+      schedule_feeds
     end
   end
 
-  def create_and_schedule_feeds
-    feed_ids = create_feeds
-    Feed.find(feed_ids).map(&:schedule)
-  end
-
-  def create_feeds
+  def schedule_feeds
     book = Book.find(self.book_id)
     contents = book.contents(count: count)
-    delivery_date = self.start_date
 
-    feeds = []
-    contents.each.with_index(1) do |content, index|
-      title = book.title
-      feeds << {
-        title: title,
+    jobs = contents.map.with_index do |content, index|
+      FeedDeliveryJob.new(
+        campaign_id: id,
+        index: index,
         content: content,
-        delivery_date: delivery_date,
-        campaign_id: self.id
-      }
-      delivery_date += 1.day
+      ).set(
+        run_at: send_at(start_date + index),
+        queue: id,
+      )
     end
-    res = Feed.insert_all feeds
-    res.rows.flatten  # 作成したfeedのid一覧を配列で返す
+    ActiveJob.perform_all_later(jobs)
   end
 
   # メール配信対象
@@ -102,17 +94,21 @@ class Campaign < ApplicationRecord
 
   private
 
-  # 同一チャネルで期間が重複するレコードが存在すればinvalid(Freeプランのみ)
-  def delivery_period_should_not_overlap
-    overlapping = Campaign.where.not(id: id).where(user_id: user_id).overlapping_with(start_date, end_date)
-    errors.add(:base, "他の配信と期間が重複しています") if overlapping.present?
-  end
+    # 同一チャネルで期間が重複するレコードが存在すればinvalid(Freeプランのみ)
+    def delivery_period_should_not_overlap
+      overlapping = Campaign.where.not(id: id).where(user_id: user_id).overlapping_with(start_date, end_date)
+      errors.add(:base, "他の配信と期間が重複しています") if overlapping.present?
+    end
 
-  def end_date_should_come_after_start_date
-    errors.add(:base, "配信終了日は開始日より後に設定してください") if end_date < start_date
-  end
+    def end_date_should_come_after_start_date
+      errors.add(:base, "配信終了日は開始日より後に設定してください") if end_date < start_date
+    end
 
-  def end_date_should_not_be_too_far
-    errors.add(:base, "配信終了日は現在から12ヶ月以内に設定してください") if end_date > Date.current.since(12.months)
-  end
+    def end_date_should_not_be_too_far
+      errors.add(:base, "配信終了日は現在から12ヶ月以内に設定してください") if end_date > Date.current.since(12.months)
+    end
+
+    def send_at(delivery_date)
+      Time.zone.parse("#{delivery_date.to_s} #{delivery_time}")
+    end
 end
